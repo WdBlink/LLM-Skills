@@ -16,7 +16,7 @@
 
 ## 这是什么
 
-本仓库模仿 `lovstudio/general-skills` 的组织方式，将个人开发或维护的技能统一放入 `skills/<name>/`，并用 `skills.yaml` 作为机器可读清单。
+本仓库用于统一管理个人开发或维护的 LLM / Agent 技能。所有技能按 `skills/<name>/` 组织，并用 `skills.yaml` 作为机器可读清单。
 
 本仓库包含：
 
@@ -27,7 +27,7 @@
 
 ## 技能列表
 
-> **4 个技能**
+> **3 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
@@ -37,8 +37,6 @@
 | ![Open](https://img.shields.io/badge/Open-green) | [`transcript-source-compiler`](skills/transcript-source-compiler) | [转写来源编译器](skills/transcript-source-compiler) | 将大段演讲转写编译成可追溯的来源底稿和可读文章。 |
 | **多模态** | | | |
 | ![Open](https://img.shields.io/badge/Open-green) | [`ms-qwen-vl`](skills/ms-qwen-vl) | [魔搭 Qwen-VL 视觉解析](skills/ms-qwen-vl) | 用 Qwen-VL 解析图片/视频，并可输出 YOLO 数据集。 |
-| **演示文稿** | | | |
-| ![Private](https://img.shields.io/badge/Private-blueviolet) | [`pv-forecast-pptx`](skills/pv-forecast-pptx) | [光伏预测汇报 PPTX](skills/pv-forecast-pptx) | 为光伏预测课题生成结构化科研汇报 PPT。 |
 
 <sub>上表由 `scripts/render_readme.py` 从 `skills.yaml` 生成。请编辑 `skills.yaml`，不要手动改表格。</sub>
 
@@ -54,7 +52,6 @@ LLM-Skills/
 └── skills/
     ├── claude-code/
     ├── ms-qwen-vl/
-    ├── pv-forecast-pptx/
     └── transcript-source-compiler/
 ```
 

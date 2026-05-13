@@ -30,13 +30,3 @@ skills:
     description: Claude Code integration for OpenClaw with documentation lookup, workflow guidance, and CLI-oriented development assistance.
     tagline_en: Query Claude Code guidance and run OpenClaw-oriented AI coding workflows.
     tagline_zh: 查询 Claude Code 文档与工作流，辅助 OpenClaw 编程任务。
-  - name: pv-forecast-pptx
-    display_name: PV Forecast PPTX
-    name_zh: 光伏预测汇报 PPTX
-    category: Presentations
-    version: 0.1.0
-    license: Proprietary
-    path: skills/pv-forecast-pptx
-    description: Create professional research presentations for photovoltaic and energy forecasting projects with structured proposal slides and technical callouts.
-    tagline_en: Create structured research proposal slide decks for photovoltaic forecasting projects.
-    tagline_zh: 为光伏预测课题生成结构化科研汇报 PPT。

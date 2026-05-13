@@ -10,7 +10,6 @@ CATEGORY_ZH = {
     "Knowledge": "知识整理",
     "Multimodal": "多模态",
     "Developer Tools": "开发工具",
-    "Presentations": "演示文稿",
 }
 
 
@@ -46,7 +45,7 @@ def render() -> str:
         "",
         "## 这是什么",
         "",
-        "本仓库模仿 `lovstudio/general-skills` 的组织方式，将个人开发或维护的技能统一放入 `skills/<name>/`，并用 `skills.yaml` 作为机器可读清单。",
+        "本仓库用于统一管理个人开发或维护的 LLM / Agent 技能。所有技能按 `skills/<name>/` 组织，并用 `skills.yaml` 作为机器可读清单。",
         "",
         "本仓库包含：",
         "",
@@ -90,7 +89,6 @@ def render() -> str:
             "└── skills/",
             "    ├── claude-code/",
             "    ├── ms-qwen-vl/",
-            "    ├── pv-forecast-pptx/",
             "    └── transcript-source-compiler/",
             "```",
             "",
