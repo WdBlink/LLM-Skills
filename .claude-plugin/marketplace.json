@@ -1,0 +1,7 @@
+{
+  "schema_version": "1.0",
+  "name": "llm-skills",
+  "display_name": "LLM Skills",
+  "description": "WdBlink personal skill aggregation repository.",
+  "skills_directory": "skills"
+}

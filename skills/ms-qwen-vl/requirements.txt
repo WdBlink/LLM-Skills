@@ -1,0 +1,5 @@
+numpy
+openai
+opencv-python
+pillow
+python-dotenv
