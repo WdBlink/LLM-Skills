@@ -22,17 +22,16 @@
 
 - `skills.yaml`：技能索引与展示元数据。
 - `skills/`：每个技能的安装镜像目录，目录名尽量与 `SKILL.md` frontmatter 的 `name` 一致。
-- `scripts/validate_skills.py`：校验清单与 `SKILL.md` 是否一致。
+- `skills/<name>/README.md`：面向人的技能用法说明，包含 version tag、安装和使用示例。
+- `scripts/validate_skills.py`：校验清单、`SKILL.md` 与技能 README 是否一致。
 - `scripts/render_readme.py`：从 `skills.yaml` 生成本 README。
 
 ## 技能列表
 
-> **3 个技能**
+> **2 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
-| **开发工具** | | | |
-| ![Open](https://img.shields.io/badge/Open-green) | [`claude-code`](skills/claude-code) | [Claude Code 集成](skills/claude-code) | 查询 Claude Code 文档与工作流，辅助 OpenClaw 编程任务。 |
 | **知识整理** | | | |
 | ![Open](https://img.shields.io/badge/Open-green) | [`transcript-source-compiler`](skills/transcript-source-compiler) | [转写来源编译器](skills/transcript-source-compiler) | 将大段演讲转写编译成可追溯的来源底稿和可读文章。 |
 | **多模态** | | | |
@@ -50,7 +49,6 @@ LLM-Skills/
 │   ├── render_readme.py
 │   └── validate_skills.py
 └── skills/
-    ├── claude-code/
     ├── ms-qwen-vl/
     └── transcript-source-compiler/
 ```

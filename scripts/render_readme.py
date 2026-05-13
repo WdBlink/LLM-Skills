@@ -9,7 +9,6 @@ from skill_index import ROOT, load_manifest
 CATEGORY_ZH = {
     "Knowledge": "知识整理",
     "Multimodal": "多模态",
-    "Developer Tools": "开发工具",
 }
 
 
@@ -17,6 +16,15 @@ def render_badge(license_name: str) -> str:
     if license_name.lower() == "proprietary":
         return "![Private](https://img.shields.io/badge/Private-blueviolet)"
     return "![Open](https://img.shields.io/badge/Open-green)"
+
+
+def render_skill_tree(skills: list[dict[str, object]]) -> list[str]:
+    names = sorted(str(skill["path"]).split("/", 1)[1] for skill in skills)
+    lines: list[str] = []
+    for index, name in enumerate(names):
+        prefix = "    └── " if index == len(names) - 1 else "    ├── "
+        lines.append(f"{prefix}{name}/")
+    return lines
 
 
 def render() -> str:
@@ -51,7 +59,8 @@ def render() -> str:
         "",
         "- `skills.yaml`：技能索引与展示元数据。",
         "- `skills/`：每个技能的安装镜像目录，目录名尽量与 `SKILL.md` frontmatter 的 `name` 一致。",
-        "- `scripts/validate_skills.py`：校验清单与 `SKILL.md` 是否一致。",
+        "- `skills/<name>/README.md`：面向人的技能用法说明，包含 version tag、安装和使用示例。",
+        "- `scripts/validate_skills.py`：校验清单、`SKILL.md` 与技能 README 是否一致。",
         "- `scripts/render_readme.py`：从 `skills.yaml` 生成本 README。",
         "",
         "## 技能列表",
@@ -87,9 +96,7 @@ def render() -> str:
             "│   ├── render_readme.py",
             "│   └── validate_skills.py",
             "└── skills/",
-            "    ├── claude-code/",
-            "    ├── ms-qwen-vl/",
-            "    └── transcript-source-compiler/",
+            *render_skill_tree(skills),
             "```",
             "",
             "## 安装",

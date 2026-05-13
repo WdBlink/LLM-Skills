@@ -41,9 +41,12 @@ def validate() -> list[str]:
 
         path = ROOT / str(skill["path"])
         skill_md = path / "SKILL.md"
+        readme_md = path / "README.md"
         if not path.is_dir():
             errors.append(f"{name}: missing directory {path.relative_to(ROOT)}")
             continue
+        if not readme_md.is_file():
+            errors.append(f"{name}: missing {readme_md.relative_to(ROOT)}")
         if not skill_md.is_file():
             errors.append(f"{name}: missing {skill_md.relative_to(ROOT)}")
             continue
