@@ -20,3 +20,13 @@ skills:
     description: Use ModelScope or SiliconFlow Qwen-VL compatible APIs to analyze images and videos, including description, OCR, visual QA, detection, charts, and YOLO dataset output.
     tagline_en: Analyze images and videos with Qwen-VL, then optionally export YOLO datasets.
     tagline_zh: 用 Qwen-VL 解析图片/视频，并可输出 YOLO 数据集。
+  - name: book-to-skill
+    display_name: Book to Skill
+    name_zh: 书籍转技能
+    category: Knowledge
+    version: 0.1.0
+    license: MIT
+    path: skills/book-to-skill
+    description: Convert a PDF, EPUB, Markdown, or text book into traceable, executable Agent Skills with references, templates, source-map evidence, and evals.
+    tagline_en: Turn books into traceable, testable Agent Skills instead of summaries.
+    tagline_zh: 将整本书转成可追溯、可测试、可执行的 Agent Skill。

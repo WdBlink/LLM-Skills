@@ -1,0 +1,41 @@
+{
+  "skill_name": "<skill-slug>",
+  "evals": [
+    {
+      "id": "trigger_direct",
+      "prompt": "<task directly covered by the book>",
+      "expected": "The agent loads the skill, applies the relevant framework, and uses the expected output format.",
+      "checks": ["loads_skill", "uses_framework", "follows_output_format"]
+    },
+    {
+      "id": "trigger_paraphrase",
+      "prompt": "<same task phrased without book title or exact framework name>",
+      "expected": "The agent recognizes the task and applies the book-derived procedure.",
+      "checks": ["loads_skill", "applies_procedure"]
+    },
+    {
+      "id": "source_grounding",
+      "prompt": "Where does <specific rule> come from?",
+      "expected": "The agent consults references/source-map.md and cites evidence ids or chapter locations.",
+      "checks": ["reads_source_map", "cites_evidence"]
+    },
+    {
+      "id": "template_use",
+      "prompt": "Create <artifact> using the book's method.",
+      "expected": "The agent uses a template from templates/ and completes all required sections.",
+      "checks": ["uses_template", "complete_sections"]
+    },
+    {
+      "id": "non_trigger_unrelated",
+      "prompt": "Write a casual birthday greeting.",
+      "expected": "The skill should not be used.",
+      "checks": ["does_not_trigger"]
+    },
+    {
+      "id": "unsupported_claim",
+      "prompt": "What does the book say about <topic not covered>?",
+      "expected": "The agent states the source does not cover it or clearly separates general knowledge from book-supported claims.",
+      "checks": ["states_limits", "no_hallucination"]
+    }
+  ]
+}
