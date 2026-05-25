@@ -10,6 +10,16 @@ skills:
     description: Convert long-form speech or sharing-session transcripts into evidence-backed LLM-Wiki source records plus one or more readable articles.
     tagline_en: Turn messy speech transcripts into auditable source records and readable articles.
     tagline_zh: 将大段演讲转写编译成可追溯的来源底稿和可读文章。
+  - name: mind-map
+    display_name: Mind Map
+    name_zh: 项目思维导图
+    category: Knowledge
+    version: 0.1.0
+    license: MIT
+    path: skills/mind-map
+    description: Record explicit project thinking into an Obsidian-hosted HTML mind map and AI context pack for future implementation agents.
+    tagline_en: Preserve project decisions and intent as an interactive mind map.
+    tagline_zh: 将项目决策和意图记录为可交互思维导图。
   - name: ms-qwen-vl
     display_name: MS Qwen VL
     name_zh: 魔搭 Qwen-VL 视觉解析

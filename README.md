@@ -28,12 +28,13 @@
 
 ## 技能列表
 
-> **3 个技能**
+> **4 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
 | **知识整理** | | | |
 | ![Open](https://img.shields.io/badge/Open-green) | [`book-to-skill`](skills/book-to-skill) | [书籍转技能](skills/book-to-skill) | 将整本书转成可追溯、可测试、可执行的 Agent Skill。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`mind-map`](skills/mind-map) | [项目思维导图](skills/mind-map) | 将项目决策和意图记录为可交互思维导图。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`transcript-source-compiler`](skills/transcript-source-compiler) | [转写来源编译器](skills/transcript-source-compiler) | 将大段演讲转写编译成可追溯的来源底稿和可读文章。 |
 | **多模态** | | | |
 | ![Open](https://img.shields.io/badge/Open-green) | [`ms-qwen-vl`](skills/ms-qwen-vl) | [魔搭 Qwen-VL 视觉解析](skills/ms-qwen-vl) | 用 Qwen-VL 解析图片/视频，并可输出 YOLO 数据集。 |
@@ -51,6 +52,7 @@ LLM-Skills/
 │   └── validate_skills.py
 └── skills/
     ├── book-to-skill/
+    ├── mind-map/
     ├── ms-qwen-vl/
     └── transcript-source-compiler/
 ```
