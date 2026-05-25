@@ -1,5 +1,15 @@
 version: 1
 skills:
+  - name: template-writing
+    display_name: Template Writing
+    name_zh: 模板写作
+    category: Knowledge
+    version: 0.1.0
+    license: Proprietary
+    path: skills/template-writing
+    description: Draft and fill strict-format DOCX templates from reference materials such as technical proposals, contracts, technical agreements, test protocols, meeting notes, and project documents.
+    tagline_en: Draft strict-format DOCX templates from project reference materials.
+    tagline_zh: 根据合同、技术协议和项目资料撰写并填充固定格式 DOCX 模板。
   - name: transcript-source-compiler
     display_name: Transcript Source Compiler
     name_zh: 转写来源编译器

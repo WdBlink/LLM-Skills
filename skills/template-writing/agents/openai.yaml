@@ -1,0 +1,4 @@
+interface:
+  display_name: "Template Writing"
+  short_description: "Draft strict-format DOCX templates from reference materials."
+  default_prompt: "Use $template-writing to complete this strict-format DOCX template from the provided contract, technical agreement, and project reference materials."
