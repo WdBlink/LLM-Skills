@@ -1,0 +1,4 @@
+interface:
+  display_name: "Auto YOLO Dataset"
+  short_description: "Build YOLO datasets through a configured detector."
+  default_prompt: "Call the configured detector service and create YOLO labels plus dataset assets for these images."

@@ -30,6 +30,16 @@ skills:
     description: Record explicit project thinking into an Obsidian-hosted HTML mind map and AI context pack for future implementation agents.
     tagline_en: Preserve project decisions and intent as an interactive mind map.
     tagline_zh: 将项目决策和意图记录为可交互思维导图。
+  - name: auto-yolo-dataset
+    display_name: Auto YOLO Dataset
+    name_zh: 自动 YOLO 数据集
+    category: Multimodal
+    version: 0.1.0
+    license: Proprietary
+    path: skills/auto-yolo-dataset
+    description: Generate object-detection annotations and portable dataset assets from images through an explicit local or remote detector backend.
+    tagline_en: Build YOLO, COCO, VOC, and Label Studio assets through a configured detector.
+    tagline_zh: 通过本地或远程检测器生成 YOLO、COCO、VOC 和 Label Studio 数据集资产。
   - name: ms-qwen-vl
     display_name: MS Qwen VL
     name_zh: 魔搭 Qwen-VL 视觉解析
