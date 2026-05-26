@@ -28,7 +28,7 @@
 
 ## 技能列表
 
-> **5 个技能**
+> **6 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
@@ -38,6 +38,7 @@
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`template-writing`](skills/template-writing) | [模板写作](skills/template-writing) | 根据合同、技术协议和项目资料撰写并填充固定格式 DOCX 模板。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`transcript-source-compiler`](skills/transcript-source-compiler) | [转写来源编译器](skills/transcript-source-compiler) | 将大段演讲转写编译成可追溯的来源底稿和可读文章。 |
 | **多模态** | | | |
+| ![Private](https://img.shields.io/badge/Private-blueviolet) | [`auto-yolo-dataset`](skills/auto-yolo-dataset) | [自动 YOLO 数据集](skills/auto-yolo-dataset) | 通过本地或远程检测器生成 YOLO、COCO、VOC 和 Label Studio 数据集资产。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`ms-qwen-vl`](skills/ms-qwen-vl) | [魔搭 Qwen-VL 视觉解析](skills/ms-qwen-vl) | 用 Qwen-VL 解析图片/视频，并可输出 YOLO 数据集。 |
 
 <sub>上表由 `scripts/render_readme.py` 从 `skills.yaml` 生成。请编辑 `skills.yaml`，不要手动改表格。</sub>
@@ -52,6 +53,7 @@ LLM-Skills/
 │   ├── render_readme.py
 │   └── validate_skills.py
 └── skills/
+    ├── auto-yolo-dataset/
     ├── book-to-skill/
     ├── mind-map/
     ├── ms-qwen-vl/
