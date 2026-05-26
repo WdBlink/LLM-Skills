@@ -1,4 +1,4 @@
 interface:
   display_name: "Template Writing"
-  short_description: "Draft strict-format DOCX templates from reference materials."
-  default_prompt: "Use $template-writing to complete this strict-format DOCX template from the provided contract, technical agreement, and project reference materials."
+  short_description: "Draft strict-format DOCX templates from references, including required diagrams."
+  default_prompt: "Use $template-writing to complete this strict-format DOCX template from the provided contract, technical agreement, and project reference materials. Generate and insert required diagrams when the template asks for structure diagrams, flowcharts, composition diagrams, topology diagrams, or similar visuals."

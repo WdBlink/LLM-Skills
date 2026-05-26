@@ -1,5 +1,15 @@
 version: 1
 skills:
+  - name: pv-forecast-pptx
+    display_name: PV Forecast PPTX
+    name_zh: 光伏预测汇报 PPTX
+    category: Presentation
+    version: 0.1.0
+    license: Proprietary
+    path: skills/air-pptx
+    description: Create professional PowerPoint research presentations for photovoltaic and energy forecasting projects using a bundled reference template and presentation resources.
+    tagline_en: Build photovoltaic forecasting research presentation decks from bundled templates.
+    tagline_zh: 基于模板资源生成光伏与能源预测研究汇报 PPTX。
   - name: template-writing
     display_name: Template Writing
     name_zh: 模板写作
@@ -60,3 +70,13 @@ skills:
     description: Convert a PDF, EPUB, Markdown, or text book into traceable, executable Agent Skills with references, templates, source-map evidence, and evals.
     tagline_en: Turn books into traceable, testable Agent Skills instead of summaries.
     tagline_zh: 将整本书转成可追溯、可测试、可执行的 Agent Skill。
+  - name: weekly-report
+    display_name: Weekly Report
+    name_zh: 中文周报生成器
+    category: Knowledge
+    version: 0.1.0
+    license: Proprietary
+    path: skills/weekly-report
+    description: Generate Chinese weekly work report DOCX files from recent work logs or a provided log file using a portable self-contained script.
+    tagline_en: Generate Chinese weekly report DOCX files from work logs.
+    tagline_zh: 从工作日志生成可迁移的中文工作周报 DOCX。

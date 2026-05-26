@@ -1,0 +1,4 @@
+interface:
+  display_name: "Weekly Report"
+  short_description: "Generate Chinese weekly work reports"
+  default_prompt: "Use $weekly-report to generate a weekly work report from my recent #工作日志 notes."

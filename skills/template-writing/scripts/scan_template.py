@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 
-PLACEHOLDER_RE = re.compile(r"(\{\{.+?\}\}|\[.+?\]|_{3,})")
+PLACEHOLDER_RE = re.compile(r"(\{\{.+?\}\}|\[.+?\]|_{3,}|[XxＸｘ×]{2,})")
 SECTION_HEADING_RE = re.compile(
     r"^("
     r"\d+(\.\d+)*"
@@ -18,6 +18,24 @@ SECTION_HEADING_RE = re.compile(
 )
 TABLE_OR_FIGURE_CAPTION_RE = re.compile(r"^[表图]\s*\d+([-.．]\d+)*\s+.+")
 TOC_LINE_RE = re.compile(r"^.+\t+\d+$|^.+\s{2,}\d+$")
+DIAGRAM_KEYWORDS = (
+    "结构框图",
+    "系统框图",
+    "组成框图",
+    "结构图",
+    "组成图",
+    "流程图",
+    "架构图",
+    "部署图",
+    "拓扑图",
+    "网络拓扑",
+    "关系图",
+    "原理图",
+    "数据流图",
+    "框图",
+    "图示",
+    "示意图",
+)
 GUIDANCE_MARKERS = (
     "【要求】",
     "【示例】",
@@ -49,6 +67,16 @@ def looks_like_guidance(text: str) -> bool:
     return stripped in {"要求", "示例", "说明"} or stripped.startswith("注：")
 
 
+def diagram_keyword(text: str) -> str | None:
+    stripped = text.strip()
+    if not stripped:
+        return None
+    for keyword in DIAGRAM_KEYWORDS:
+        if keyword in stripped:
+            return keyword
+    return None
+
+
 def looks_like_structural_paragraph(text: str, style: str) -> bool:
     stripped = text.strip()
     if not stripped:
@@ -68,10 +96,14 @@ def paragraph_rewrite_reason(text: str, style: str) -> str | None:
     stripped = text.strip()
     if not stripped:
         return "blank_or_empty_region"
+    if diagram_keyword(stripped):
+        return "diagram_request"
     if looks_like_guidance(stripped):
         return "template_guidance_or_example"
     if looks_like_slot(stripped):
         return "placeholder_or_slot"
+    if TABLE_OR_FIGURE_CAPTION_RE.match(stripped):
+        return "caption_text"
     if looks_like_structural_paragraph(stripped, style):
         return None
     return "template_body_text"
@@ -81,6 +113,8 @@ def cell_rewrite_reason(row_index: int, text: str) -> str | None:
     stripped = text.strip()
     if not stripped:
         return "blank_or_empty_cell"
+    if diagram_keyword(stripped):
+        return "diagram_request"
     if looks_like_guidance(stripped):
         return "template_guidance_or_example"
     if looks_like_slot(stripped):
@@ -93,6 +127,7 @@ def cell_rewrite_reason(row_index: int, text: str) -> str | None:
 def paragraph_record(index: int, paragraph: Any) -> dict[str, Any]:
     text = paragraph.text
     style = paragraph.style.name if paragraph.style is not None else ""
+    keyword = diagram_keyword(text)
     return {
         "type": "paragraph",
         "index": index,
@@ -101,12 +136,15 @@ def paragraph_record(index: int, paragraph: Any) -> dict[str, Any]:
         "looks_like_slot": looks_like_slot(text),
         "looks_like_guidance": looks_like_guidance(text),
         "looks_like_structure": looks_like_structural_paragraph(text, style),
+        "looks_like_diagram_request": keyword is not None,
+        "diagram_keyword": keyword,
         "rewrite_reason": paragraph_rewrite_reason(text, style),
     }
 
 
 def cell_record(table_index: int, row_index: int, col_index: int, cell: Any) -> dict[str, Any]:
     text = cell.text.strip()
+    keyword = diagram_keyword(text)
     return {
         "type": "table_cell",
         "table": table_index,
@@ -116,6 +154,8 @@ def cell_record(table_index: int, row_index: int, col_index: int, cell: Any) -> 
         "normalized_text": normalize(text),
         "looks_like_slot": looks_like_slot(text),
         "looks_like_guidance": looks_like_guidance(text),
+        "looks_like_diagram_request": keyword is not None,
+        "diagram_keyword": keyword,
         "rewrite_reason": cell_rewrite_reason(row_index, text),
         "paragraph_count": len(cell.paragraphs),
     }
@@ -212,6 +252,43 @@ def rewrite_candidates(paragraphs: list[dict[str, Any]], cells: list[dict[str, A
     return candidates
 
 
+def diagram_candidates(paragraphs: list[dict[str, Any]], cells: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    for paragraph in paragraphs:
+        if not paragraph.get("looks_like_diagram_request"):
+            continue
+        candidates.append(
+            {
+                "target_hint": "image_paragraph or image_before_paragraph/image_after_paragraph",
+                "location": {
+                    "type": "paragraph",
+                    "index": paragraph["index"],
+                },
+                "diagram_keyword": paragraph.get("diagram_keyword"),
+                "text": paragraph["text"],
+                "is_caption": bool(TABLE_OR_FIGURE_CAPTION_RE.match(str(paragraph["text"]).strip())),
+            }
+        )
+    for cell in cells:
+        if not cell.get("looks_like_diagram_request"):
+            continue
+        candidates.append(
+            {
+                "target_hint": "image_table_cell",
+                "location": {
+                    "type": "table_cell",
+                    "table": cell["table"],
+                    "row": cell["row"],
+                    "col": cell["col"],
+                },
+                "diagram_keyword": cell.get("diagram_keyword"),
+                "text": cell["text"],
+                "is_caption": False,
+            }
+        )
+    return candidates
+
+
 def scan(template: Path) -> dict[str, Any]:
     try:
         from docx import Document
@@ -252,6 +329,7 @@ def scan(template: Path) -> dict[str, Any]:
         "cells": cells,
         "field_candidates": adjacent_field_candidates(cells),
         "guidance_blocks": extract_guidance_blocks(paragraphs),
+        "diagram_candidates": diagram_candidates(paragraphs, cells),
         "rewrite_candidates": rewrite_candidates(paragraphs, cells),
     }
 

@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 .trae/
 .claude/
+/generated/
 
 # Local scratch / pre-reorg copies kept on this machine, not part of the index.
 /air-pptx/
