@@ -502,6 +502,12 @@ def html_template() -> str:
 
 def render_html(state: dict[str, Any]) -> str:
     data_json = json.dumps(state, ensure_ascii=False)
+    safe_data_json = (
+        data_json
+        .replace("&", "\\u0026")
+        .replace("<", "\\u003c")
+        .replace(">", "\\u003e")
+    )
     template = html_template()
     language = state.get("settings", {}).get("language", "en")
     labels = labels_for(language)
@@ -510,7 +516,7 @@ def render_html(state: dict[str, Any]) -> str:
         .replace("__HTML_LANG__", html.escape(language))
         .replace("__PAGE_TITLE__", html.escape(labels["pageTitle"]))
         .replace("__GENERATED_AT__", html.escape(state["project"]["updatedAt"]))
-        .replace("__DATA_JSON__", data_json.replace("</", "<\\/"))
+        .replace("__DATA_JSON__", safe_data_json)
     )
 
 

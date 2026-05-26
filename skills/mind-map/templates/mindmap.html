@@ -3,318 +3,813 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>__PROJECT_TITLE__ __PAGE_TITLE__</title>
+  <title>Project MindMap - __PROJECT_TITLE__</title>
   <style>
     :root {
-      --bg: #f7f5ef;
-      --ink: #1f2a28;
-      --muted: #64706d;
-      --line: #c9d1cb;
-      --card: #ffffff;
-      --accent: #216869;
-      --decision: #e7f1ed;
-      --principle: #fff1d8;
-      --question: #e8ecff;
-      --task: #f4e7f1;
-      --deprecated: #eee9e1;
+      --bg: oklch(98% 0.005 250);
+      --surface: oklch(100% 0 0);
+      --surface-2: oklch(96% 0.006 250);
+      --fg: oklch(22% 0.02 240);
+      --muted: oklch(50% 0.018 240);
+      --border: oklch(90% 0.008 240);
+      --accent: oklch(58% 0.16 145);
+      --secondary: oklch(58% 0.16 250);
+      --warn: oklch(68% 0.16 70);
+      --danger: oklch(58% 0.17 25);
+      --ink-soft: color-mix(in oklch, var(--fg) 72%, white);
+      --shadow: 0 16px 45px color-mix(in oklch, var(--fg) 10%, transparent);
+      --font-display: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
+      --font-body: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", system-ui, sans-serif;
+      --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, Menlo, monospace;
     }
+
     * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
     body {
       margin: 0;
-      color: var(--ink);
-      background: var(--bg);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--fg);
+      background:
+        linear-gradient(180deg, color-mix(in oklch, var(--secondary) 5%, transparent), transparent 36rem),
+        var(--bg);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
     }
-    header {
-      padding: 28px 36px 12px;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255,255,255,0.68);
-      backdrop-filter: blur(12px);
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    p, span, strong, code, button, li {
+      overflow-wrap: anywhere;
+      word-break: normal;
+    }
+    button:focus-visible,
+    input:focus-visible,
+    .node-group:focus-visible {
+      outline: 3px solid color-mix(in oklch, var(--secondary) 34%, transparent);
+      outline-offset: 3px;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+    .topbar {
       position: sticky;
       top: 0;
-      z-index: 5;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border);
+      background: color-mix(in oklch, var(--surface) 88%, transparent);
+      backdrop-filter: blur(14px);
     }
-    .topline {
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border: 1px solid color-mix(in oklch, var(--accent) 45%, var(--border));
+      border-radius: 8px;
+      background: color-mix(in oklch, var(--accent) 10%, white);
+      color: var(--accent);
+      font: 700 16px/1 var(--font-mono);
+    }
+    .brand h1 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(19px, 2vw, 28px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+    .brand p {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      flex-wrap: wrap;
+      flex: 0 0 auto;
+    }
+    .segmented {
+      display: inline-flex;
+      min-height: 34px;
+      padding: 3px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+    }
+    .segmented button {
+      min-width: 48px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font: 700 11px/1 var(--font-mono);
+      letter-spacing: 0;
+    }
+    .segmented button[aria-pressed="true"] {
+      background: var(--fg);
+      color: white;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 34px;
+      padding: 0 12px;
+      max-width: 260px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--ink-soft);
+      font: 12px/1.25 var(--font-mono);
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 99px;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent) 16%, transparent);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(260px, 320px) minmax(440px, 1fr) minmax(300px, 380px);
+      gap: 16px;
+      padding: 16px;
+      min-height: 0;
+    }
+    .panel,
+    .map-shell {
+      min-width: 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: color-mix(in oklch, var(--surface) 94%, transparent);
+      box-shadow: var(--shadow);
+    }
+    .panel {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-header {
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .kicker {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font: 700 11px/1 var(--font-mono);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .panel h2,
+    .map-toolbar h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 18px;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    .panel-body {
+      padding: 16px;
+      overflow: auto;
+    }
+    .field {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+    .field label {
+      color: var(--muted);
+      font: 700 11px/1 var(--font-mono);
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .search {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 0 12px;
+      background: var(--surface);
+      color: var(--fg);
+      outline: none;
+    }
+    .search:focus {
+      border-color: color-mix(in oklch, var(--secondary) 60%, var(--border));
+      box-shadow: 0 0 0 4px color-mix(in oklch, var(--secondary) 13%, transparent);
+    }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .filter-button,
+    .action-button,
+    .detail-button,
+    .related-button {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--fg);
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+    .filter-button {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 7px;
+      padding: 0 10px;
+      font-size: 13px;
+    }
+    .filter-button[aria-pressed="true"] {
+      border-color: color-mix(in oklch, var(--type-color) 50%, var(--border));
+      background: color-mix(in oklch, var(--type-color) 13%, white);
+    }
+    .swatch {
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+      background: var(--type-color);
+      flex: 0 0 auto;
+    }
+    .action-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .action-button,
+    .detail-button {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      padding: 0 10px;
+      font: 700 12px/1 var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .action-button.primary,
+    .detail-button.primary {
+      background: var(--fg);
+      color: white;
+      border-color: var(--fg);
+    }
+    .action-button:hover,
+    .detail-button:hover,
+    .filter-button:hover,
+    .related-button:hover {
+      transform: translateY(-1px);
+      border-color: color-mix(in oklch, var(--fg) 24%, var(--border));
+    }
+
+    .contract,
+    .stack-strip,
+    .handoff-note,
+    .timeline-card {
+      margin-top: 18px;
+    }
+    .contract {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+    .contract-row {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      padding: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .contract-row:first-child { border-top: 0; }
+    .contract-code {
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 6px;
+      background: var(--surface-2);
+      color: var(--secondary);
+      font: 700 12px/1 var(--font-mono);
+    }
+    .contract strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.25;
+    }
+    .contract span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
+    }
+    .stack-strip {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+    }
+    .stack-chip {
+      min-height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: color-mix(in oklch, var(--secondary) 5%, var(--surface));
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.25;
+    }
+    .stack-chip code {
+      color: var(--secondary);
+      font: 700 11px/1.25 var(--font-mono);
+    }
+    .handoff-note {
+      margin-top: 14px;
+      padding: 12px;
+      border: 1px solid color-mix(in oklch, var(--accent) 28%, var(--border));
+      border-radius: 7px;
+      background: color-mix(in oklch, var(--accent) 7%, var(--surface));
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    .map-shell {
+      min-height: 730px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      overflow: hidden;
+    }
+    .map-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .map-toolbar h2 { font-size: 15px; }
+    .map-meta,
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font: 12px/1 var(--font-mono);
+    }
+    .map-canvas {
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px),
+        var(--surface);
+      background-size: 34px 34px;
+    }
+    svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: 620px;
+    }
+    .edge {
+      stroke: color-mix(in oklch, var(--secondary) 70%, var(--muted));
+      stroke-width: 2;
+      opacity: 0.38;
+      transition: opacity 0.18s ease, stroke-width 0.18s ease;
+    }
+    .edge.active {
+      opacity: 0.95;
+      stroke-width: 3;
+    }
+    .edge.dim { opacity: 0.08; }
+    .edge-label {
+      fill: var(--muted);
+      font: 10px/1 var(--font-mono);
+      paint-order: stroke;
+      stroke: var(--surface);
+      stroke-width: 6px;
+      stroke-linejoin: round;
+    }
+    .edge-label.dim { opacity: 0.12; }
+    .node-group {
+      outline: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    .node-card {
+      fill: var(--surface);
+      stroke: color-mix(in oklch, var(--node-color) 44%, var(--border));
+      stroke-width: 1.4;
+      rx: 8;
+      filter: drop-shadow(0 10px 18px rgb(25 38 54 / 0.08));
+      transition: stroke-width 0.18s ease, fill 0.18s ease;
+    }
+    .node-group:hover .node-card,
+    .node-group.selected .node-card {
+      stroke-width: 2.6;
+      fill: color-mix(in oklch, var(--node-color) 8%, white);
+    }
+    .node-group.dim { opacity: 0.18; }
+    .node-title {
+      fill: var(--fg);
+      font: 700 13px/1.2 var(--font-display);
+      pointer-events: none;
+    }
+    .node-summary {
+      fill: var(--muted);
+      font: 11px/1.35 var(--font-body);
+      pointer-events: none;
+    }
+    .node-type {
+      fill: var(--node-color);
+      font: 700 10px/1 var(--font-mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    .node-pin { fill: var(--node-color); }
+    .lane-label {
+      fill: color-mix(in oklch, var(--muted) 75%, transparent);
+      font: 700 10px/1 var(--font-mono);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+    .lane-rule {
+      stroke: color-mix(in oklch, var(--border) 80%, transparent);
+      stroke-width: 1;
+      stroke-dasharray: 5 7;
+      pointer-events: none;
+    }
+    .map-footer {
+      min-height: 48px;
+      border-top: 1px solid var(--border);
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(180px, auto);
+      gap: 12px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .legend {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .empty-state {
+      min-height: 240px;
+      display: grid;
+      place-items: center;
+      color: var(--muted);
+      text-align: center;
+      padding: 24px;
+    }
+    .empty-state strong {
+      display: block;
+      color: var(--fg);
+      margin-bottom: 6px;
+    }
+
+    .detail-title {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 18px;
-    }
-    h1 {
-      margin: 0;
-      font-size: 28px;
-      letter-spacing: 0;
-      line-height: 1.15;
-    }
-    .meta {
-      margin-top: 8px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .language-toggle {
-      display: inline-flex;
-      gap: 4px;
-      padding: 3px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.72);
-      flex: 0 0 auto;
-    }
-    .language-toggle button {
-      border: 0;
-      border-radius: 6px;
-      padding: 6px 9px;
-      background: transparent;
-      color: var(--muted);
-      font: inherit;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .language-toggle button[aria-pressed="true"] {
-      background: var(--accent);
-      color: #fff;
-    }
-    .toolbar {
-      display: flex;
-      align-items: center;
       gap: 10px;
-      margin-top: 18px;
-      flex-wrap: wrap;
     }
-    .search {
-      min-width: min(320px, 100%);
-      flex: 1 1 260px;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 9px 11px;
-      background: #fff;
-      color: var(--ink);
-      font: inherit;
-      font-size: 13px;
-    }
-    .filters {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .hint {
-      flex-basis: 100%;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .filter-button,
-    .reset-button,
-    .detail-button {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 7px 9px;
-      background: rgba(255,255,255,0.78);
-      color: var(--muted);
-      font: inherit;
-      font-size: 12px;
-      cursor: pointer;
-    }
-    .filter-button[aria-pressed="true"] {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: #fff;
-    }
-    main {
-      padding: 28px 36px 42px;
-    }
-    .map {
-      position: relative;
-      min-height: 620px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(240px, 1fr));
-      gap: 22px;
-      align-items: start;
-    }
-    .lane {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      min-width: 0;
-    }
-    .lane-title {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      padding-left: 4px;
-    }
-    .node {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      background: var(--card);
-      padding: 14px 15px;
-      box-shadow: 0 8px 22px rgba(31,42,40,0.08);
-      cursor: pointer;
-      transition: opacity 160ms ease, transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
-    }
-    .node:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 10px 26px rgba(31,42,40,0.12);
-    }
-    .node.is-focused {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(33,104,105,0.18), 0 12px 28px rgba(31,42,40,0.14);
-    }
-    .node.is-related {
-      border-color: rgba(33,104,105,0.45);
-    }
-    .node.is-dimmed {
-      opacity: 0.34;
-    }
-    .node[data-type="thesis"] { border-color: #72aaa0; background: #edf7f3; }
-    .node[data-type="decision"] { background: var(--decision); }
-    .node[data-type="principle"] { background: var(--principle); }
-    .node[data-type="question"] { background: var(--question); }
-    .node[data-type="task"] { background: var(--task); }
-    .node[data-type="deprecated"] { background: var(--deprecated); opacity: 0.78; }
-    .node h2 {
-      margin: 0;
-      font-size: 16px;
-      line-height: 1.25;
-      letter-spacing: 0;
-    }
-    .node p {
-      margin: 9px 0 0;
-      color: #33413e;
-      font-size: 13px;
-      line-height: 1.45;
-    }
-    .badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 11px;
+    .detail-title h2 {
+      max-width: 26ch;
+      overflow-wrap: anywhere;
     }
     .badge {
-      border: 1px solid rgba(31,42,40,0.16);
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 0 8px;
       border-radius: 999px;
-      padding: 3px 7px;
-      color: var(--muted);
-      font-size: 11px;
-      background: rgba(255,255,255,0.62);
+      border: 1px solid color-mix(in oklch, var(--badge-color) 40%, var(--border));
+      background: color-mix(in oklch, var(--badge-color) 10%, white);
+      color: color-mix(in oklch, var(--badge-color) 78%, black);
+      font: 700 10px/1 var(--font-mono);
+      letter-spacing: 0;
+      text-transform: uppercase;
+      white-space: nowrap;
     }
-    .links {
-      margin: 11px 0 0;
-      padding: 9px 0 0;
-      border-top: 1px solid rgba(31,42,40,0.12);
+    .summary-text {
+      margin: 0 0 16px;
+      color: var(--ink-soft);
+      font-size: 15px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+    .detail-block {
+      padding: 14px 0;
+      border-top: 1px solid var(--border);
+    }
+    .detail-block h3 {
+      margin: 0 0 9px;
       color: var(--muted);
+      font: 700 11px/1 var(--font-mono);
+      letter-spacing: 0;
+      text-transform: uppercase;
+    }
+    .detail-block p,
+    .detail-block li {
+      color: var(--ink-soft);
+      font-size: 13px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
+    .detail-block p { margin: 0; }
+    .detail-block ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .related-list {
+      display: grid;
+      gap: 8px;
+    }
+    .related-button {
+      width: 100%;
+      min-height: 38px;
+      display: grid;
+      grid-template-columns: 8px 1fr auto;
+      align-items: center;
+      gap: 9px;
+      padding: 8px 9px;
+      text-align: left;
+    }
+    .related-button strong {
+      font-size: 12px;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+    .related-button span:last-child {
+      color: var(--muted);
+      font: 10px/1 var(--font-mono);
+      text-transform: uppercase;
+    }
+    .timeline-card {
+      display: grid;
+      gap: 8px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .timeline-row {
+      display: grid;
+      grid-template-columns: minmax(86px, 0.38fr) minmax(0, 1fr);
+      gap: 10px;
+      padding: 9px 0;
+      border-top: 1px solid color-mix(in oklch, var(--border) 68%, transparent);
+      color: var(--ink-soft);
       font-size: 12px;
       line-height: 1.4;
     }
-    .links div + div { margin-top: 4px; }
-    .details {
-      display: none;
-      margin-top: 11px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(31,42,40,0.12);
-      color: #33413e;
-      font-size: 12px;
-      line-height: 1.45;
-    }
-    .node[data-expanded="true"] .details {
-      display: block;
-    }
-    .details ul {
-      margin: 6px 0 0;
-      padding-left: 18px;
-    }
-    .detail-button {
-      margin-top: 11px;
-      padding: 6px 8px;
-    }
-    .empty-result {
-      grid-column: 1 / -1;
-      border: 1px dashed var(--line);
-      border-radius: 8px;
-      padding: 24px;
+    .timeline-row:first-child { border-top: 0; }
+    .timeline-row time {
       color: var(--muted);
-      background: rgba(255,255,255,0.52);
-      text-align: center;
+      font-family: var(--font-mono);
+      overflow-wrap: anywhere;
     }
-    .timeline {
-      margin-top: 30px;
-      border-top: 1px solid var(--line);
-      padding-top: 22px;
+
+    @media (max-width: 1180px) {
+      .workspace {
+        grid-template-columns: 300px minmax(0, 1fr);
+      }
+      .inspector {
+        grid-column: 1 / -1;
+      }
+      .inspector .panel-body {
+        display: grid;
+        grid-template-columns: minmax(0, 1.15fr) minmax(260px, 0.85fr);
+        gap: 20px;
+      }
     }
-    .timeline h2 {
-      margin: 0 0 12px;
-      font-size: 18px;
-    }
-    .entry {
-      display: grid;
-      grid-template-columns: 190px 1fr;
-      gap: 18px;
-      padding: 12px 0;
-      border-top: 1px solid rgba(31,42,40,0.1);
-      font-size: 13px;
-    }
-    .entry time {
-      color: var(--muted);
-    }
-    @media (max-width: 860px) {
-      header, main { padding-left: 18px; padding-right: 18px; }
-      .map { grid-template-columns: 1fr; }
-      .entry { grid-template-columns: 1fr; gap: 4px; }
-      .topline { flex-direction: column; }
+    @media (max-width: 760px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 16px;
+      }
+      .top-actions {
+        justify-content: flex-start;
+      }
+      .workspace {
+        grid-template-columns: 1fr;
+        padding: 10px;
+      }
+      .map-shell { min-height: 650px; }
+      svg { min-height: 540px; }
+      .map-toolbar,
+      .map-footer {
+        grid-template-columns: 1fr;
+      }
+      .map-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .filter-grid { grid-template-columns: 1fr; }
+      .inspector .panel-body { display: block; }
+      .timeline-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="topline">
-      <div>
-        <h1>__PROJECT_TITLE__</h1>
-        <div id="meta" class="meta"></div>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">MM</div>
+        <div>
+          <h1>Project MindMap</h1>
+          <p id="brand-subtitle"></p>
+        </div>
       </div>
-      <div class="language-toggle" aria-label="Language">
-        <button id="lang-zh" type="button" data-lang="zh">中文</button>
-        <button id="lang-en" type="button" data-lang="en">English</button>
+      <div class="top-actions" aria-label="Mind map status">
+        <span class="segmented" aria-label="Language">
+          <button id="lang-zh" type="button" data-lang="zh">中文</button>
+          <button id="lang-en" type="button" data-lang="en">EN</button>
+        </span>
+        <span class="status-pill"><span class="status-dot"></span><span id="active-count"></span></span>
+        <span class="status-pill" id="boundary-pill"></span>
       </div>
-    </div>
-    <div class="toolbar" role="search">
-      <input id="search" class="search" type="search">
-      <div id="filters" class="filters" aria-label="Filters"></div>
-      <button id="reset" class="reset-button" type="button"></button>
-      <div id="hint" class="hint"></div>
-    </div>
-  </header>
-  <main>
-    <section id="map" class="map"></section>
-    <section class="timeline">
-      <h2 id="timeline-title"></h2>
-      <div id="timeline"></div>
-    </section>
-  </main>
+    </header>
+
+    <main class="workspace">
+      <aside class="panel controls" aria-label="Explore and filter">
+        <div class="panel-header">
+          <p class="kicker" id="explore-kicker"></p>
+          <h2 id="explore-title"></h2>
+        </div>
+        <div class="panel-body">
+          <div class="field">
+            <label id="search-label" for="search"></label>
+            <input id="search" class="search" type="search" autocomplete="off">
+          </div>
+
+          <div class="field">
+            <label id="filter-label"></label>
+            <div id="filters" class="filter-grid" aria-label="Node type filters"></div>
+          </div>
+
+          <div class="action-row">
+            <button id="show-all" class="action-button primary" type="button"></button>
+            <button id="reset" class="action-button" type="button"></button>
+          </div>
+
+          <section class="contract" aria-label="Product contract">
+            <div class="contract-row">
+              <div class="contract-code">01</div>
+              <div><strong id="contract-1-title"></strong><span id="contract-1-body"></span></div>
+            </div>
+            <div class="contract-row">
+              <div class="contract-code">02</div>
+              <div><strong id="contract-2-title"></strong><span id="contract-2-body"></span></div>
+            </div>
+            <div class="contract-row">
+              <div class="contract-code">03</div>
+              <div><strong id="contract-3-title"></strong><span id="contract-3-body"></span></div>
+            </div>
+          </section>
+
+          <section class="stack-strip" aria-label="Storage and handoff stack">
+            <div class="stack-chip"><span id="stack-shell"></span><code>Vite + React / SvelteKit</code></div>
+            <div class="stack-chip"><span id="stack-graph"></span><code>Graphology</code></div>
+            <div class="stack-chip"><span id="stack-render"></span><code>Sigma.js</code></div>
+            <div class="stack-chip"><span id="stack-context"></span><code>context.md + JSON</code></div>
+            <div class="stack-chip"><span id="stack-history"></span><code>entries/*.md</code></div>
+          </section>
+          <p class="handoff-note" id="handoff-note"></p>
+        </div>
+      </aside>
+
+      <section class="map-shell" aria-label="Semantic memory graph">
+        <div class="map-toolbar">
+          <h2 id="map-title"></h2>
+          <div class="map-meta">
+            <span id="result-count"></span>
+            <span id="focus-state"></span>
+          </div>
+        </div>
+        <div class="map-canvas">
+          <svg id="map-svg" viewBox="0 0 1240 780" role="img" aria-label="Mind map graph"></svg>
+        </div>
+        <div class="map-footer">
+          <div class="legend" id="edge-legend"></div>
+          <span id="map-hint"></span>
+        </div>
+      </section>
+
+      <aside class="panel inspector" aria-label="Node detail">
+        <div class="panel-header detail-title">
+          <div>
+            <p class="kicker" id="detail-kicker"></p>
+            <h2 id="detail-heading"></h2>
+          </div>
+          <span class="badge" id="detail-badge" style="--badge-color: var(--secondary)"></span>
+        </div>
+        <div class="panel-body" id="detail-body"></div>
+      </aside>
+    </main>
+  </div>
+
   <script id="mindmap-data" type="application/json">__DATA_JSON__</script>
   <script>
     const data = JSON.parse(document.getElementById("mindmap-data").textContent);
+    const TYPE_META = {
+      thesis: { color: "oklch(58% 0.16 250)" },
+      principle: { color: "oklch(58% 0.16 145)" },
+      decision: { color: "oklch(58% 0.13 205)" },
+      constraint: { color: "oklch(62% 0.15 35)" },
+      question: { color: "oklch(68% 0.16 70)" },
+      task: { color: "oklch(58% 0.16 305)" },
+      deprecated: { color: "oklch(58% 0.04 80)" }
+    };
+    const TYPE_ORDER = ["thesis", "principle", "decision", "constraint", "question", "task", "deprecated"];
+    const EDGE_META = {
+      implies: "implies",
+      requires: "requires",
+      enables: "enables",
+      constrains: "constrains",
+      conflicts: "conflicts",
+      supersedes: "supersedes",
+      relates: "relates"
+    };
     const i18n = {
       zh: {
-        meta: `项目思维导图 · 更新于 ${data.project.updatedAt} · 实现前先阅读 context.md`,
-        mapLabel: "项目思维导图",
-        timeline: "思考历史",
-        lanes: [
-          ["核心判断", ["thesis"]],
-          ["方向与原则", ["principle", "decision", "constraint"]],
-          ["问题与执行", ["question", "task", "deprecated"]]
-        ],
-        emptyTitle: "暂无节点",
-        emptyBody: "用 mind-map skill 主动记录一个项目想法。",
-        noMatch: "没有匹配的节点",
-        searchPlaceholder: "搜索节点、标签、理由或摘要",
-        all: "全部",
-        reset: "重置",
-        details: "详情",
-        hideDetails: "收起",
+        subtitle: "把项目判断沉淀成未来 Agent 可读取、可追溯、可交接的记忆层",
+        boundary: "记录 / 实现分离",
+        exploreKicker: "Explore",
+        exploreTitle: "检索项目判断",
+        searchLabel: "Search nodes",
+        searchPlaceholder: "搜索标题、摘要、理由、标签...",
+        filterLabel: "Node type filters",
+        showAll: "全部类型",
+        reset: "重置全图",
+        contract1Title: "只记录用户明确表达",
+        contract1Body: "不自动扫全量对话，不把模型猜测变成项目事实。",
+        contract2Title: "记录和实现分离",
+        contract2Body: "task 节点是意图，不是当前 Agent 立即执行的许可。",
+        contract3Title: "先解释为什么",
+        contract3Body: "未来实现型 Agent 先读约束、原则和废弃项，再改代码。",
+        stackShell: "Obsidian 插件外壳",
+        stackGraph: "关系图数据模型",
+        stackRender: "可交互图谱渲染",
+        stackContext: "交接上下文输出",
+        stackHistory: "追加式历史记录",
+        handoffNote: "Graphology 负责可维护的数据结构，Sigma.js 负责图谱性能与聚焦交互；插件 UI 不把 task 自动执行，只把上下文交给后续实现型 Agent。",
+        mapTitle: "Semantic memory graph",
+        mapHint: "点击节点聚焦关联关系，按 Esc 取消聚焦",
+        detailKicker: "Node detail",
+        noSelection: "选择一个节点",
+        noSelectionBody: "从图谱中选择节点以查看理由、来源记录和 Agent 交接上下文。",
+        ready: "READY",
+        noMatchesTitle: "无匹配节点",
+        noMatchesBody: "调整搜索或点击“重置全图”。",
+        emptyGraph: "暂无节点。用 mind-map skill 主动记录一个项目想法。",
+        fullMap: "全图",
+        focused: "聚焦",
+        nodes: "节点",
+        activeNodes: "active 节点",
         rationale: "理由",
         implications: "影响",
-        related: "关联",
-        focusHint: "点击节点聚焦关联关系，按 Esc 取消聚焦。",
+        related: "关联节点",
+        trace: "追溯",
+        agentHandoff: "Agent 交接",
+        handoffText: "实现型 Agent 应先读取 active 的 principle / constraint，再处理 task；遇到 deprecated 节点时，不应恢复旧方案，除非用户明确重开。插件实现建议拆成三层：Vite + React/SvelteKit 负责 Obsidian UI，Graphology 负责图数据模型，Sigma.js 负责交互式图谱渲染。",
+        expand: "展开详情",
+        collapse: "收起详情",
+        clearFocus: "解除聚焦",
+        timeline: "思考历史",
+        source: "来源",
         type: {
           thesis: "核心判断",
           principle: "原则",
@@ -332,32 +827,57 @@
           conflict: "冲突"
         },
         priority: {
-          high: "高优先级",
-          medium: "中优先级",
-          low: "低优先级"
+          high: "高",
+          medium: "中",
+          low: "低"
         }
       },
       en: {
-        meta: `Project mind map · Updated ${data.project.updatedAt} · Read context.md before implementation`,
-        mapLabel: "Project mind map",
-        timeline: "Thinking History",
-        lanes: [
-          ["Thesis", ["thesis"]],
-          ["Direction", ["principle", "decision", "constraint"]],
-          ["Execution", ["question", "task", "deprecated"]]
-        ],
-        emptyTitle: "No nodes yet",
-        emptyBody: "Record a project thought with the mind-map skill.",
-        noMatch: "No matching nodes",
-        searchPlaceholder: "Search nodes, tags, rationale, or summaries",
-        all: "All",
-        reset: "Reset",
-        details: "Details",
-        hideDetails: "Hide",
+        subtitle: "A traceable project memory layer future agents can read, explore, and inherit",
+        boundary: "record / implement separated",
+        exploreKicker: "Explore",
+        exploreTitle: "Search project judgment",
+        searchLabel: "Search nodes",
+        searchPlaceholder: "Search titles, summaries, rationale, tags...",
+        filterLabel: "Node type filters",
+        showAll: "All types",
+        reset: "Reset map",
+        contract1Title: "Record explicit user intent",
+        contract1Body: "No automatic transcript sweep and no guessed project facts.",
+        contract2Title: "Separate record from implementation",
+        contract2Body: "A task node is intent, not permission for the current agent to execute.",
+        contract3Title: "Explain why first",
+        contract3Body: "Future implementation agents read constraints, principles, and deprecated ideas before code.",
+        stackShell: "Obsidian plugin shell",
+        stackGraph: "Graph data model",
+        stackRender: "Interactive graph rendering",
+        stackContext: "Handoff context output",
+        stackHistory: "Append-only thinking history",
+        handoffNote: "Graphology owns the maintainable graph data model; Sigma.js owns performant exploration and focus interactions. The plugin UI records task intent, then hands context to a future implementation agent.",
+        mapTitle: "Semantic memory graph",
+        mapHint: "Click a node to focus related links. Press Esc to clear focus.",
+        detailKicker: "Node detail",
+        noSelection: "Select a node",
+        noSelectionBody: "Choose a graph node to inspect rationale, source entries, and agent handoff context.",
+        ready: "READY",
+        noMatchesTitle: "No matching nodes",
+        noMatchesBody: "Adjust search or reset the full map.",
+        emptyGraph: "No nodes yet. Record a project thought with the mind-map skill.",
+        fullMap: "full map",
+        focused: "focused",
+        nodes: "nodes",
+        activeNodes: "active nodes",
         rationale: "Rationale",
         implications: "Implications",
-        related: "Related",
-        focusHint: "Click a node to focus related links. Press Esc to clear focus.",
+        related: "Related nodes",
+        trace: "Trace",
+        agentHandoff: "Agent handoff",
+        handoffText: "Implementation agents should read active principles and constraints before handling tasks. Deprecated nodes should not be revived unless the user explicitly reopens them. The proposed plugin split is: Vite + React/SvelteKit for the Obsidian UI, Graphology for graph data, and Sigma.js for interactive graph rendering.",
+        expand: "Expand detail",
+        collapse: "Collapse detail",
+        clearFocus: "Clear focus",
+        timeline: "Thinking history",
+        source: "Source",
         type: {
           thesis: "thesis",
           principle: "principle",
@@ -381,39 +901,59 @@
         }
       }
     };
+
     const defaultLang = data.settings?.language === "en" ? "en" : "zh";
-    let currentLang = localStorage.getItem(`mindmap-lang:${data.project.id}`) || defaultLang;
-    let query = "";
-    let activeType = "all";
-    let focusedId = "";
-    const map = document.getElementById("map");
-    const searchInput = document.getElementById("search");
-    const filters = document.getElementById("filters");
-    const resetButton = document.getElementById("reset");
+    const state = {
+      lang: localStorage.getItem(`mindmap-lang:${data.project.id}`) || defaultLang,
+      query: "",
+      activeTypes: new Set(TYPE_ORDER),
+      selectedId: "",
+      expanded: false
+    };
     const nodes = data.nodes || [];
     const nodeById = new Map(nodes.map((node) => [node.id, node]));
+    const edges = (data.edges || []).filter((edge) => nodeById.has(edge.from) && nodeById.has(edge.to));
+    const entryById = new Map((data.entries || []).map((entry) => [entry.id, entry]));
     const outgoing = new Map();
     const incoming = new Map();
-    (data.edges || []).forEach((edge) => {
+    edges.forEach((edge) => {
       if (!outgoing.has(edge.from)) outgoing.set(edge.from, []);
-      outgoing.get(edge.from).push(edge);
       if (!incoming.has(edge.to)) incoming.set(edge.to, []);
+      outgoing.get(edge.from).push(edge);
       incoming.get(edge.to).push(edge);
     });
-    const filterTypes = ["all", "thesis", "principle", "decision", "constraint", "question", "task", "deprecated"];
-    const byType = (types) => visibleNodes().filter((node) => types.includes(node.type));
 
-    function el(tag, className, text) {
-      const node = document.createElement(tag);
-      if (className) node.className = className;
-      if (text) node.textContent = text;
-      return node;
+    const svg = document.getElementById("map-svg");
+    const searchInput = document.getElementById("search");
+    const filters = document.getElementById("filters");
+    const detailBody = document.getElementById("detail-body");
+    const detailHeading = document.getElementById("detail-heading");
+    const detailBadge = document.getElementById("detail-badge");
+
+    function labels() {
+      return i18n[state.lang] || i18n.zh;
     }
-
-    function label(dict, key) {
-      return dict[key] || key;
+    function text(key) {
+      return labels()[key];
     }
-
+    function typeLabel(type) {
+      return labels().type[type] || type;
+    }
+    function statusLabel(status) {
+      return labels().status[status || "active"] || status || "active";
+    }
+    function priorityLabel(priority) {
+      return labels().priority[priority || "medium"] || priority || "medium";
+    }
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#39;"
+      }[char]));
+    }
     function searchableText(node) {
       return [
         node.title,
@@ -426,177 +966,363 @@
         ...(node.implications || [])
       ].join(" ").toLowerCase();
     }
-
     function visibleNodes() {
-      const q = query.trim().toLowerCase();
+      const query = state.query.trim().toLowerCase();
       return nodes.filter((node) => {
-        if (activeType !== "all" && node.type !== activeType) return false;
-        if (q && !searchableText(node).includes(q)) return false;
+        if (!state.activeTypes.has(node.type)) return false;
+        if (query && !searchableText(node).includes(query)) return false;
         return true;
       });
     }
-
     function relatedIds(nodeId) {
       const ids = new Set([nodeId]);
       (outgoing.get(nodeId) || []).forEach((edge) => ids.add(edge.to));
       (incoming.get(nodeId) || []).forEach((edge) => ids.add(edge.from));
       return ids;
     }
-
-    function renderNode(node, labels) {
-      const card = el("article", "node");
-      card.dataset.type = node.type;
-      card.id = node.id;
-      card.tabIndex = 0;
-      if (focusedId) {
-        const related = relatedIds(focusedId);
-        if (node.id === focusedId) card.classList.add("is-focused");
-        else if (related.has(node.id)) card.classList.add("is-related");
-        else card.classList.add("is-dimmed");
+    function graphMetrics() {
+      const canvasWidth = document.querySelector(".map-canvas")?.clientWidth || window.innerWidth;
+      if (canvasWidth < 520) {
+        return {
+          viewWidth: 430,
+          cardWidth: 124,
+          cardHeight: 88,
+          xPositions: [86, 215, 344],
+          titleChars: 10,
+          summaryChars: 13,
+          titleOffset: 50,
+          summaryOffset: 50
+        };
       }
-      card.appendChild(el("h2", "", node.title || "Untitled"));
-      if (node.summary) card.appendChild(el("p", "", node.summary));
-      const badges = el("div", "badges");
-      badges.appendChild(el("span", "badge", label(labels.type, node.type)));
-      badges.appendChild(el("span", "badge", label(labels.status, node.status || "active")));
-      if (node.priority) badges.appendChild(el("span", "badge", label(labels.priority, node.priority)));
-      (node.tags || []).slice(0, 3).forEach((tag) => badges.appendChild(el("span", "badge", tag)));
-      card.appendChild(badges);
-      const links = outgoing.get(node.id) || [];
-      if (links.length > 0) {
-        const linkBox = el("div", "links");
-        links.slice(0, 4).forEach((edge) => {
-          const target = nodeById.get(edge.to);
-          if (target) linkBox.appendChild(el("div", "", `${edge.label || edge.type} -> ${target.title}`));
-        });
-        card.appendChild(linkBox);
+      return {
+        viewWidth: 1240,
+        cardWidth: 220,
+        cardHeight: 118,
+        xPositions: [170, 620, 1070],
+        titleChars: 16,
+        summaryChars: 24,
+        titleOffset: 94,
+        summaryOffset: 94
+      };
+    }
+    function wrapText(value, maxChars, maxLines = 2) {
+      const source = String(value || "");
+      const chars = Array.from(source);
+      const lines = [];
+      let current = "";
+      function pushSegment(segment) {
+        const segmentChars = Array.from(segment.trim());
+        for (let index = 0; index < segmentChars.length; index += maxChars) {
+          lines.push(segmentChars.slice(index, index + maxChars).join(""));
+        }
       }
-      const detailButton = el("button", "detail-button", labels.details);
-      detailButton.type = "button";
-      detailButton.addEventListener("click", (event) => {
-        event.stopPropagation();
-        const expanded = card.dataset.expanded === "true";
-        card.dataset.expanded = String(!expanded);
-        detailButton.textContent = expanded ? labels.details : labels.hideDetails;
-      });
-      card.appendChild(detailButton);
-      const details = el("div", "details");
-      if (node.rationale) {
-        details.appendChild(el("strong", "", labels.rationale));
-        details.appendChild(el("p", "", node.rationale));
-      }
-      if ((node.implications || []).length > 0) {
-        details.appendChild(el("strong", "", labels.implications));
-        const list = el("ul");
-        node.implications.forEach((item) => list.appendChild(el("li", "", item)));
-        details.appendChild(list);
-      }
-      const related = [...(outgoing.get(node.id) || []), ...(incoming.get(node.id) || [])];
-      if (related.length > 0) {
-        details.appendChild(el("strong", "", labels.related));
-        const list = el("ul");
-        related.forEach((edge) => {
-          const other = edge.from === node.id ? nodeById.get(edge.to) : nodeById.get(edge.from);
-          if (other) list.appendChild(el("li", "", `${edge.label || edge.type}: ${other.title}`));
-        });
-        details.appendChild(list);
-      }
-      card.appendChild(details);
-      card.addEventListener("click", () => {
-        focusedId = focusedId === node.id ? "" : node.id;
-        render(currentLang);
-      });
-      card.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          focusedId = focusedId === node.id ? "" : node.id;
-          render(currentLang);
+      chars.forEach((char) => {
+        current += char;
+        if (current.length >= maxChars && /[，。；、\s:：/]/.test(char)) {
+          pushSegment(current);
+          current = "";
         }
       });
-      return card;
+      if (current.trim()) pushSegment(current);
+      return lines.slice(0, maxLines);
     }
-
-    function render(lang) {
-      const labels = i18n[lang] || i18n.zh;
-      document.documentElement.lang = lang;
-      document.getElementById("meta").textContent = labels.meta;
-      document.getElementById("map").setAttribute("aria-label", labels.mapLabel);
-      document.getElementById("timeline-title").textContent = labels.timeline;
-      searchInput.placeholder = labels.searchPlaceholder;
-      resetButton.textContent = labels.reset;
-      document.getElementById("hint").textContent = labels.focusHint;
-      document.querySelectorAll(".language-toggle button").forEach((button) => {
-        button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
+    function layoutNodes(list, metrics) {
+      const columns = [
+        ["thesis", "principle", "constraint"],
+        ["decision", "question"],
+        ["task", "deprecated"]
+      ];
+      const positioned = new Map();
+      columns.forEach((types, columnIndex) => {
+        const columnNodes = list.filter((node) => types.includes(node.type));
+        const count = Math.max(columnNodes.length, 1);
+        const gap = 128;
+        const start = Math.max(92, 360 - ((Math.min(count, 5) - 1) * gap) / 2);
+        columnNodes.forEach((node, index) => {
+          positioned.set(node.id, {
+            x: metrics.xPositions[columnIndex],
+            y: start + index * gap
+          });
+        });
       });
+      list.forEach((node, index) => {
+        if (!positioned.has(node.id)) {
+          positioned.set(node.id, { x: metrics.xPositions[1], y: 120 + index * 128 });
+        }
+      });
+      return positioned;
+    }
+    function setChrome() {
+      document.documentElement.lang = state.lang === "zh" ? "zh-CN" : "en";
+      document.getElementById("brand-subtitle").textContent = `${text("subtitle")} · ${data.project?.name || "Project"}`;
+      document.getElementById("boundary-pill").textContent = text("boundary");
+      document.getElementById("explore-kicker").textContent = text("exploreKicker");
+      document.getElementById("explore-title").textContent = text("exploreTitle");
+      document.getElementById("search-label").textContent = text("searchLabel");
+      document.getElementById("filter-label").textContent = text("filterLabel");
+      document.getElementById("show-all").textContent = text("showAll");
+      document.getElementById("reset").textContent = text("reset");
+      document.getElementById("contract-1-title").textContent = text("contract1Title");
+      document.getElementById("contract-1-body").textContent = text("contract1Body");
+      document.getElementById("contract-2-title").textContent = text("contract2Title");
+      document.getElementById("contract-2-body").textContent = text("contract2Body");
+      document.getElementById("contract-3-title").textContent = text("contract3Title");
+      document.getElementById("contract-3-body").textContent = text("contract3Body");
+      document.getElementById("stack-shell").textContent = text("stackShell");
+      document.getElementById("stack-graph").textContent = text("stackGraph");
+      document.getElementById("stack-render").textContent = text("stackRender");
+      document.getElementById("stack-context").textContent = text("stackContext");
+      document.getElementById("stack-history").textContent = text("stackHistory");
+      document.getElementById("handoff-note").textContent = text("handoffNote");
+      document.getElementById("map-title").textContent = text("mapTitle");
+      document.getElementById("map-hint").textContent = text("mapHint");
+      document.getElementById("detail-kicker").textContent = text("detailKicker");
+      searchInput.placeholder = text("searchPlaceholder");
+      document.querySelectorAll(".segmented button").forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.lang === state.lang));
+      });
+    }
+    function drawFilters() {
       filters.replaceChildren();
-      filterTypes.forEach((type) => {
-        const button = el("button", "filter-button", type === "all" ? labels.all : label(labels.type, type));
+      TYPE_ORDER.forEach((type) => {
+        const button = document.createElement("button");
         button.type = "button";
-        button.dataset.type = type;
-        button.setAttribute("aria-pressed", String(activeType === type));
+        button.className = "filter-button";
+        button.style.setProperty("--type-color", TYPE_META[type].color);
+        button.setAttribute("aria-pressed", String(state.activeTypes.has(type)));
+        button.innerHTML = `<span class="swatch"></span><span>${escapeHtml(typeLabel(type))}</span>`;
         button.addEventListener("click", () => {
-          activeType = type;
-          focusedId = "";
-          render(currentLang);
+          if (state.activeTypes.has(type) && state.activeTypes.size > 1) {
+            state.activeTypes.delete(type);
+          } else {
+            state.activeTypes.add(type);
+          }
+          state.selectedId = "";
+          render();
         });
         filters.appendChild(button);
       });
-      map.replaceChildren();
-      const currentVisibleNodes = visibleNodes();
-      if (currentVisibleNodes.length === 0) {
-        map.appendChild(el("div", "empty-result", labels.noMatch));
-      } else {
-        labels.lanes.forEach(([title, types]) => {
-          const lane = el("div", "lane");
-          lane.appendChild(el("div", "lane-title", title));
-          const laneNodes = byType(types);
-          if (laneNodes.length === 0) {
-            const empty = el("article", "node");
-            empty.appendChild(el("h2", "", labels.emptyTitle));
-            empty.appendChild(el("p", "", labels.emptyBody));
-            lane.appendChild(empty);
-          } else {
-            laneNodes.forEach((node) => lane.appendChild(renderNode(node, labels)));
-          }
-          map.appendChild(lane);
-        });
+    }
+    function drawLegend() {
+      const legend = document.getElementById("edge-legend");
+      const edgeTypes = Array.from(new Set(edges.map((edge) => edge.type || "relates"))).slice(0, 5);
+      legend.innerHTML = edgeTypes.map((type) => {
+        const label = EDGE_META[type] || type;
+        return `<span><span class="swatch" style="--type-color: var(--secondary)"></span>${escapeHtml(label)}</span>`;
+      }).join("");
+    }
+    function drawMap() {
+      const currentNodes = visibleNodes();
+      const visibleIds = new Set(currentNodes.map((node) => node.id));
+      if (state.selectedId && !visibleIds.has(state.selectedId)) state.selectedId = "";
+      const metrics = graphMetrics();
+      const positions = layoutNodes(currentNodes, metrics);
+      const selectedRelated = state.selectedId ? relatedIds(state.selectedId) : new Set();
+      const parts = [
+        `<line class="lane-rule" x1="${metrics.viewWidth * 0.05}" y1="205" x2="${metrics.viewWidth * 0.95}" y2="205"></line>`,
+        `<line class="lane-rule" x1="${metrics.viewWidth * 0.05}" y1="565" x2="${metrics.viewWidth * 0.95}" y2="565"></line>`,
+        `<text class="lane-label" x="${metrics.viewWidth * 0.06}" y="72">source / 事实来源</text>`,
+        `<text class="lane-label" x="${metrics.viewWidth * 0.38}" y="72">schema / 项目判断模型</text>`,
+        `<text class="lane-label" x="${metrics.viewWidth * 0.72}" y="72">runtime / 技术栈与交接</text>`,
+        `<text class="lane-label" x="${metrics.viewWidth * 0.06}" y="610">interaction / 探索动作</text>`
+      ];
+      if (currentNodes.length === 0) {
+        svg.setAttribute("viewBox", `0 0 ${metrics.viewWidth} 780`);
+        svg.innerHTML = `<foreignObject x="${metrics.viewWidth * 0.12}" y="230" width="${metrics.viewWidth * 0.76}" height="180"><div xmlns="http://www.w3.org/1999/xhtml" class="empty-state"><div><strong>${escapeHtml(text("noMatchesTitle"))}</strong><span>${escapeHtml(text("noMatchesBody"))}</span></div></div></foreignObject>`;
+        updateMapMeta(0);
+        return;
       }
-      if (focusedId && !visibleNodes().some((node) => node.id === focusedId)) {
-        focusedId = "";
-      }
-      const timeline = document.getElementById("timeline");
-      timeline.replaceChildren();
-      (data.entries || []).slice(-12).reverse().forEach((entry) => {
-        const row = el("div", "entry");
-        row.appendChild(el("time", "", entry.createdAt || ""));
-        row.appendChild(el("div", "", entry.summary || entry.thought || ""));
-        timeline.appendChild(row);
+      const maxY = Math.max(...Array.from(positions.values()).map((pos) => pos.y));
+      const viewHeight = Math.max(780, maxY + 120);
+      svg.setAttribute("viewBox", `0 0 ${metrics.viewWidth} ${viewHeight}`);
+      svg.style.minHeight = `${Math.max(560, viewHeight * 0.78)}px`;
+      edges.forEach((edge) => {
+        if (!visibleIds.has(edge.from) || !visibleIds.has(edge.to)) return;
+        const from = positions.get(edge.from);
+        const to = positions.get(edge.to);
+        const active = state.selectedId && (edge.from === state.selectedId || edge.to === state.selectedId);
+        const dim = state.selectedId && !active;
+        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2;
+        parts.push(`<line class="edge ${active ? "active" : ""} ${dim ? "dim" : ""}" x1="${from.x}" y1="${from.y}" x2="${to.x}" y2="${to.y}"></line>`);
+        parts.push(`<text class="edge-label ${dim ? "dim" : ""}" x="${midX}" y="${midY - 8}" text-anchor="middle">${escapeHtml(edge.label || edge.type || "relates")}</text>`);
       });
-      localStorage.setItem(`mindmap-lang:${data.project.id}`, lang);
+      currentNodes.forEach((node) => {
+        const pos = positions.get(node.id);
+        const meta = TYPE_META[node.type] || TYPE_META.decision;
+        const selected = node.id === state.selectedId;
+        const dim = state.selectedId && !selectedRelated.has(node.id);
+        const titleLines = wrapText(node.title || "Untitled", metrics.titleChars, 2);
+        const summaryLines = wrapText(node.summary || "", metrics.summaryChars, 2);
+        const titleText = titleLines.map((line, index) => `<tspan x="${pos.x - metrics.titleOffset}" dy="${index === 0 ? 0 : 18}">${escapeHtml(line)}</tspan>`).join("");
+        const summaryText = summaryLines.map((line, index) => `<tspan x="${pos.x - metrics.summaryOffset}" dy="${index === 0 ? 0 : 15}">${escapeHtml(line)}</tspan>`).join("");
+        parts.push(`
+          <g class="node-group ${selected ? "selected" : ""} ${dim ? "dim" : ""}" tabindex="0" role="button" aria-label="${escapeHtml(node.title || "Untitled")}" data-node-id="${escapeHtml(node.id)}" style="--node-color: ${meta.color}">
+            <rect class="node-card" x="${pos.x - metrics.cardWidth / 2}" y="${pos.y - metrics.cardHeight / 2}" width="${metrics.cardWidth}" height="${metrics.cardHeight}" rx="8" ry="8"></rect>
+            <circle class="node-pin" cx="${pos.x - metrics.cardWidth / 2 + 20}" cy="${pos.y - metrics.cardHeight / 2 + 22}" r="5"></circle>
+            <text class="node-type" x="${pos.x - metrics.cardWidth / 2 + 34}" y="${pos.y - metrics.cardHeight / 2 + 26}">${escapeHtml(node.type)}</text>
+            <text class="node-title" x="${pos.x - metrics.titleOffset}" y="${pos.y - metrics.cardHeight / 2 + 52}">${titleText}</text>
+            <text class="node-summary" x="${pos.x - metrics.summaryOffset}" y="${pos.y + (metrics.cardHeight > 100 ? 24 : 33)}">${summaryText}</text>
+          </g>
+        `);
+      });
+      svg.innerHTML = parts.join("");
+      svg.querySelectorAll(".node-group").forEach((group) => {
+        const nodeId = group.getAttribute("data-node-id");
+        group.addEventListener("click", () => selectNode(nodeId));
+        group.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectNode(nodeId);
+          }
+        });
+      });
+      updateMapMeta(currentNodes.length);
+    }
+    function updateMapMeta(count) {
+      document.getElementById("result-count").textContent = `${count} / ${nodes.length} ${text("nodes")}`;
+      const selected = state.selectedId ? nodeById.get(state.selectedId) : null;
+      document.getElementById("focus-state").textContent = selected ? `${text("focused")}: ${selected.title || selected.id}` : text("fullMap");
+      document.getElementById("active-count").textContent = `${nodes.filter((node) => (node.status || "active") === "active").length} ${text("activeNodes")}`;
+    }
+    function selectNode(nodeId) {
+      state.selectedId = state.selectedId === nodeId ? "" : nodeId;
+      state.expanded = false;
+      render();
+    }
+    function relatedNodes(nodeId) {
+      return Array.from(relatedIds(nodeId)).filter((id) => id !== nodeId).map((id) => nodeById.get(id)).filter(Boolean);
+    }
+    function renderDetail() {
+      const selected = state.selectedId ? nodeById.get(state.selectedId) : null;
+      if (!selected) {
+        detailHeading.textContent = text("noSelection");
+        detailBadge.textContent = text("ready");
+        detailBadge.style.setProperty("--badge-color", "var(--secondary)");
+        detailBody.innerHTML = `<div class="empty-state"><div><strong>${escapeHtml(text("noSelection"))}</strong><span>${escapeHtml(text("noSelectionBody"))}</span></div></div>`;
+        return;
+      }
+      const meta = TYPE_META[selected.type] || TYPE_META.decision;
+      const related = relatedNodes(selected.id);
+      detailHeading.textContent = selected.title || "Untitled";
+      detailBadge.textContent = typeLabel(selected.type);
+      detailBadge.style.setProperty("--badge-color", meta.color);
+      const sourceEntries = (selected.sourceEntries || []).map((id) => {
+        const entry = entryById.get(id);
+        const label = entry?.summary || entry?.thought || id;
+        return `<li><code>entries/${escapeHtml(id)}.md</code> - ${escapeHtml(label)}</li>`;
+      }).join("");
+      const expanded = state.expanded ? `
+        <div class="detail-block">
+          <h3>${escapeHtml(text("implications"))}</h3>
+          <ul>${(selected.implications || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("") || `<li>${escapeHtml(text("emptyGraph"))}</li>`}</ul>
+        </div>
+        <div class="detail-block">
+          <h3>${escapeHtml(text("trace"))}</h3>
+          <p>Status: ${escapeHtml(statusLabel(selected.status))}. Priority: ${escapeHtml(priorityLabel(selected.priority))}. Tags: ${escapeHtml((selected.tags || []).join(", ") || "-")}.</p>
+          <ul>${sourceEntries || `<li>${escapeHtml(text("source"))}: entries/*.md</li>`}</ul>
+        </div>
+      ` : "";
+      const timelineRows = (data.entries || []).slice(-5).reverse().map((entry) => `
+        <div class="timeline-row">
+          <time>${escapeHtml(entry.createdAt || "")}</time>
+          <div>${escapeHtml(entry.summary || entry.thought || "")}</div>
+        </div>
+      `).join("");
+      detailBody.innerHTML = `
+        <section>
+          <p class="summary-text">${escapeHtml(selected.summary || "")}</p>
+          <div class="detail-block">
+            <h3>${escapeHtml(text("rationale"))}</h3>
+            <p>${escapeHtml(selected.rationale || "")}</p>
+          </div>
+          ${expanded}
+          <div class="action-row" style="margin: 0 0 16px">
+            <button class="detail-button primary" type="button" id="toggle-detail">${escapeHtml(state.expanded ? text("collapse") : text("expand"))}</button>
+            <button class="detail-button" type="button" id="clear-focus">${escapeHtml(text("clearFocus"))}</button>
+          </div>
+        </section>
+        <section>
+          <div class="detail-block" style="padding-top: 0; border-top: 0">
+            <h3>${escapeHtml(text("related"))}</h3>
+            <div class="related-list">
+              ${related.map((node) => {
+                const relatedMeta = TYPE_META[node.type] || TYPE_META.decision;
+                return `<button class="related-button" type="button" data-related-id="${escapeHtml(node.id)}" style="--type-color:${relatedMeta.color}">
+                  <span class="swatch"></span><strong>${escapeHtml(node.title || "Untitled")}</strong><span>${escapeHtml(node.type)}</span>
+                </button>`;
+              }).join("") || `<p>${escapeHtml(text("noMatchesBody"))}</p>`}
+            </div>
+          </div>
+          <div class="detail-block">
+            <h3>${escapeHtml(text("agentHandoff"))}</h3>
+            <p>${escapeHtml(text("handoffText"))}</p>
+          </div>
+          <div class="timeline-card">
+            <h3>${escapeHtml(text("timeline"))}</h3>
+            ${timelineRows || `<p>${escapeHtml(text("emptyGraph"))}</p>`}
+          </div>
+        </section>
+      `;
+      document.getElementById("toggle-detail").addEventListener("click", () => {
+        state.expanded = !state.expanded;
+        renderDetail();
+      });
+      document.getElementById("clear-focus").addEventListener("click", () => {
+        state.selectedId = "";
+        state.expanded = false;
+        render();
+      });
+      detailBody.querySelectorAll("[data-related-id]").forEach((button) => {
+        button.addEventListener("click", () => {
+          state.selectedId = button.getAttribute("data-related-id");
+          state.expanded = false;
+          render();
+        });
+      });
+    }
+    function render() {
+      setChrome();
+      drawFilters();
+      drawLegend();
+      drawMap();
+      renderDetail();
+      localStorage.setItem(`mindmap-lang:${data.project.id}`, state.lang);
     }
 
-    document.querySelectorAll(".language-toggle button").forEach((button) => {
-      button.addEventListener("click", () => render(button.dataset.lang));
+    document.querySelectorAll(".segmented button").forEach((button) => {
+      button.addEventListener("click", () => {
+        state.lang = button.dataset.lang;
+        render();
+      });
     });
     searchInput.addEventListener("input", (event) => {
-      query = event.target.value;
-      focusedId = "";
-      render(currentLang);
+      state.query = event.target.value;
+      state.selectedId = "";
+      state.expanded = false;
+      render();
     });
-    resetButton.addEventListener("click", () => {
-      query = "";
-      activeType = "all";
-      focusedId = "";
+    document.getElementById("show-all").addEventListener("click", () => {
+      state.activeTypes = new Set(TYPE_ORDER);
+      render();
+    });
+    document.getElementById("reset").addEventListener("click", () => {
+      state.query = "";
+      state.activeTypes = new Set(TYPE_ORDER);
+      state.selectedId = "";
+      state.expanded = false;
       searchInput.value = "";
-      render(currentLang);
+      render();
     });
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") {
-        focusedId = "";
-        render(currentLang);
+        state.selectedId = "";
+        state.expanded = false;
+        render();
       }
     });
-    render(currentLang);
+
+    render();
   </script>
 </body>
 </html>
