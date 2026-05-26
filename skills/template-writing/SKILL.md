@@ -84,6 +84,8 @@ Create a working directory beside the output or under a temporary project run:
 acceptance-report-run/
 ├── sources/
 ├── template-scan.json
+├── docx-preview.md
+├── structure-diff.json
 ├── fact-ledger.md
 ├── report-plan.json
 ├── missing-and-uncertain.md
@@ -91,6 +93,49 @@ acceptance-report-run/
 ```
 
 Copy or reference source files without modifying them.
+
+### DOCX Handling Strategy
+
+Use the `minimax-docx`/OpenXML workflow principles for document mechanics:
+
+- Default to **base-replace** for strict templates: copy the original template
+  DOCX as the output base, then replace only the selected narrative paragraphs,
+  table body cells, placeholders, or image slots. This preserves sections,
+  headers, footers, TOC fields, numbering definitions, table grids, signature
+  areas, and page geometry.
+- Do not use a previous generated output as the template base unless the user
+  explicitly says that generated file is now the template.
+- Treat source/reference DOCX files as content evidence, not as style sources.
+  Do not copy their direct paragraph/run/table formatting into the template.
+  The output style must come from the target template location.
+- For simple text/cell/image replacement, the bundled Python scripts are
+  sufficient.
+- For complex structural operations, use an OpenXML-capable path such as
+  `minimax-docx` or a direct OpenXML SDK script. Complex operations include
+  section breaks, headers/footers, TOC/field manipulation, numbering definition
+  edits, style merging, nested/floating tables, track changes, or relationship
+  repair.
+- When manipulating raw WordprocessingML, preserve OpenXML element order:
+  `w:p` uses `pPr` before runs, `w:r` uses `rPr` before text/breaks,
+  `w:tbl` uses `tblPr` then `tblGrid` then rows, and `w:body` keeps `sectPr`
+  as the last child. Invalid order is a document-corruption risk.
+- Preserve field structures. Do not rewrite TOC, PAGE, SEQ, REF, DATE, or other
+  field result text as ordinary body text unless the field is intentionally
+  removed or rebuilt.
+- Preserve header/footer XML and relationship parts byte-for-byte when possible.
+  Do not recreate multi-section headers, footers, page numbering, or `titlePg`
+  settings from scratch.
+- If a document contains track changes, remember that deletions use
+  `w:delText` and insertions use `w:t`; do not mix these element types.
+
+The operating loop is:
+
+1. Preview/readable dump.
+2. Analyze structure and editable targets.
+3. Draft content from the fact ledger.
+4. Apply the smallest necessary base-replace edits.
+5. Diff structure against the original template.
+6. Validate before delivery.
 
 ### 2. Scan The Template
 
@@ -133,6 +178,12 @@ template contract. They outrank generic writing style. Remove or replace only
 the instructional text that the template clearly expects the final report to
 replace; do not leave `【要求】` or `【示例】` blocks in the final deliverable
 unless the template explicitly asks to retain them.
+
+Also produce or inspect a readable preview before editing when the template is
+long or format-sensitive. The preview should record paragraph indexes, paragraph
+styles, table indexes, row/column counts, section geometry, images, headers,
+footers, TOC/field locations, and obvious relationship assets. Use the preview
+as an analysis artifact only; do not convert the preview back into DOCX.
 
 ### 3. Build A Fact Ledger
 
@@ -189,6 +240,10 @@ Rules:
 - Start from `rewrite_candidates`, not only from blank fields or placeholders.
   The normal task is to replace all non-structural template content with content
   grounded in the reference materials.
+- Keep the template's local formatting. When writing replacement text into a
+  paragraph or cell, reuse the target paragraph/cell style and existing run
+  properties where possible. Do not import fonts, colors, spacing, borders, or
+  numbering from reference documents or older generated outputs.
 - Treat already-filled template prose as example prose by default. A complete
   sentence in the template is not evidence that the sentence should be retained.
 - For each section, first read the nearby template requirements, examples, and
@@ -205,6 +260,9 @@ Rules:
 - Do not edit TOC lines or Word field-result paragraphs as if they were normal
   body content. If a TOC or field result must change, preserve the field
   structure or leave it for Word field refresh.
+- If section breaks, page orientation, headers/footers, outline levels,
+  numbering definitions, or TOC fields must change, switch to an OpenXML-capable
+  workflow instead of forcing the change through simple text replacement.
 - For short opinion/signature documents, replace text in the existing template
   paragraphs only. Preserve paragraph count, blank spacer paragraphs, title
   position, signature labels, and date position.
@@ -376,6 +434,11 @@ The script replaces only the selected paragraphs, cells, or matched placeholder
 text, and inserts only selected diagram images. It does not decide report
 content or diagram content.
 
+Before filling, confirm that the `--template` path is the original user-provided
+template or a deliberately chosen converted copy of it. If the original was a
+`.doc` file converted to `.docx`, use the converted `.docx` as the stable base
+and keep that conversion artifact in the run directory.
+
 ### 8. Validate
 
 Run:
@@ -399,11 +462,25 @@ It does not replace manual review. After validation, review:
 - For strict-format documents without intentional inserted paragraphs, rerun
   validation with `--strict-layout` and investigate any paragraph style, section
   geometry, or paragraph-count drift.
+- Table count and row/cell shapes match the original template unless the user
+  explicitly asked for table expansion.
+- Header/footer parts, section count, section geometry, and page numbering were
+  not disturbed.
+- TOC/field paragraphs were preserved or are clearly marked for Word field
+  refresh.
 - Inline images fit within the Word page body width.
 - Table and figure caption numbers do not repeat unexpectedly.
 - Required terms from `report-plan.json` appear in the output.
 - All key conclusions trace back to `fact-ledger.md`.
 - Missing items are documented in `missing-and-uncertain.md`.
+- A structure diff or manual preview confirms minimal changes: content changed
+  where planned, template mechanics did not.
+
+If a validation failure involves malformed XML, broken relationships, missing
+headers/footers, corrupted fields, unexpected section changes, or table grid
+damage, do not keep patching blindly. Rebuild from the original template base
+and apply only the necessary replacements, preferably through an OpenXML SDK
+workflow.
 
 ## Borrowed From `fill-form`
 
@@ -414,6 +491,28 @@ updates. For this skill, use those ideas only as low-level mechanics.
 Do not copy its core assumption that each template label maps directly to one
 input value. Acceptance reports usually require source synthesis, consistency
 checking, and section-level drafting.
+
+## Borrowed From `minimax-docx`
+
+The MiniMax DOCX workflow is useful for robust Word-file mechanics:
+
+- Pipeline C-2 **base-replace** is the default for strict templates with cover
+  pages, TOCs, section breaks, headers/footers, signature areas, and complex
+  tables.
+- Preview/analyze before editing, then diff/validate after editing.
+- Use OpenXML SDK or an equivalent OpenXML-aware tool for complex structural
+  edits instead of relying only on high-level text replacement.
+- Respect OpenXML element order and Word unit conventions. Image and page
+  dimensions are EMU/DXA-based; picture width must be calculated from the
+  section's usable page width, not from a guessed pixel size.
+- Avoid direct-format contamination from source documents. Copy content intent,
+  not source formatting.
+- Treat XSD/business-rule validation, zip validation, and final preview as
+  delivery gates for strict-format documents.
+
+Use these as document-engineering guardrails. Do not import its create-from-
+scratch emphasis when the user has provided a fixed template; for this skill,
+template fidelity outranks aesthetic redesign.
 
 ## Delivery
 
