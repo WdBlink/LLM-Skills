@@ -89,6 +89,7 @@ acceptance-report-run/
 ├── fact-ledger.md
 ├── report-plan.json
 ├── missing-and-uncertain.md
+├── self-review.md
 └── output.docx
 ```
 
@@ -136,6 +137,8 @@ The operating loop is:
 4. Apply the smallest necessary base-replace edits.
 5. Diff structure against the original template.
 6. Validate before delivery.
+7. Perform a final self-review against sources, template rules, and visual
+   output before calling the document final.
 
 ### 2. Scan The Template
 
@@ -482,6 +485,92 @@ damage, do not keep patching blindly. Rebuild from the original template base
 and apply only the necessary replacements, preferably through an OpenXML SDK
 workflow.
 
+### 9. Self-Review Before Final Delivery
+
+After automated validation passes, perform an autonomous review and write
+`self-review.md`. This is a delivery gate, not optional commentary. Use
+`templates/self-review-template.md` if available.
+
+The self-review must inspect the final DOCX, the original template scan, the
+fact ledger, and the source/reference materials. Do not rely only on successful
+script output. Review at least:
+
+- **Fact consistency:** product/project names, parties, contract scope,
+  acceptance criteria, quantities, dates, deliverables, versions, deployment
+  locations, test methods, conclusions, and warranty/service commitments match
+  the contract, technical agreement, test protocol, or other source materials.
+- **Unsupported claims:** every acceptance conclusion, pass/fail statement,
+  measured result, issue count, and compliance statement is either sourced,
+  explicitly conservative, or recorded as missing/uncertain. Do not present
+  inferred or researched material as if it came from the protocol/contract.
+- **Source conflicts:** if the references disagree, record the conflict and do
+  not silently choose the more convenient value when it affects an acceptance
+  conclusion.
+- **Template conformity:** required headings, section order, paragraph count
+  where strict, table shapes, captions, signature areas, headers/footers, TOC
+  fields, page geometry, fonts, and local template instructions remain
+  consistent with the template.
+- **Diagram/visual review:** generated structure diagrams, topology diagrams,
+  flowcharts, composition diagrams, architecture diagrams, and inserted images
+  are readable, not cropped, not horizontally overflowing, and fit inside the
+  Word page body or intended table cell. Check both image dimensions and the
+  rendered/previewed visual when possible.
+- **Residual template content:** examples, `XXX`, `××`, `202X`, `……`,
+  old project names, old conclusions, old indicators, and leftover instructions
+  are removed unless the template explicitly requires retaining them.
+- **Numbering and cross-reference coherence:** figure/table numbers are not
+  duplicated unexpectedly; textual references such as "见表 3" or "如图 2"
+  point to the right item after edits.
+- **Final file usability:** the DOCX opens cleanly, contains the expected images
+  and tables, and is saved as a separate output without modifying the original
+  sources/templates.
+
+Use this result format:
+
+```markdown
+# Self Review
+
+## Reviewed Files
+| Role | Path |
+|---|---|
+
+## Gate Summary
+| Gate | Result | Notes |
+|---|---|---|
+| Fact consistency | Pass/Fail |  |
+| Template conformity | Pass/Fail |  |
+| Diagram and image display | Pass/Fail |  |
+| Residual template content | Pass/Fail |  |
+| Numbering and references | Pass/Fail |  |
+| Final file usability | Pass/Fail |  |
+
+## Findings
+| Severity | Location | Issue | Evidence | Action |
+|---|---|---|---|---|
+
+## Source Trace Spot Checks
+| Output Claim | Source Evidence | Status |
+|---|---|---|
+
+## Final Decision
+Ready / Needs fixes / Needs user confirmation
+```
+
+Severity rules:
+
+- `Blocker`: factual conflict with a source, unsupported final acceptance
+  conclusion, broken template structure, cropped/unreadable required diagram,
+  corrupted DOCX, or missing required output section. Fix before delivery.
+- `Major`: likely format drift, stale example text, questionable inferred fact,
+  duplicated numbering, or unclear source support. Fix or explicitly document
+  why it remains.
+- `Minor`: wording, polish, or non-blocking uncertainty that does not change
+  meaning or template compliance.
+
+Do not deliver as final while `self-review.md` has unresolved Blocker findings.
+If a Blocker cannot be resolved from the available sources, stop and ask the
+user for the missing source or confirmation.
+
 ## Borrowed From `fill-form`
 
 The LovStudio `fill-form` skill is useful for template scanning, field
@@ -521,6 +610,7 @@ Return:
 - Output DOCX path.
 - `fact-ledger.md` path.
 - `missing-and-uncertain.md` path, if any.
+- `self-review.md` path and final decision.
 - Validation result summary.
 
 Do not paste the full report unless the user asks.
