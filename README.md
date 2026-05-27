@@ -34,7 +34,7 @@
 |---|---|---|---|
 | **知识整理** | | | |
 | ![Open](https://img.shields.io/badge/Open-green) | [`book-to-skill`](skills/book-to-skill) | [书籍转技能](skills/book-to-skill) | 将整本书转成可追溯、可测试、可执行的 Agent Skill。 |
-| ![Open](https://img.shields.io/badge/Open-green) | [`mind-map`](skills/mind-map) | [项目思维导图](skills/mind-map) | 将项目决策和意图记录为可交互思维导图。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`mind-map`](skills/mind-map) | [项目思维导图](skills/mind-map) | 将项目决策记录为 Obsidian 双链节点、中英混编索引文件名、图谱中性的时间线/溯源和可交互 HTML 图谱。 |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`template-writing`](skills/template-writing) | [模板写作](skills/template-writing) | 根据合同、技术协议和项目资料撰写并填充固定格式 DOCX 模板。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`transcript-source-compiler`](skills/transcript-source-compiler) | [转写来源编译器](skills/transcript-source-compiler) | 将大段演讲转写编译成可追溯的来源底稿和可读文章。 |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`weekly-report`](skills/weekly-report) | [中文周报生成器](skills/weekly-report) | 从工作日志生成可迁移的中文工作周报 DOCX。 |

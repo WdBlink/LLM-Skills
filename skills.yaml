@@ -34,12 +34,12 @@ skills:
     display_name: Mind Map
     name_zh: 项目思维导图
     category: Knowledge
-    version: 0.1.0
+    version: 0.2.12
     license: MIT
     path: skills/mind-map
-    description: Record explicit project thinking into an Obsidian-hosted HTML mind map and AI context pack for future implementation agents.
-    tagline_en: Preserve project decisions and intent as an interactive mind map.
-    tagline_zh: 将项目决策和意图记录为可交互思维导图。
+    description: Record explicit project thinking into Obsidian Markdown nodes, project directory anchors, bilingual index filenames, graph-neutral provenance and timeline logs, an interactive HTML mind map, and an AI context pack.
+    tagline_en: Preserve project decisions as Obsidian nodes, bilingual index filenames, graph-neutral timeline/provenance, and an interactive HTML map.
+    tagline_zh: 将项目决策记录为 Obsidian 双链节点、中英混编索引文件名、图谱中性的时间线/溯源和可交互 HTML 图谱。
   - name: auto-yolo-dataset
     display_name: Auto YOLO Dataset
     name_zh: 自动 YOLO 数据集
