@@ -28,7 +28,7 @@
 
 ## 技能列表
 
-> **8 个技能**
+> **9 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
@@ -41,6 +41,7 @@
 | **多模态** | | | |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`auto-yolo-dataset`](skills/auto-yolo-dataset) | [自动 YOLO 数据集](skills/auto-yolo-dataset) | 通过本地或远程检测器生成 YOLO、COCO、VOC 和 Label Studio 数据集资产。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`ms-qwen-vl`](skills/ms-qwen-vl) | [魔搭 Qwen-VL 视觉解析](skills/ms-qwen-vl) | 用 Qwen-VL 解析图片/视频，并可输出 YOLO 数据集。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`social-cover-maker`](skills/social-cover-maker) | [社交平台封面生成器](skills/social-cover-maker) | 基于 Open Design 风格系统为公众号、小红书、知乎等平台生成可校验的 SVG/PNG 封面。 |
 | **演示文稿** | | | |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`pv-forecast-pptx`](skills/air-pptx) | [光伏预测汇报 PPTX](skills/air-pptx) | 基于模板资源生成光伏与能源预测研究汇报 PPTX。 |
 
@@ -61,6 +62,7 @@ LLM-Skills/
     ├── book-to-skill/
     ├── mind-map/
     ├── ms-qwen-vl/
+    ├── social-cover-maker/
     ├── template-writing/
     ├── transcript-source-compiler/
     └── weekly-report/

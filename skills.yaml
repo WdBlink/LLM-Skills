@@ -80,3 +80,13 @@ skills:
     description: Generate Chinese weekly work report DOCX files from recent work logs or a provided log file using a portable self-contained script.
     tagline_en: Generate Chinese weekly report DOCX files from work logs.
     tagline_zh: 从工作日志生成可迁移的中文工作周报 DOCX。
+  - name: social-cover-maker
+    display_name: Social Cover Maker
+    name_zh: 社交平台封面生成器
+    category: Multimodal
+    version: 0.1.0
+    license: MIT
+    path: skills/social-cover-maker
+    description: Generate social media cover images for WeChat, Xiaohongshu, Zhihu, and other publishing platforms from Markdown articles or notes using Open Design systems and deterministic SVG-to-PNG rendering.
+    tagline_en: Generate platform-ready article covers with Open Design styles and verified SVG/PNG exports.
+    tagline_zh: 基于 Open Design 风格系统为公众号、小红书、知乎等平台生成可校验的 SVG/PNG 封面。
