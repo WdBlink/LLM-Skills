@@ -34,12 +34,12 @@ skills:
     display_name: Mind Map
     name_zh: 项目思维导图
     category: Knowledge
-    version: 0.2.12
+    version: 0.2.13
     license: MIT
     path: skills/mind-map
-    description: Record explicit project thinking into Obsidian Markdown nodes, project directory anchors, bilingual index filenames, graph-neutral provenance and timeline logs, an interactive HTML mind map, and an AI context pack.
-    tagline_en: Preserve project decisions as Obsidian nodes, bilingual index filenames, graph-neutral timeline/provenance, and an interactive HTML map.
-    tagline_zh: 将项目决策记录为 Obsidian 双链节点、中英混编索引文件名、图谱中性的时间线/溯源和可交互 HTML 图谱。
+    description: Record explicit project thinking into Obsidian Markdown nodes, project directory anchors, compact judgment/rule schema indexes, graph-neutral provenance and timeline logs, an interactive HTML mind map, and an AI context pack.
+    tagline_en: Preserve project judgments as Obsidian nodes, compact schema indexes, graph-neutral timeline/provenance, and an interactive HTML map.
+    tagline_zh: 将项目判断记录为 Obsidian 双链节点、紧凑 schema 索引、图谱中性的时间线/溯源和可交互 HTML 图谱。
   - name: auto-yolo-dataset
     display_name: Auto YOLO Dataset
     name_zh: 自动 YOLO 数据集
@@ -80,6 +80,16 @@ skills:
     description: Generate Chinese weekly work report DOCX files from recent work logs or a provided log file using a portable self-contained script.
     tagline_en: Generate Chinese weekly report DOCX files from work logs.
     tagline_zh: 从工作日志生成可迁移的中文工作周报 DOCX。
+  - name: karpathy-autoresearch-adapter
+    display_name: Karpathy Autoresearch Adapter
+    name_zh: Karpathy 自动研究适配器
+    category: Knowledge
+    version: 0.1.0
+    license: MIT
+    path: skills/karpathy-autoresearch-adapter
+    description: Adapt an existing GitHub project into a Karpathy-style autoresearch protocol project by scanning for a real evaluator, producing a plan first, and applying only after user confirmation.
+    tagline_en: Turn existing repositories into evaluator-first autoresearch protocol projects.
+    tagline_zh: 将现有仓库改造成以真实评价器为核心的自动研究协议项目。
   - name: social-cover-maker
     display_name: Social Cover Maker
     name_zh: 社交平台封面生成器
@@ -90,3 +100,13 @@ skills:
     description: Generate social media cover images for WeChat, Xiaohongshu, Zhihu, and other publishing platforms from Markdown articles or notes using Open Design systems and deterministic SVG-to-PNG rendering.
     tagline_en: Generate platform-ready article covers with Open Design styles and verified SVG/PNG exports.
     tagline_zh: 基于 Open Design 风格系统为公众号、小红书、知乎等平台生成可校验的 SVG/PNG 封面。
+  - name: paper-deconstruction
+    display_name: Paper Deconstruction
+    name_zh: 论文精读
+    category: Knowledge
+    version: 0.1.0
+    license: MIT
+    path: skills/paper-deconstruction
+    description: Distill ML/CV/NLP papers into visual, evidence-backed deep-read notes using a five-stage method (structure, story, deconstruct, evaluate, visualize) built around the ViLT paper-reading lecture.
+    tagline_en: Distill a paper into a visual deep-read note with a five-stage story-plus-engineering method.
+    tagline_zh: 用结构-故事-拆解-评价-视觉化五阶法把一篇论文精读成带配图的可视化笔记。

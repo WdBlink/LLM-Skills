@@ -1,0 +1,110 @@
+{
+  "skill": "paper-deconstruction",
+  "version": "1.1.0",
+  "source": "ViLT 论文精读视频 (2021 ICML, 'Vision-and-Language Transformer Without Convolution or Region Supervision') + locate-anything-pbd 公众号 post 范例",
+  "evals": [
+    {
+      "id": "trigger-direct",
+      "prompt": "帮我精读一下这篇 ViLT 论文 https://arxiv.org/abs/2102.03334",
+      "expected": "skill 触发, 输出 4 阶法笔记 (结构/故事/拆解/评价), 引用 references/procedures.md, references/concepts.md, references/source-map.md, references/examples.md, templates/output-template.md, templates/checklist.md, templates/task-brief.md",
+      "checks": [
+        "调用 references/source-map.md 找证据",
+        "调用 references/concepts.md 列 8 个思维模型",
+        "调用 templates/output-template.md 套 5 段格式",
+        "输出含故事 (痛点/前人/卖点) + 拆解 (输入/模型/损失/训练/数据/实验) + 评价 (5 维) + follow 计划"
+      ]
+    },
+    {
+      "id": "trigger-paraphrase",
+      "prompt": "我想组会讲一篇新出的多模态论文, 怎么拆开来讲比较清楚?",
+      "expected": "skill 触发 (paraphrase, 不含具体论文), 给出 4 阶法 + 输出模板 + 检查清单",
+      "checks": [
+        "激活四阶法 (结构/故事/拆解/评价)",
+        "给 templates/checklist.md 的 40 项清单",
+        "给 templates/output-template.md 的 5 段格式",
+        "提到 8 个核心思维模型中的至少 3 个 (X-free, 卖点, 留白)"
+      ]
+    },
+    {
+      "id": "trigger-wechat-post",
+      "prompt": "帮我把刚精读完的这篇 LocateAnything 改写成一篇公众号 post, 要有钩子, 配图丰富一些",
+      "expected": "skill 触发, 切到公众号 post 模式, 调用 templates/wechat-post-template.md 和 references/visual-assets.md 第 8-13 节",
+      "checks": [
+        "调用 templates/wechat-post-template.md 的 6 段骨架",
+        "调用 references/visual-assets.md 第 8 节 (两档模式) 和第 9 节 (钩子图)",
+        "明确自画 4 张 + 截图 3 张 的配图清单",
+        "输出第 1 段是反直觉问题 + 钩子图 (`01_hook.png`)",
+        "输出收尾段有 follow 路线图 (`04_follow_roadmap.png`) + 金句"
+      ]
+    },
+    {
+      "id": "trigger-hook-image",
+      "prompt": "我那篇 grounding 论文 post 的开头钩子图怎么设计? 老方法是 6 个 token 串行吐, 新方法一次吐 4 个坐标",
+      "expected": "skill 触发, 调用 references/visual-assets.md 第 9 节, 给出钩子图的 3 种范式选择 + excalidraw 调用模板",
+      "checks": [
+        "推荐 范式 A '旧 vs 新对比' 或 范式 B '流程对比'",
+        "给出 excalidraw skill 的调用模板, 含'左侧灰色串行 + 右侧高亮并行 + 中间箭头'",
+        "提醒钩子图必须自画, 不要用论文截图",
+        "给出文件命名: assets/<slug>-wechat/01_hook.png"
+      ]
+    },
+    {
+      "id": "source-grounding",
+      "prompt": "讲师说的'X-free 标题套路'具体指什么? 给我原文证据。",
+      "expected": "skill 触发, 引用 references/source-map.md 中的证据, 给出 V6_40 (讲师原话) + X-free 例子列表",
+      "checks": [
+        "调用 references/source-map.md 找 V6_40",
+        "列出 X-free 例子 (anchor-free, BN-free, NMS-free, motion-free)",
+        "引用讲师原话 'Without Convolution or Region Supervision'"
+      ]
+    },
+    {
+      "id": "source-specific-claim",
+      "prompt": "讲师说 ViLT 的训练用了 64 张 V100 训 3 天, 给我原始来源",
+      "expected": "skill 触发, 在 references/source-map.md 里找 V3_39 (讲师原话)",
+      "checks": [
+        "调用 references/source-map.md 找 V3_39",
+        "引用讲师原话 '64 张 32G 的 V100 的卡, 训练三天'",
+        "标注证据 id V3_39"
+      ]
+    },
+    {
+      "id": "followup-checklist",
+      "prompt": "我刚读完一篇 DETR 改进版, 准备 follow, 你能套你的检查清单帮我看一遍吗?",
+      "expected": "skill 触发, 调用 templates/checklist.md 40 项, 评估用户那篇论文的精读覆盖度",
+      "checks": [
+        "调用 templates/checklist.md",
+        "按 4 阶段 (结构/故事/拆解/评价) 分组打勾",
+        "提示用户'消融看了吗'、'速度列看了吗'、'画分类图了吗'"
+      ]
+    },
+    {
+      "id": "non-trigger-unrelated",
+      "prompt": "帮我写一个 React 组件, 显示一个 todo list",
+      "expected": "skill 不触发, 切到代码生成或前端 skill",
+      "checks": [
+        "不调用 paper-deconstruction 的任何文件",
+        "切到合适的代码生成 skill (frontend-patterns 等)"
+      ]
+    },
+    {
+      "id": "non-trigger-implementation",
+      "prompt": "ViLT 的 patch projection 具体怎么实现的? 给我 PyTorch 代码",
+      "expected": "skill 不触发 (这是实现细节), 切到代码阅读 / PyTorch skill",
+      "checks": [
+        "不调用 paper-deconstruction 的 SKILL.md 主流程",
+        "提示用户'这是实现细节, 精读 skill 不覆盖, 切到代码阅读'"
+      ]
+    },
+    {
+      "id": "source-refuse-unsupported",
+      "prompt": "讲师在 ViLT 视频里有没有讲过 diffusion model 的事?",
+      "expected": "skill 触发但 '有尊严地无知' — ViLT 视频 2021, diffusion 主要在 2022+ 爆发, 大概率没讲或讲得少; 答 '大概率没有, 但 source-map.md 里可以验证'",
+      "checks": [
+        "在 references/source-map.md 里搜 'diffusion' / 'DDPM'",
+        "如果没有, 答 '没找到证据, 视频是 2021 ICML, diffusion 主要在 2022 爆发'",
+        "不编造"
+      ]
+    }
+  ]
+}

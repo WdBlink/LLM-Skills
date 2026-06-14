@@ -28,13 +28,15 @@
 
 ## 技能列表
 
-> **9 个技能**
+> **11 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
 | **知识整理** | | | |
 | ![Open](https://img.shields.io/badge/Open-green) | [`book-to-skill`](skills/book-to-skill) | [书籍转技能](skills/book-to-skill) | 将整本书转成可追溯、可测试、可执行的 Agent Skill。 |
-| ![Open](https://img.shields.io/badge/Open-green) | [`mind-map`](skills/mind-map) | [项目思维导图](skills/mind-map) | 将项目决策记录为 Obsidian 双链节点、中英混编索引文件名、图谱中性的时间线/溯源和可交互 HTML 图谱。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`karpathy-autoresearch-adapter`](skills/karpathy-autoresearch-adapter) | [Karpathy 自动研究适配器](skills/karpathy-autoresearch-adapter) | 将现有仓库改造成以真实评价器为核心的自动研究协议项目。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`mind-map`](skills/mind-map) | [项目思维导图](skills/mind-map) | 将项目判断记录为 Obsidian 双链节点、紧凑 schema 索引、图谱中性的时间线/溯源和可交互 HTML 图谱。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`paper-deconstruction`](skills/paper-deconstruction) | [论文精读](skills/paper-deconstruction) | 用结构-故事-拆解-评价-视觉化五阶法把一篇论文精读成带配图的可视化笔记。 |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`template-writing`](skills/template-writing) | [模板写作](skills/template-writing) | 根据合同、技术协议和项目资料撰写并填充固定格式 DOCX 模板。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`transcript-source-compiler`](skills/transcript-source-compiler) | [转写来源编译器](skills/transcript-source-compiler) | 将大段演讲转写编译成可追溯的来源底稿和可读文章。 |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`weekly-report`](skills/weekly-report) | [中文周报生成器](skills/weekly-report) | 从工作日志生成可迁移的中文工作周报 DOCX。 |
@@ -60,8 +62,10 @@ LLM-Skills/
     ├── air-pptx/
     ├── auto-yolo-dataset/
     ├── book-to-skill/
+    ├── karpathy-autoresearch-adapter/
     ├── mind-map/
     ├── ms-qwen-vl/
+    ├── paper-deconstruction/
     ├── social-cover-maker/
     ├── template-writing/
     ├── transcript-source-compiler/
