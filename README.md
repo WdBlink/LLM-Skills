@@ -28,12 +28,15 @@
 
 ## 技能列表
 
-> **11 个技能**
+> **15 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
 | **知识整理** | | | |
+| ![Open](https://img.shields.io/badge/Open-green) | [`academic-writing-storytelling`](skills/academic-writing-storytelling) | [学术写作讲故事框架](skills/academic-writing-storytelling) | 学术写作讲故事的四派综合框架——把"讲故事"拆成6个可操作心智模型与12步工作流。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`annie-duke-perspective`](skills/annie-duke-perspective) | [Annie Duke 对赌思维](skills/annie-duke-perspective) | 用 Annie Duke 的对赌思维做决策顾问——把决策质量与结果质量分开，强制概率式叙述与责任性预测。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`book-to-skill`](skills/book-to-skill) | [书籍转技能](skills/book-to-skill) | 将整本书转成可追溯、可测试、可执行的 Agent Skill。 |
+| ![Private](https://img.shields.io/badge/Private-blueviolet) | [`daily-todo-planner`](skills/daily-todo-planner) | [每日待办计划器](skills/daily-todo-planner) | 将杂乱每日描述转成可复盘学习、可提前预研的时间块计划。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`karpathy-autoresearch-adapter`](skills/karpathy-autoresearch-adapter) | [Karpathy 自动研究适配器](skills/karpathy-autoresearch-adapter) | 将现有仓库改造成以真实评价器为核心的自动研究协议项目。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`mind-map`](skills/mind-map) | [项目思维导图](skills/mind-map) | 将项目判断记录为 Obsidian 双链节点、紧凑 schema 索引、图谱中性的时间线/溯源和可交互 HTML 图谱。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`paper-deconstruction`](skills/paper-deconstruction) | [论文精读](skills/paper-deconstruction) | 用结构-故事-拆解-评价-视觉化五阶法把一篇论文精读成带配图的可视化笔记。 |
@@ -42,6 +45,7 @@
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`weekly-report`](skills/weekly-report) | [中文周报生成器](skills/weekly-report) | 从工作日志生成可迁移的中文工作周报 DOCX。 |
 | **多模态** | | | |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`auto-yolo-dataset`](skills/auto-yolo-dataset) | [自动 YOLO 数据集](skills/auto-yolo-dataset) | 通过本地或远程检测器生成 YOLO、COCO、VOC 和 Label Studio 数据集资产。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`glm-ocr-pdf2md`](skills/glm-ocr-pdf2md) | [本地GLM-OCR扫描PDF转Markdown](skills/glm-ocr-pdf2md) | 本地ZhipuAI/GLM-OCR将扫描版PDF转为带目录和页码标记的Markdown书籍。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`ms-qwen-vl`](skills/ms-qwen-vl) | [魔搭 Qwen-VL 视觉解析](skills/ms-qwen-vl) | 用 Qwen-VL 解析图片/视频，并可输出 YOLO 数据集。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`social-cover-maker`](skills/social-cover-maker) | [社交平台封面生成器](skills/social-cover-maker) | 基于 Open Design 风格系统为公众号、小红书、知乎等平台生成可校验的 SVG/PNG 封面。 |
 | **演示文稿** | | | |
@@ -59,9 +63,13 @@ LLM-Skills/
 │   ├── render_readme.py
 │   └── validate_skills.py
 └── skills/
+    ├── academic-writing-storytelling/
     ├── air-pptx/
+    ├── annie-duke-perspective/
     ├── auto-yolo-dataset/
     ├── book-to-skill/
+    ├── daily-todo-planner/
+    ├── glm-ocr-pdf2md/
     ├── karpathy-autoresearch-adapter/
     ├── mind-map/
     ├── ms-qwen-vl/

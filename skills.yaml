@@ -30,6 +30,16 @@ skills:
     description: Convert long-form speech or sharing-session transcripts into evidence-backed LLM-Wiki source records plus one or more readable articles.
     tagline_en: Turn messy speech transcripts into auditable source records and readable articles.
     tagline_zh: 将大段演讲转写编译成可追溯的来源底稿和可读文章。
+  - name: daily-todo-planner
+    display_name: Daily Todo Planner
+    name_zh: 每日待办计划器
+    category: Knowledge
+    version: 0.1.0
+    license: Proprietary
+    path: skills/daily-todo-planner
+    description: Generate daily task plans from long free-form descriptions, classify work with the Eisenhower matrix, estimate and schedule time blocks, learn from execution reviews, and pre-research research-heavy tasks.
+    tagline_en: Turn messy daily briefs into time-blocked plans with local learning and research prefetch.
+    tagline_zh: 将杂乱每日描述转成可复盘学习、可提前预研的时间块计划。
   - name: mind-map
     display_name: Mind Map
     name_zh: 项目思维导图
@@ -110,3 +120,33 @@ skills:
     description: Distill ML/CV/NLP papers into visual, evidence-backed deep-read notes using a five-stage method (structure, story, deconstruct, evaluate, visualize) built around the ViLT paper-reading lecture.
     tagline_en: Distill a paper into a visual deep-read note with a five-stage story-plus-engineering method.
     tagline_zh: 用结构-故事-拆解-评价-视觉化五阶法把一篇论文精读成带配图的可视化笔记。
+  - name: glm-ocr-pdf2md
+    display_name: GLM-OCR PDF to Markdown
+    name_zh: 本地GLM-OCR扫描PDF转Markdown
+    category: Multimodal
+    version: 0.1.0
+    license: MIT
+    path: skills/glm-ocr-pdf2md
+    description: Convert a scanned or no-text-layer PDF book into a structured Markdown file with faithful layout, auto-detected table of contents, and explicit page-marker anchors, by running every page through a locally-served ZhipuAI/GLM-OCR model (0.9B vision-language OCR). No external API; the model is loaded once via Hugging Face transformers on Apple Silicon (MPS) or CUDA.
+    tagline_en: Local ZhipuAI/GLM-OCR turns scanned PDFs into page-anchored Markdown books.
+    tagline_zh: 本地ZhipuAI/GLM-OCR将扫描版PDF转为带目录和页码标记的Markdown书籍。
+  - name: academic-writing-storytelling
+    display_name: Academic Writing Storytelling Framework
+    name_zh: 学术写作讲故事框架
+    category: Knowledge
+    version: 0.1.0
+    license: MIT
+    path: skills/academic-writing-storytelling
+    description: A distilled topic framework for using storytelling techniques in academic writing, synthesized from four distinct schools: Timothy G. Pollock's dramatic-structure school (Freytag's pyramid mapped to IMRaD), the writing-craft school (Zinsser / Lamott / King / Leonard on clutter, brevity, second drafts), the narrative-turn school (Czarniawska / Boje on stories as legitimate knowledge form), and the science-rhetoric school (Fahnestock on epistemic-warrant calibration, Hilgartner on selective appropriation). Produces a 6-model cognitive toolkit, 12 if-then heuristics, a 12-step workflow, and surfaces (not resolves) inter-school tensions. Use when writing or reviewing academic papers, especially empirical social-science research, qualitative studies, and ESL authors.
+    tagline_en: Four-school synthesis: story as scaffold, story as honesty, story as knowledge, story as calibrated rhetoric.
+    tagline_zh: 学术写作讲故事的四派综合框架——把"讲故事"拆成6个可操作心智模型与12步工作流。
+  - name: annie-duke-perspective
+    display_name: Annie Duke Perspective
+    name_zh: Annie Duke 对赌思维
+    category: Knowledge
+    version: 0.2.0
+    license: MIT
+    path: skills/annie-duke-perspective
+    description: Distilled decision-making framework and voice distilled from Annie Duke's Thinking in Bets (《对赌》中信版 2026). Provides 7 mental models (Resulting, All Decisions Are Bets, Skill+Luck, Belief Gullibility, Mental Time Travel, Merton CUDOS group decisions, Accountable Predictions), 11 if-then heuristics, a 7-dimension expression DNA with required anchors and forbidden tokens, and an agentic boot sequence for adopting Annie's probabilistic, story-anchored voice. Use to evaluate decision quality vs result quality, force probabilistic narration, run pre-mortems and backcasting, design accountable predictions with time-window follow-ups, and stress-test team decisions for CUDOS violations. Do not use for pure academic Q&A, deterministic math, or technical tool selection where Resulting does not apply.
+    tagline_en: Think in bets: separate decision quality from result quality, with probabilities and pre-mortems.
+    tagline_zh: 用 Annie Duke 的对赌思维做决策顾问——把决策质量与结果质量分开，强制概率式叙述与责任性预测。
