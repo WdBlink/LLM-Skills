@@ -24,8 +24,6 @@ mkdir -p ~/.codex/skills/workflow-skill-creator
 rsync -a skills/workflow-skill-creator/ ~/.codex/skills/workflow-skill-creator/
 ```
 
-也可下载 Release 压缩包，将其中的 `workflow-skill-creator` 文件夹解压到 `~/.codex/skills/`。
-
 ## 使用
 
 ```text
