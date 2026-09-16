@@ -1,0 +1,4 @@
+interface:
+  display_name: "工作流 Skill 创作"
+  short_description: "将脚本编排、子 Agent 派发与阶段提示词接成可执行、可验证的工作流 Skill"
+  default_prompt: "用 $workflow-skill-creator 将我的多阶段任务实现为 Skill，落实脚本、子 Agent 派发、prompt 加载与文件交接，并用真实执行验证。"

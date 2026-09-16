@@ -1,5 +1,15 @@
 version: 1
 skills:
+  - name: workflow-skill-creator
+    display_name: Workflow Skill Creator
+    name_zh: 工作流 Skill 创作
+    category: Knowledge
+    version: 0.1.0
+    license: MIT
+    path: skills/workflow-skill-creator
+    description: Create executable workflow skills with program and model orchestration, host dispatch, file contracts and runtime validation.
+    tagline_en: Turn multi-stage tasks into executable and verifiable skills.
+    tagline_zh: 将多阶段任务实现为可执行、可验证的工作流技能。
   - name: pv-forecast-pptx
     display_name: PV Forecast PPTX
     name_zh: 光伏预测汇报 PPTX

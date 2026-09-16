@@ -28,7 +28,7 @@
 
 ## 技能列表
 
-> **14 个技能**
+> **15 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
@@ -42,6 +42,7 @@
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`template-writing`](skills/template-writing) | [模板写作](skills/template-writing) | 根据合同、技术协议和项目资料撰写并填充固定格式 DOCX 模板。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`transcript-source-compiler`](skills/transcript-source-compiler) | [转写来源编译器](skills/transcript-source-compiler) | 将大段演讲转写编译成可追溯的来源底稿和可读文章。 |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`weekly-report`](skills/weekly-report) | [中文周报生成器](skills/weekly-report) | 从工作日志生成可迁移的中文工作周报 DOCX。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`workflow-skill-creator`](skills/workflow-skill-creator) | [工作流 Skill 创作](skills/workflow-skill-creator) | 将多阶段任务实现为可执行、可验证的工作流技能。 |
 | **多模态** | | | |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`auto-yolo-dataset`](skills/auto-yolo-dataset) | [自动 YOLO 数据集](skills/auto-yolo-dataset) | 通过本地或远程检测器生成 YOLO、COCO、VOC 和 Label Studio 数据集资产。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`glm-ocr-pdf2md`](skills/glm-ocr-pdf2md) | [本地GLM-OCR扫描PDF转Markdown](skills/glm-ocr-pdf2md) | 本地ZhipuAI/GLM-OCR将扫描版PDF转为带目录和页码标记的Markdown书籍。 |
@@ -75,7 +76,8 @@ LLM-Skills/
     ├── social-cover-maker/
     ├── template-writing/
     ├── transcript-source-compiler/
-    └── weekly-report/
+    ├── weekly-report/
+    └── workflow-skill-creator/
 ```
 
 ## 安装
