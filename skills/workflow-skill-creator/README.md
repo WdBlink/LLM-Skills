@@ -7,6 +7,16 @@
 
 ## 安装
 
+已安装 Node.js 时，一条命令安装到 Codex 全局技能目录：
+
+```bash
+npx -y skills add WdBlink/LLM-Skills --skill workflow-skill-creator --agent codex --global --yes
+```
+
+安装参数见 [Skills CLI 文档](https://github.com/vercel-labs/skills#options)。
+
+### 手动安装
+
 在本仓库根目录执行：
 
 ```bash
