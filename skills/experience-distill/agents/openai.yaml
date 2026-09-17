@@ -1,0 +1,4 @@
+interface:
+  display_name: "Experience Distill"
+  short_description: "从长程任务与失败轨迹提炼有证据、有边界、可供下一次任务使用的经验知识"
+  default_prompt: "使用 $experience-distill 提炼本次任务的经验，保留证据、反例和适用边界，并给出可复用的短备忘录。"

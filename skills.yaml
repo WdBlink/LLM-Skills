@@ -1,5 +1,15 @@
 version: 1
 skills:
+  - name: experience-distill
+    display_name: Experience Distill
+    name_zh: 任务经验提炼
+    category: Knowledge
+    version: 0.1.0
+    license: MIT
+    path: skills/experience-distill
+    description: Distill task histories into evidence-backed lessons with applicability boundaries, counterexamples and focused handoff notes.
+    tagline_en: Turn task experience into actionable lessons with evidence and limits.
+    tagline_zh: 从任务经历提炼有证据、有边界、可供下次任务复用的经验。
   - name: workflow-skill-creator
     display_name: Workflow Skill Creator
     name_zh: 工作流 Skill 创作
