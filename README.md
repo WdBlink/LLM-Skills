@@ -28,7 +28,7 @@
 
 ## 技能列表
 
-> **16 个技能**
+> **17 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
@@ -41,6 +41,7 @@
 | ![Open](https://img.shields.io/badge/Open-green) | [`mind-map`](skills/mind-map) | [项目思维导图](skills/mind-map) | 将项目判断记录为 Obsidian 双链节点、紧凑 schema 索引、图谱中性的时间线/溯源和可交互 HTML 图谱。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`paper-deconstruction`](skills/paper-deconstruction) | [论文精读](skills/paper-deconstruction) | 用结构-故事-拆解-评价-视觉化五阶法把一篇论文精读成带配图的可视化笔记。 |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`template-writing`](skills/template-writing) | [模板写作](skills/template-writing) | 根据合同、技术协议和项目资料撰写并填充固定格式 DOCX 模板。 |
+| ![Private](https://img.shields.io/badge/Private-blueviolet) | [`thinking-in-bets`](skills/thinking-in-bets) | [对赌决策工作流](skills/thinking-in-bets) | 从《对赌》提炼35个工具与七条工作流，按情境自动辅助选择、信念校准、复盘和风险规划。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`transcript-source-compiler`](skills/transcript-source-compiler) | [转写来源编译器](skills/transcript-source-compiler) | 将大段演讲转写编译成可追溯的来源底稿和可读文章。 |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`weekly-report`](skills/weekly-report) | [中文周报生成器](skills/weekly-report) | 从工作日志生成可迁移的中文工作周报 DOCX。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`workflow-skill-creator`](skills/workflow-skill-creator) | [工作流 Skill 创作](skills/workflow-skill-creator) | 将多阶段任务实现为可执行、可验证的工作流技能。 |
@@ -77,6 +78,7 @@ LLM-Skills/
     ├── paper-deconstruction/
     ├── social-cover-maker/
     ├── template-writing/
+    ├── thinking-in-bets/
     ├── transcript-source-compiler/
     ├── weekly-report/
     └── workflow-skill-creator/

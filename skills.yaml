@@ -1,5 +1,15 @@
 version: 1
 skills:
+  - name: thinking-in-bets
+    display_name: Thinking in Bets
+    name_zh: 对赌决策工作流
+    category: Knowledge
+    version: 0.1.0
+    license: Proprietary
+    path: skills/thinking-in-bets
+    description: Apply evidence-grounded workflows for decisions under uncertainty, belief updates, outcome reviews, dissent, future planning and precommitment.
+    tagline_en: Turn uncertainty into actionable choices and learning with 35 tools and seven workflows.
+    tagline_zh: 从《对赌》提炼35个工具与七条工作流，按情境自动辅助选择、信念校准、复盘和风险规划。
   - name: experience-distill
     display_name: Experience Distill
     name_zh: 任务经验提炼

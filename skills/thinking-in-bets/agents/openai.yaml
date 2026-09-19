@@ -1,0 +1,6 @@
+interface:
+  display_name: "对赌 · 决策工作流"
+  short_description: "在信息不足时比较选项、校准信念、规划风险，并从结果中改进决策"
+  default_prompt: "使用 $thinking-in-bets 帮我分析当前决策，给出建议、关键不确定性和改变判断的条件。"
+policy:
+  allow_implicit_invocation: true
