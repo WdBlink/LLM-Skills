@@ -1,5 +1,15 @@
 version: 1
 skills:
+  - name: good-benchmarks
+    display_name: Good Benchmarks
+    name_zh: Benchmark 设计与审计
+    category: Knowledge
+    version: 0.1.0
+    license: MIT
+    path: skills/good-benchmarks
+    description: Design and audit benchmarks with explicit task contracts, same-information reference solutions, semantic verification, failure diagnosis and evidence-backed review.
+    tagline_en: Build realistic, solvable benchmarks with fair scoring and traceable validation.
+    tagline_zh: 从真实任务构建可解、可验证、可复现的 benchmark，核验评分公平性与难度来源。
   - name: thinking-in-bets
     display_name: Thinking in Bets
     name_zh: 对赌决策工作流

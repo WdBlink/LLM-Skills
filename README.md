@@ -28,7 +28,7 @@
 
 ## 技能列表
 
-> **17 个技能**
+> **18 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
@@ -37,6 +37,7 @@
 | ![Open](https://img.shields.io/badge/Open-green) | [`annie-duke-perspective`](skills/annie-duke-perspective) | [Annie Duke 对赌思维](skills/annie-duke-perspective) | 用 Annie Duke 的对赌思维做决策顾问——把决策质量与结果质量分开，强制概率式叙述与责任性预测。 |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`daily-todo-planner`](skills/daily-todo-planner) | [每日待办计划器](skills/daily-todo-planner) | 将杂乱每日描述转成可复盘学习、可提前预研的时间块计划。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`experience-distill`](skills/experience-distill) | [任务经验提炼](skills/experience-distill) | 从任务经历提炼有证据、有边界、可供下次任务复用的经验。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`good-benchmarks`](skills/good-benchmarks) | [Benchmark 设计与审计](skills/good-benchmarks) | 从真实任务构建可解、可验证、可复现的 benchmark，核验评分公平性与难度来源。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`karpathy-autoresearch-adapter`](skills/karpathy-autoresearch-adapter) | [Karpathy 自动研究适配器](skills/karpathy-autoresearch-adapter) | 将现有仓库改造成以真实评价器为核心的自动研究协议项目。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`mind-map`](skills/mind-map) | [项目思维导图](skills/mind-map) | 将项目判断记录为 Obsidian 双链节点、紧凑 schema 索引、图谱中性的时间线/溯源和可交互 HTML 图谱。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`paper-deconstruction`](skills/paper-deconstruction) | [论文精读](skills/paper-deconstruction) | 用结构-故事-拆解-评价-视觉化五阶法把一篇论文精读成带配图的可视化笔记。 |
@@ -72,6 +73,7 @@ LLM-Skills/
     ├── daily-todo-planner/
     ├── experience-distill/
     ├── glm-ocr-pdf2md/
+    ├── good-benchmarks/
     ├── karpathy-autoresearch-adapter/
     ├── mind-map/
     ├── ms-qwen-vl/
