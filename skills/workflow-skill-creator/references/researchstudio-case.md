@@ -1,8 +1,10 @@
 # ResearchStudio：方法来源与迁移边界
 
+需要独立审查或复杂编排时选读，或在核对 ResearchStudio 的来源与实现边界时查阅。少量语义判断默认采用 [当前宿主判断接力](judgment-interface.md)，普通顺序和少量分支用现有工具与普通代码；本页的多 Agent、导航与恢复机制均按实际需求选择。
+
 证据版本：microsoft/ResearchStudio，commit `0597891df1a153b8e4cbdc8c1c685f43a0a6abcf`（2026-09-06），核验日 2026-09-12。本文件是原创概括，不包含上游实现的复制。使用更新版本时需核对变化，不能把本文件日期当成最新保证。
 
-具体脚本、派发和 prompt 接线见 [实现拆解](implementation-walkthrough.md)、[宿主派发](host-dispatch.md)、[prompt 加载](prompt-loading.md)。本页保留系统范围与反例，不替代实现教程。
+需要借用这些机制时，具体脚本、派发和 prompt 接线见 [实现拆解](implementation-walkthrough.md)、[宿主派发](host-dispatch.md)、[prompt 加载](prompt-loading.md)。本页保留系统范围与反例，不替代对应实现说明，也不是所有 Skill 的必读步骤。
 
 ## 两种架构，不是一个万能模板
 

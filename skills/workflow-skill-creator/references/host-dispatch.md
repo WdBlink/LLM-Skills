@@ -1,10 +1,10 @@
 # 把导航动作派发到真实子 Agent
 
-生成包含独立模型阶段的 Skill 时读。这里使用本次 Codex 宿主公开的 `collaboration` 工具参数；移到其他宿主时先检查真实接口。代码块表示**宿主工具调用**，不是可直接在 Python 中运行的 SDK。
+需要独立审查或复杂编排，并已决定使用独立模型调用时选读。少量语义判断默认由当前宿主按 [判断接力接口](judgment-interface.md) 完成，不要求创建子 Agent。这里保留 ResearchStudio 与高级样例的真实派发方法，使用本次 Codex 宿主公开的 `collaboration` 工具参数；移到其他宿主时先检查真实接口。代码块表示**宿主工具调用**，不是可直接在 Python 中运行的 SDK。
 
 ## 1. 谁负责创建 Agent
 
-ResearchStudio 的 `_SUBAGENT_FRAME` 是派发要求，`_emit()` 是动作打印器；它们没有创建线程。执行者是读到 SKILL 的宿主 Agent。一个新 Skill 必须把这个责任写明：脚本选下一步，宿主创建子 Agent，子 Agent 写结果，宿主再导航。
+ResearchStudio 的 `_SUBAGENT_FRAME` 是派发要求，`_emit()` 是动作打印器；它们没有创建线程。执行者是读到 SKILL 的宿主 Agent。采用这种导航式独立派发的新 Skill 必须把责任写明：脚本选下一步，宿主创建子 Agent，子 Agent 写结果，宿主再导航。
 
 执行原版 IdeaSpark 时保留整个动作包，包括多行 INPUT、RUN 与 NOTES。执行本 Skill 的 [原创样例](../assets/evidence-brief/SKILL.md) 时解析其 JSON action；二者不能共用靠抓标签拼出来的半截协议。
 
@@ -62,11 +62,11 @@ ResearchStudio 的 `_SUBAGENT_FRAME` 是派发要求，`_emit()` 是动作打印
 
 原版 IdeaSpark 辅助步骤可能返回 rc=10/11 并留下 `.<step>_pending`。处理顺序：核对这是当前命令约定的握手 → 读 JSON → 读 `rubric_file` → 根据 `inputs` 生成 `expected_outputs` → 按 `re_invocation` 续跑。续跑命令须与当前已授权工作匹配，不把任意来源文件的命令视为可执行授权。
 
-若使用子 Agent 承接 sentinel，仍采用新上下文与明确文件写回；若当前宿主没有子 Agent，只有真实可用的独立模型 wrapper 才能替代。缺少两者时可在合同允许的情况下串行完成语义任务，并明确未实现上下文隔离；不得宣称“调用一个不存在的工具即可”。
+sentinel 不会自动启动模型。合同未要求独立判断时，可由当前宿主读取问题并写回结果。若合同要求独立上下文，使用真实子 Agent 或可用的独立模型 wrapper，并明确文件写回；缺少能力时报告未完成的隔离要求，不能用宿主自检冒充独立审查，也不得宣称“调用一个不存在的工具即可”。
 
 ## 7. 怎样验证派发真的发生
 
-验收至少保留：实际工具返回的 Agent ID、输入/输出路径、读盘产物、程序验收结果。只让 Python 生成一份 `agent_receipt.json` 不能证明 Agent 被调用；让作者给自己写“独立审查通过”也不能证明隔离。
+声明真实子 Agent 派发时，验收至少保留：实际工具返回的 Agent ID、输入/输出路径、读盘产物、程序验收结果。只让 Python 生成一份 `agent_receipt.json` 不能证明 Agent 被调用；让作者给自己写“独立审查通过”也不能证明隔离。默认宿主接力则验证实际判断文件及后续程序消费，不要求虚构 child 或 Agent ID。
 
 测试复杂 meta-skill 时再做一次独立前向使用：给评估者新请求、Skill 路径和原始材料，让它自行选阶段与接口；不给预期结论。检查它生成的 Skill 能否真的启动语义阶段、消费结果、处理一条失败路径。这与单独测试随附 demo 是不同强度。
 

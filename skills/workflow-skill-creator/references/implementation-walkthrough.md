@@ -1,6 +1,6 @@
 # ResearchStudio：从源码学会写工作流脚本
 
-创建包含程序与多个模型阶段的 Skill 时读。这里把“源代码做了什么”转成“新 Skill 应怎样实现”，配套可运行的原创实现见 [evidence-brief](../assets/evidence-brief/SKILL.md)。该样例是迁移练习，不是 IdeaSpark 的替代实现。
+需要独立审查或复杂编排时选读。这里把 ResearchStudio 的实现拆成可按需借用的方法；普通线性流程先用现有工具和普通代码，少量语义判断默认走 [当前宿主判断接力](judgment-interface.md)，不要求照搬导航器或多个子 Agent。配套的 [evidence-brief](../assets/evidence-brief/SKILL.md) 是保留独立审查保证的可选高级示例，不是新 Skill 的默认骨架，也不是 IdeaSpark 的替代实现。
 
 证据固定为 Microsoft ResearchStudio `0597891df1a153b8e4cbdc8c1c685f43a0a6abcf`，核验日 2026-09-12。下文代码示意与样例为原创；源码用固定链接定位。历史测试和整体边界见 [案例参考](researchstudio-case.md)。
 
@@ -29,7 +29,7 @@ IdeaSpark 的一次典型交接：
 
 源码入口：[run.py](https://github.com/microsoft/ResearchStudio/blob/0597891df1a153b8e4cbdc8c1c685f43a0a6abcf/ResearchStudio-Idea/skills/idea_spark/scripts/run.py)、[next_step.py:1–71](https://github.com/microsoft/ResearchStudio/blob/0597891df1a153b8e4cbdc8c1c685f43a0a6abcf/ResearchStudio-Idea/skills/idea_spark/scripts/next_step.py#L1)。
 
-新 Skill 先把一个样本走通：定义最终文件 → 列出需要的语义内容 → 把机械字段拿回程序 → 确定模型输出 → 接上宿主派发 → 再补导航分支。不要先造一套通用 workflow 类。
+新 Skill 先把一个样本走通：定义最终文件 → 列出需要的语义内容 → 把机械字段拿回程序 → 确定判断输出 → 接上当前宿主判断与程序消费。确需独立调用时再接派发，分支或恢复复杂时再补导航。不要先造一套通用 workflow 类。
 
 ## 2. CLI 写成确定入口，减少宿主临场选择
 
@@ -49,7 +49,7 @@ scripts/run.py
 
 样例把这些放在一个文件，因为没有独立复用的 helper；IdeaSpark 较大，才把 connector、merger、validator 分开。拆文件的依据是责任与复用，不是每个阶段必须一个模块。
 
-可以按这个顺序读随附 [run.py](../assets/evidence-brief/scripts/run.py)，再改造成自己的实现：
+需要借用这套独立审查结构时，可以按这个顺序读随附 [run.py](../assets/evidence-brief/scripts/run.py)，再改造成自己的实现；日常执行已有入口无需重新读完源码：
 
 | 函数 | 真正负责的事 | 迁移时要改什么 |
 | --- | --- | --- |
@@ -213,8 +213,8 @@ Reel 的 Paper2Video 已有制片与视频工具，父技能不再实现一份�
 ## 10. 把方法变成自己的脚本时要留下什么
 
 - 一条从任意工作目录可调用的真实入口，以及最小真实输入。
-- 每个模型阶段的 prompt、输入视图、输出 schema 和实际宿主派发步骤。
+- 每个必要判断的规则、输入视图、输出 schema 和宿主接力步骤；采用独立调用时另给真实派发步骤。
 - 一条确定的内容流：生成→合并/校验→消费，含失败时的下一动作。
 - 针对关键不变量的可运行反例，及一次真实模型阶段运行记录。
 
-不是每个 Skill 都要以上全部模块。若任务只有一个文本转换，只需指令和样例；若声称提供类似 IdeaSpark 的多阶段编排，就不能缺失宿主如何执行模型阶段这一环。
+不是每个 Skill 都要以上全部模块。若任务主要是一次性理解或创作，可只用指令和已有工具；稳定重复的转换应复用脚本。若声称提供类似 IdeaSpark 的多阶段编排，就不能缺失宿主如何执行模型阶段这一环。宿主判断产物被程序真实消费即可验证默认接力；只有声明独立派发时才要求对应的真实 child 与调用证据。

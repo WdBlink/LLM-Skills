@@ -1,9 +1,11 @@
 ---
 name: evidence-brief
-description: 用三条明确标注的虚构证据运行一个可验证的简报样例，演示程序骨架、独立写作审查、受限修订和再审闭环。用于学习多阶段 Skill 工程方法。
+description: 可选高级示例：用三条明确标注的虚构证据演示程序骨架、独立写作审查、受限修订和再审闭环。仅在需要独立审查或复杂编排时学习与改造。
 ---
 
 # Evidence Brief
+
+本例保留真实子 Agent 与独立审查合同，供需要独立审查或复杂编排时选读和运行。普通任务默认使用 [当前宿主判断接力](../../references/judgment-interface.md)，不必采用本例的多阶段结构。选用本例后，下文 `llm_subagent` 派发与隔离要求仍完整生效，不能在主上下文模拟角色后宣称通过。
 
 交付一份中文 Markdown 证据简报。样例只使用 [虚构输入](fixtures/input.json)，不联网、不涉及真实研究结论。所有程序只使用 Python 标准库；`scripts/run.py` 不调用或模拟 LLM。
 

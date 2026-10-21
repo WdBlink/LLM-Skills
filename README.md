@@ -45,7 +45,7 @@
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`thinking-in-bets`](skills/thinking-in-bets) | [对赌决策工作流](skills/thinking-in-bets) | 从《对赌》提炼35个工具与七条工作流，按情境自动辅助选择、信念校准、复盘和风险规划。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`transcript-source-compiler`](skills/transcript-source-compiler) | [转写来源编译器](skills/transcript-source-compiler) | 将大段演讲转写编译成可追溯的来源底稿和可读文章。 |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`weekly-report`](skills/weekly-report) | [中文周报生成器](skills/weekly-report) | 从工作日志生成可迁移的中文工作周报 DOCX。 |
-| ![Open](https://img.shields.io/badge/Open-green) | [`workflow-skill-creator`](skills/workflow-skill-creator) | [工作流 Skill 创作](skills/workflow-skill-creator) | 将多阶段任务实现为可执行、可验证的工作流技能。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`workflow-skill-creator`](skills/workflow-skill-creator) | [工作流 Skill 创作](skills/workflow-skill-creator) | 固化重复操作、参数化任务差异，按需由当前宿主判断，并验证交付质量与实际成本。 |
 | **多模态** | | | |
 | ![Private](https://img.shields.io/badge/Private-blueviolet) | [`auto-yolo-dataset`](skills/auto-yolo-dataset) | [自动 YOLO 数据集](skills/auto-yolo-dataset) | 通过本地或远程检测器生成 YOLO、COCO、VOC 和 Label Studio 数据集资产。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`glm-ocr-pdf2md`](skills/glm-ocr-pdf2md) | [本地GLM-OCR扫描PDF转Markdown](skills/glm-ocr-pdf2md) | 本地ZhipuAI/GLM-OCR将扫描版PDF转为带目录和页码标记的Markdown书籍。 |
