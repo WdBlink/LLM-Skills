@@ -1,4 +1,4 @@
 interface:
   display_name: "Good Benchmarks"
   short_description: "从真实任务构建可解、可验证、可复现的 benchmark，并审计难度与评分器"
-  default_prompt: "使用 $good-benchmarks 为当前任务设计或审计 benchmark，交付任务契约、验证方案、正反例和实际检查证据。"
+  default_prompt: "使用 $good-benchmarks，按目标选择任务形态与成功依据，交付可复用的数据、配置、运行/评分入口和独立预期的正反例；分别报告评分可复算、验收有效、比较条件及未验证项，复测使用已保存入口。"

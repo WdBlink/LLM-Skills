@@ -1,11 +1,11 @@
 # Good Benchmarks
 
-![Version](https://img.shields.io/badge/version-0.1.0-CC785C)
+![Version](https://img.shields.io/badge/version-0.2.0-CC785C)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 依据 Ivan Bercovich 的 [*Good Benchmarks*, arXiv:2607.12217v1](https://arxiv.org/html/2607.12217v1)，将真实任务、可解性、评分器正确性、环境稳定性与失败诊断组织为可执行的 benchmark 设计流程。适用于新建、实现或审计评测任务、任务集和评分器。
 
-该 Skill 交付任务契约、要求与检查的映射、参考解证据、评分器正反例、试跑及审阅记录。低通过率需要结合实际失败原因解释，不能单独证明任务有效。
+该 Skill 先区分任务的存在形式与成功依据，再交付任务契约、逐指标的数据与评分入口映射、参考解证据、裁判正反例、试跑及审阅记录。静态题目、可执行任务包、交互环境、生成任务、冻结运行和现场协议可以按需组合；开放解题过程仍可有客观验收。低通过率需要结合失败原因解释，不能单独证明任务有效。
 
 ## 安装
 
@@ -22,7 +22,7 @@ mkdir -p ~/.codex/skills/good-benchmarks
 rsync -a skills/good-benchmarks/ ~/.codex/skills/good-benchmarks/
 ```
 
-技能本身是纯文本，无额外运行依赖；具体 benchmark 的依赖和资源按项目定义。
+说明以 Markdown 为主；可选文件完整性检查器使用 Python 3.9+ 和标准库。具体 benchmark 的评分器、依赖和资源按项目定义，完整性检查通过不等于评测有效。
 
 ## 使用
 
@@ -31,8 +31,9 @@ rsync -a skills/good-benchmarks/ ~/.codex/skills/good-benchmarks/
 ```text
 用 $good-benchmarks 为当前项目设计 benchmark。
 目标是比较两个系统能否准确完成设备占用时间汇总。
-请交付任务契约、可解性依据、评分器验证方案与正反例；
-如果需要实现，复用当前项目的测试设施，并报告实际运行结果。
+先选择任务形态和成功依据，再交付数据/初态、任务契约、
+可复用的运行与评分入口、独立预期的正反例和实际检查结果。
+复用当前项目的测试设施，分别说明工程验证、真实可解与未验证项。
 ```
 
 审计已有评测时，可以要求：
@@ -54,7 +55,10 @@ rsync -a skills/good-benchmarks/ ~/.codex/skills/good-benchmarks/
 | 文件 | 用途 |
 |---|---|
 | [SKILL.md](SKILL.md) | 八步工作流程、决策边界、验收与停止条件 |
+| [场景选型](references/benchmark-forms.md) | 任务形态与成功依据的组合、四类样本、分场景构建及评分可复算/验收有效/比较公平 |
 | [任务契约](references/task-contract.md) | 输入输出、权限资源、要求映射、验证矩阵和故障分类 |
+| [可执行交付](references/executable-package.md) | 按形态准备数据与入口、逐指标登记、冻结及复跑要求 |
+| [完整性检查器](scripts/verify_artifacts.py) | 只读验证已登记文件哈希；不判断 benchmark 的科学或业务有效性 |
 | [六组案例](references/examples.md) | 数据汇总、故障定位、主观写作、时延与协调、评分隔离、随机实验的正反例 |
 | [来源与适配](references/source-notes.md) | 原论文章节索引及本地扩展的适用边界 |
 | [Codex 配置](agents/openai.yaml) | 展示名称与默认调用提示 |
