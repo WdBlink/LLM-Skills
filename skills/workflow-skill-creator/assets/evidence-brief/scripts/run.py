@@ -246,30 +246,65 @@ def prepare(input_path, directory):
         write_json(base_path, skeleton(value))
 
 
+def execute_step(step, directory, doc):
+    if step == "prepare":
+        prepare(directory / "input.json", directory)
+    elif step in ("assemble", "merge"):
+        write_json(directory / ("draft.json" if step == "assemble" else "revised.json"), doc)
+    elif step == "render":
+        atomic_new(directory / "brief.md", markdown(doc))
+    else:
+        raise ValueError(f"未知机械步骤 {step}，未执行")
+
+
+def advance(directory, executed, input_path=None):
+    action, doc = inspect_run(directory)
+    if input_path is not None:
+        prepare(input_path, directory)
+        if action["kind"] == "command" and action["step"] == "prepare":
+            executed.append("prepare")
+        action, doc = inspect_run(directory)
+    require((directory / "input.json").is_file(), "首次 advance 必须提供 --input；不会自动使用教学输入")
+    while action["kind"] == "command":
+        step = action["step"]
+        require(step not in executed, f"步骤 {step} 重复出现，推进没有进展；保留运行目录并检查实现")
+        execute_step(step, directory, doc)
+        executed.append(step)
+        action, doc = inspect_run(directory)
+    return action
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="operation", required=True)
-    for name in ("prepare", "next", "assemble", "merge", "render"):
-        sub = subparsers.add_parser(name)
+    commands = {"advance": "推进机械步骤，遇到判断、完成或阻塞时返回",
+                "prepare": "显式准备输入快照", "next": "只读检查下一动作",
+                "assemble": "组装当前初稿", "merge": "合并允许的修订", "render": "渲染已通过的稿件"}
+    for name, help_text in commands.items():
+        sub = subparsers.add_parser(name, help=help_text)
         sub.add_argument("--dir", required=True, type=Path)
-        if name == "prepare":
-            sub.add_argument("--input", required=True, type=Path)
+        if name in ("prepare", "advance"):
+            sub.add_argument("--input", required=name == "prepare", type=Path,
+                             help="首次运行必需；续跑时若提供，必须与已有快照一致")
     args = parser.parse_args()
     directory = args.dir.resolve()
+    executed = []
     try:
-        if args.operation == "prepare":
+        if args.operation == "advance":
+            action = advance(directory, executed, args.input.resolve() if args.input is not None else None)
+        elif args.operation == "prepare":
             prepare(args.input.resolve(), directory)
         elif args.operation != "next":
             action, doc = inspect_run(directory)
             require(action["kind"] == "command" and action["step"] == args.operation,
                     f"当前应执行 {action['step']}，不可执行 {args.operation}")
-            if args.operation in ("assemble", "merge"):
-                write_json(directory / ("draft.json" if args.operation == "assemble" else "revised.json"), doc)
-            else:
-                atomic_new(directory / "brief.md", markdown(doc))
-        action, _ = inspect_run(directory)
+            execute_step(args.operation, directory, doc)
+        if args.operation != "advance":
+            action, _ = inspect_run(directory)
     except (OSError, ValueError, TypeError, KeyError) as error:
         action = {"kind": "blocked", "step": "validate", "notes": str(error)}
+    if args.operation == "advance":
+        action["executed"] = executed
     print(json.dumps(action, ensure_ascii=False, indent=2))
     return 2 if action["kind"] == "blocked" else 0
 

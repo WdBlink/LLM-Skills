@@ -14,16 +14,18 @@ description: 可选高级示例：用三条明确标注的虚构证据演示程�
 先将本 Skill 目录和一个全新的运行目录解析为绝对路径，再运行：
 
 ```bash
-python3 "$SKILL_DIR/scripts/run.py" prepare --input "$SKILL_DIR/fixtures/input.json" --dir "$RUN_DIR"
-python3 "$SKILL_DIR/scripts/run.py" next --dir "$RUN_DIR"
+python3 "$SKILL_DIR/scripts/run.py" advance --input "$SKILL_DIR/fixtures/input.json" --dir "$RUN_DIR"
 ```
 
-`next` 只读，每次输出一个 JSON action。这是本样例原创的机器可读协议，**不是 ResearchStudio 上游的文本协议或兼容接口**。action 中所有文件路径和程序 argv 都是绝对路径：
+`advance` 校验当前状态并执行 prepare、assemble、merge、render 中已知且就绪的操作，直到返回判断、完成或阻塞。首次必须显式提供 `--input`；续跑读取冻结快照，若再次提供输入则须与快照一致。它只调用内部操作，不执行 action.argv，也不会启动或模拟模型。
 
-- `kind=command`：逐项执行 `argv`，不拼接 shell 字符串；再调用 next。
-- `kind=llm_subagent`：宿主实际创建一个全新、无历史上下文的子 Agent。只传此 action 的 `prompt`、`inputs`、`output` 和只写 output 的约束；不传主会话、其他角色输出或期望结论。让它读取提示文件并原子写入指定 JSON；等待完成后调用 next。
+每次输出一个 JSON action，`executed` 列出本次成功完成的机械步骤；完整内容留在文件中。部分步骤失败时，按错误与已有产物确定恢复位置，不能仅凭 executed 推断所有磁盘写入。这是本样例原创的机器可读协议，**不是 ResearchStudio 上游的文本协议或兼容接口**。action 中所有文件路径均为绝对路径：
+
+- `kind=llm_subagent`：宿主实际创建一个全新、无历史上下文的子 Agent。只传此 action 的 `prompt`、`inputs`、`output` 和只写 output 的约束；不传主会话、其他角色输出或期望结论。让它读取提示文件并原子写入指定 JSON；等待完成后再次运行 `advance --dir "$RUN_DIR"`。
 - `kind=done`：读取并交付 output 指向的 `brief.md`。
 - `kind=blocked`：报告 notes 及保留的运行目录，停止依赖步骤；不可通过删评审、改 verdict 或反复开新目录隐藏失败。
+
+需要只读检查时调用 `next --dir "$RUN_DIR"`，它不创建目录或写文件，也没有 executed 字段。它可能返回 `kind=command` 和绝对 argv；日常用 advance 消费就绪机械步骤。原有 prepare、assemble、merge、render 保留为单步诊断入口，均复用同一套校验和操作。
 
 使用原生子 Agent 工具时设置 `fork_turns="none"`（或宿主等价选项）。writer、critic-0、reviser、critic-1 必须是各自新建的 Agent；同一 critic 提示可复用，但实例和上下文不可复用。子 Agent 只负责 action.output，不自行推进其他阶段。宿主没有真实子 Agent 能力时明确阻塞，不在主上下文模拟角色。该隔离是宿主执行约束，Python 脚本不能证明 Agent 身份。
 
@@ -46,7 +48,9 @@ critic 的非空理由、合法 verdict、finding scope、来源编号、原文�
 
 最多一次修订。初审 abandon 立即停止；再审 revise/abandon 也停止。done 必须同时具备与当前候选逐字一致的非空终稿，以及绑定该候选的最新 advance 评审。发现损坏产物时先报告；确需重新实验则用新目录并保留失败原因。修改输入后必须使用新运行目录，prepare 会拒绝在已有目录装入不同输入；只读源文件后来变化不会改写已经冻结的 input.json 快照。
 
-`next` 和其他命令都输出 JSON；blocked 的进程退出码为 2，其他为 0。可直接运行的检查：
+对未完成写入或临时 I/O 失败，排除具体障碍后在原目录重新 advance；已验证的输入与产物不重写。损坏判断须保留失败证据，由负责该输出的执行者按原合同修复，再继续校验；不能把业务不通过改为通过。重复调用等待中或已完成运行不会重写有效文件；未知机械动作或同一步无进展会阻塞。
+
+所有命令都输出 JSON；blocked 的进程退出码为 2，其他为 0。退出码 0 只表示命令正常返回，llm_subagent 表示仍待判断，done 才表示本例程序合同完成；语义正确性和真实独立派发仍需宿主证据。可直接运行的检查：
 
 ```bash
 python3 "$SKILL_DIR/scripts/check.py"

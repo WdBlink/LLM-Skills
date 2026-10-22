@@ -21,7 +21,6 @@ from typing import Any
 
 
 SCHEMA_VERSION = "mind-map.v1"
-DEFAULT_VAULT = Path("/Users/echooo/SynologyDrive/Typora")
 OUTPUT_ROOT = Path("AI-Projects/MindMaps")
 ALLOWED_TYPES = {
     "thesis",
@@ -264,12 +263,15 @@ def resolve_vault(explicit: str | None) -> Path:
     if config_path.exists():
         try:
             data = json.loads(config_path.read_text(encoding="utf-8"))
-            configured = data.get("defaultVaultPath")
-            if configured:
-                return Path(configured).expanduser().resolve()
-        except Exception:
-            pass
-    return DEFAULT_VAULT
+        except (OSError, ValueError) as exc:
+            raise ValueError(f"Cannot read vault configuration: {config_path}") from exc
+        if not isinstance(data, dict):
+            raise ValueError("Vault configuration must be a JSON object")
+        configured = data.get("defaultVaultPath")
+        if isinstance(configured, str) and configured.strip():
+            return Path(configured).expanduser().resolve()
+    raise ValueError("Set --vault, MIND_MAP_VAULT, or defaultVaultPath in ~/.agent-mindmap/config.json")
+
 
 
 def load_config() -> dict[str, Any]:
@@ -1560,7 +1562,10 @@ def main() -> int:
     payload = read_payload(args)
     language = resolve_language(args, payload)
     payload.setdefault("language", language)
-    vault = resolve_vault(args.vault)
+    try:
+        vault = resolve_vault(args.vault)
+    except ValueError as exc:
+        parser.error(str(exc))
     project = project_identity(Path(args.project_path))
     root = vault / OUTPUT_ROOT
     project_dir = root / project["id"]

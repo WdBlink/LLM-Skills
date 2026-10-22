@@ -1,0 +1,21 @@
+{
+  "goal": "选择所有明确限制实验结论适用范围或指出未验证条件的段落；仅描述结果、工作安排或文件管理的段落不符合。",
+  "input_sha256": "c82a9701f8d8c947aa4542c6fdcb8ceb0e3c5b3133bda2f694387edc20aaba7c",
+  "protocol_version": 1,
+  "request_id": "sha256:d8b5ca73b8da13c33757f890f391f23dccfb2a42f60d72f86e0a6ede2a6dce7d",
+  "status": "needs_judgment",
+  "units": [
+    {
+      "text": "这是为评分器构造的合成资料，不是真实项目记录。团队今天完成了文件重命名。",
+      "unit_id": "u0001"
+    },
+    {
+      "text": "会议记录和流程图存放在同一项目目录中。",
+      "unit_id": "u0002"
+    },
+    {
+      "text": "下一步安排是整理目录，并为每份文件添加说明。",
+      "unit_id": "u0003"
+    }
+  ]
+}

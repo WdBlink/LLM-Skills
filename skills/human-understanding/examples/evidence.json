@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "task": {
+    "question": "虚构示例：本轮延迟是否降低？",
+    "reader": "项目负责人",
+    "scope": "仅 synthetic-run-1；全部为虚构测试数据"
+  },
+  "sources": [
+    {"id": "S1", "path": "results.json", "kind": "primary", "status": "available", "version": "synthetic-run-1"}
+  ],
+  "evidence": [
+    {
+      "id": "E1",
+      "source_id": "S1",
+      "kind": "metric",
+      "pointer": "/runs/0",
+      "metric": {
+        "name": "latency_p95",
+        "experiment": "synthetic-run-1",
+        "conditions": "同一硬件，固定并发 1；同一 100 个请求配对比较；仅运行一次，其他负载未测",
+        "baseline_name": "synthetic-baseline",
+        "unit": "ms",
+        "direction": "lower",
+        "value": 90,
+        "baseline": 100,
+        "n": 100,
+        "baseline_n": 100
+      },
+      "computed": {"delta": -10, "relative_change_pct": -10, "trend": "improved"}
+    }
+  ],
+  "claims": [
+    {
+      "id": "C1",
+      "text": "虚构实验的 p95 延迟由 100 ms 降至 90 ms，下降 10%。",
+      "scope": "只适用于所列硬件、并发及这批请求的一次运行",
+      "kind": "observation",
+      "evidence_ids": ["E1"],
+      "limitations": ["未提供跨运行波动，不能证明稳定改善", "其他负载、正确率和成本未测，不能判断整体成功"]
+    }
+  ]
+}

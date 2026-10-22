@@ -1,0 +1,7 @@
+{
+  "request_id": "sha256:38c88467dc58e1b700685a38e504107bb3fa9b0b71bb840be97d4eb4918069f9",
+  "selected": [
+    {"unit_id": "u0002", "reason": "明确限定光照、固定相机和目标距离。"},
+    {"unit_id": "u0003", "reason": "列出没有验证过的条件，并明确禁止外推。"}
+  ]
+}

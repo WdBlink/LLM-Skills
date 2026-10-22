@@ -35,19 +35,20 @@ IdeaSpark 的一次典型交接：
 
 `run.py` 根据自身 `__file__` 找 Skill 根目录；connector 子进程用参数数组、固定 `cwd`、绝对输出路径、超时与结果检查。这解决三个具体错误：从其他工作目录调用时找不到模块；子进程把相对路径写到另一个目录；失败的 connector 被当成空文献列表。
 
-迁移后的组织方式可以很小：
+本地样例的实现放在一个文件中：
 
 ```text
 scripts/run.py
-  parse_args()           参数和合法子命令
+  main()                参数、合法子命令与结果回执
   prepare(input, run)    原始请求、证据与 skeleton
-  next_action(run)       只读路由
-  assemble(run)          应用 fill_map
-  merge(run)             应用审查授权范围内的 patch
-  render(run)            从通过审查的对象渲染最终文件
+  inspect_run(run)      只读校验与下一动作
+  execute_step(...)    共享的机械操作，复用领域校验结果
+  advance(...)         连续执行到判断、完成或阻塞
 ```
 
-样例把这些放在一个文件，因为没有独立复用的 helper；IdeaSpark 较大，才把 connector、merger、validator 分开。拆文件的依据是责任与复用，不是每个阶段必须一个模块。
+首次 `advance --input INPUT --dir RUN` 冻结显式输入，后续 `advance --dir RUN` 复用有效状态。`next` 保持只读；单步命令继续可用。advance 不执行返回的 argv，也不创建模型调用；它复用 inspect_run 的校验与 execute_step 的机械操作，未知动作或无进展会阻塞。这是本地样例的接口，不是上游 IdeaSpark 已有命令。
+
+样例把这些放在一个文件，因为没有独立复用的 helper。阶段是执行协议，模块按领域数据、不变量和复用关系划分；同一引用、绑定或白名单规则只维护一份，由单步执行、自动推进和恢复共同使用。
 
 需要借用这套独立审查结构时，可以按这个顺序读随附 [run.py](../assets/evidence-brief/scripts/run.py)，再改造成自己的实现；日常执行已有入口无需重新读完源码：
 
@@ -59,6 +60,8 @@ scripts/run.py
 | `candidate` | 合成对象并绑定评审对象内容 | 有旧审查误用风险才保留该绑定 |
 | `critique` | 合法 verdict、findings、来源原文与对象绑定 | 让程序结构检查对应领域 prompt 的判断条件 |
 | `inspect_run` | 只读检查当前阶段，选择一个 action | 成功、修订、失败的实际分支 |
+| `execute_step` | 执行已知机械动作，不解释外部命令 | 复用领域操作，拒绝未知步骤 |
+| `advance` | 复用有效产物，推进到交接点或终态 | 显式初始输入、停止边界、无进展保护 |
 | `atomic_new` | 发布完整文件并拒绝覆盖已有产物 | 根据宿主文件能力保留防数据丢失处理 |
 | `main` | 命令入口，只执行当前允许动作 | 对接真实公开 CLI |
 
@@ -97,7 +100,7 @@ def skeleton(value):
 }
 ```
 
-上例展示协议形状，路径须以样例实际 `next` 输出为准；`command` action 给出 `argv`，`done/blocked` 是终态。生成新 Skill 时选择与宿主匹配的一种协议，把生产者、消费者一起写完，不能只交一个无人消费的 schema。
+上例展示协议形状，路径以样例实际输出为准。advance 另给 executed 列表，说明本次完成的机械步骤；它在判断处交回宿主。只读 next 仍可返回带 argv 的 command，供诊断当前步骤。done/blocked 区分完成与阻塞，退出码 0 不等于业务完成。生成新 Skill 时选择与宿主匹配的一种协议，把生产者、消费者一起写完，不能只交一个无人消费的 schema。
 
 源码：[Phase 2 的准备与合并派发](https://github.com/microsoft/ResearchStudio/blob/0597891df1a153b8e4cbdc8c1c685f43a0a6abcf/ResearchStudio-Idea/skills/idea_spark/scripts/next_step.py#L492)。
 

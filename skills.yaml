@@ -34,7 +34,7 @@ skills:
     display_name: Workflow Skill Creator
     name_zh: 工作流 Skill 创作
     category: Knowledge
-    version: 0.2.0
+    version: 0.3.0
     license: MIT
     path: skills/workflow-skill-creator
     description: Create or refactor skills by reusing tools and saved scripts, parameterizing task differences, and handing structured judgments to the current host with explicit validation, recovery and quality checks.
@@ -84,7 +84,7 @@ skills:
     display_name: Mind Map
     name_zh: 项目思维导图
     category: Knowledge
-    version: 0.2.13
+    version: 0.2.14
     license: MIT
     path: skills/mind-map
     description: Record explicit project thinking into Obsidian Markdown nodes, project directory anchors, compact judgment/rule schema indexes, graph-neutral provenance and timeline logs, an interactive HTML mind map, and an AI context pack.
@@ -104,7 +104,7 @@ skills:
     display_name: MS Qwen VL
     name_zh: 魔搭 Qwen-VL 视觉解析
     category: Multimodal
-    version: 0.1.0
+    version: 0.1.1
     license: MIT
     path: skills/ms-qwen-vl
     description: Use ModelScope or SiliconFlow Qwen-VL compatible APIs to analyze images and videos, including description, OCR, visual QA, detection, charts, and YOLO dataset output.
@@ -114,7 +114,7 @@ skills:
     display_name: Weekly Report
     name_zh: 中文周报生成器
     category: Knowledge
-    version: 0.1.0
+    version: 0.1.1
     license: Proprietary
     path: skills/weekly-report
     description: Generate Chinese weekly work report DOCX files from recent work logs or a provided log file using a portable self-contained script.
@@ -180,3 +180,68 @@ skills:
     description: Distilled decision-making framework and voice distilled from Annie Duke's Thinking in Bets (《对赌》中信版 2026). Provides 7 mental models (Resulting, All Decisions Are Bets, Skill+Luck, Belief Gullibility, Mental Time Travel, Merton CUDOS group decisions, Accountable Predictions), 11 if-then heuristics, a 7-dimension expression DNA with required anchors and forbidden tokens, and an agentic boot sequence for adopting Annie's probabilistic, story-anchored voice. Use to evaluate decision quality vs result quality, force probabilistic narration, run pre-mortems and backcasting, design accountable predictions with time-window follow-ups, and stress-test team decisions for CUDOS violations. Do not use for pure academic Q&A, deterministic math, or technical tool selection where Resulting does not apply.
     tagline_en: Think in bets: separate decision quality from result quality, with probabilities and pre-mortems.
     tagline_zh: 用 Annie Duke 的对赌思维做决策顾问——把决策质量与结果质量分开，强制概率式叙述与责任性预测。
+
+  - name: human-understanding
+    display_name: Human Understanding
+    name_zh: 结果理解与证据解释
+    category: Knowledge
+    version: 0.3.0
+    license: Proprietary
+    path: skills/human-understanding
+    description: Explain concepts and LLM outputs with explicit actors, consistent terms, scoped conditions, worked examples, diagrams and interactive HTML, preserving evidence boundaries.
+    tagline_en: Turn understanding obstacles into clear language, diagrams and custom interactive explainers.
+    tagline_zh: 以明确主语、固定术语和分步示例解释复杂概念与结果，按需制作图解和交互页面。
+
+  - name: project-handoff
+    display_name: Project Handoff
+    name_zh: 项目交接
+    category: Knowledge
+    version: 0.1.0
+    license: Proprietary
+    path: skills/project-handoff
+    description: Compile a standalone project handoff from project assets and accessible history with evidence-backed writing and independent review.
+    tagline_en: Hand off project decisions, evidence and current state in one document.
+    tagline_zh: 核对项目资产与历史，经独立审查生成可单独阅读的项目交接文档。
+
+  - name: research-context
+    display_name: Research Context
+    name_zh: 研究任务上下文
+    category: Knowledge
+    version: 0.2.0
+    license: MIT
+    path: skills/research-context
+    description: Maintain research context with frozen evidence, host-dispatched writing and independent review, restricted patches, validated commits and focused recovery.
+    tagline_en: Compile traceable research context through program and model orchestration.
+    tagline_zh: 以程序冻结证据、模型独立审查和受限修订，持续维护可恢复的研究上下文。
+
+  - name: resource2skill-distiller
+    display_name: Resource2Skill Distiller
+    name_zh: 资源方法技能提炼器
+    category: Multimodal
+    version: 0.3.0
+    license: MIT
+    path: skills/resource2skill-distiller
+    description: Distill webpages, source text and sampled video frames into reusable candidate skills using local Codex CLI and optional Resource2Skill domain prompts.
+    tagline_en: Turn sourced resources into candidate Codex skills with evidence and explicit validation.
+    tagline_zh: 调用本机 Codex 提炼网页、文本与视频证据，交付保留来源和验证记录的候选技能。
+
+  - name: photographer-style
+    display_name: Photographer Style
+    name_zh: 摄影师风格拆解
+    category: Multimodal
+    version: 0.6.1
+    license: Proprietary
+    path: skills/photographer-style
+    description: Research photographer styles, deliver illustrated notes and dual-mode prompt assets, and archive completed assets in a private GitHub repository when requested.
+    tagline_en: Create photographer-style prompt assets and version them in a private GitHub repository.
+    tagline_zh: 拆解摄影风格，交付介绍、参考图与双模式提示词，并按请求归档到 GitHub 私有仓库。
+  - name: clean-code-refactoring-framework
+    display_name: Clean Code Refactoring Framework
+    name_zh: 行为保持式代码重构
+    category: Knowledge
+    version: 0.1.0
+    license: Proprietary
+    path: skills/clean-code-refactoring-framework
+    description: Diagnose code smells and plan behavior-preserving refactoring using attributed book-derived methods and project-specific verification.
+    tagline_en: Diagnose code smells and apply small refactorings with behavior checks.
+    tagline_zh: 用书籍提炼的方法诊断坏味道，执行小步重构并验证行为保持。

@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 MS-Qwen-VL CLI
-使用 OpenAI SDK 兼容方式调用 ModelScope Qwen-VL 多模态 API，对给定路径中的图片或者视频进行分析，并生成相应数据集。
+使用 OpenAI SDK 兼容方式调用 ModelScope 或 SiliconFlow Qwen-VL API，分析图片或视频并生成相应数据集。
 
 支持功能：
 - 图像描述 (describe)
@@ -21,6 +21,7 @@ import os
 import re
 import sys
 import uuid
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Literal, Optional, Tuple
 
@@ -34,11 +35,49 @@ from PIL import Image
 dotenv.load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 dotenv.load_dotenv(Path(__file__).parent / ".env")
 
-# 默认配置
-DEFAULT_API_KEY = os.getenv("SILICONFLOW_API_KEY", "")
-DEFAULT_MODEL = os.getenv("SILICONFLOW_MODEL", "Qwen/Qwen3-VL-235B-A22B-Instruct")
-DEFAULT_MODEL_PRECISE = os.getenv("SILICONFLOW_MODEL_PRECISE", "Qwen/Qwen3-VL-235B-A22B-Instruct")
-API_BASE_URL = "https://api.siliconflow.cn/v1/"
+# 每个服务只读取自己的密钥和模型配置，不跨服务回退。
+PROVIDERS = {
+    "modelscope": ("https://api-inference.modelscope.cn/v1/", "MODELSCOPE"),
+    "siliconflow": ("https://api.siliconflow.cn/v1/", "SILICONFLOW"),
+}
+DEFAULT_MODEL = "Qwen/Qwen3-VL-235B-A22B-Instruct"
+
+
+@dataclass(frozen=True)
+class ApiConfig:
+    provider: str
+    base_url: str
+    model: str
+    api_key: str = field(repr=False)
+
+
+def resolve_api_config(
+    provider: Optional[str] = None,
+    api_key: Optional[str] = None,
+    model: Optional[str] = None,
+    precise: bool = False,
+) -> ApiConfig:
+    provider = provider or os.getenv("QWEN_VL_PROVIDER")
+    if not provider:
+        if api_key:
+            raise ValueError("传入 API Key 时必须用 --provider 或 QWEN_VL_PROVIDER 指定服务")
+        configured = [
+            name for name, (_, prefix) in PROVIDERS.items()
+            if os.getenv(f"{prefix}_API_KEY")
+        ]
+        if len(configured) > 1:
+            raise ValueError("检测到多个服务的密钥，请用 --provider 或 QWEN_VL_PROVIDER 指定服务")
+        provider = configured[0] if configured else "modelscope"
+    if provider not in PROVIDERS:
+        raise ValueError("provider 必须为 modelscope 或 siliconflow")
+    base_url, prefix = PROVIDERS[provider]
+    key = api_key or os.getenv(f"{prefix}_API_KEY")
+    if not key:
+        raise ValueError(f"请设置 {prefix}_API_KEY，或为 {provider} 传入 --api-key")
+    model_var = f"{prefix}_MODEL_PRECISE" if precise else f"{prefix}_MODEL"
+    model_name = model or os.getenv(model_var) or DEFAULT_MODEL
+    return ApiConfig(provider, base_url, model_name, key)
+
 
 # 任务类型定义
 TaskType = Literal["describe", "ocr", "ask", "detect", "chart"]
@@ -326,36 +365,25 @@ def analyze_image(
     api_key: Optional[str] = None,
     model: Optional[str] = None,
     precise: bool = False,
+    provider: Optional[str] = None,
 ) -> str:
     """
-    调用 ModelScope API 分析图片。
+    调用所选服务的 Qwen-VL API 分析图片。
 
     Args:
         image_path (str): 图片路径或 URL。
         task (TaskType): 任务类型。
         question (Optional[str]): 自定义问题 (ask 任务需要)。
         custom_prompt (Optional[str]): 用户完全自定义的 prompt。
-        api_key (Optional[str]): ModelScope API Key。
+        api_key (Optional[str]): 所选服务的 API Key，显式传入时须指定 provider。
         model (Optional[str]): 指定模型。
         precise (bool): 是否使用精细模式模型。
+        provider (Optional[str]): modelscope 或 siliconflow。
 
     Returns:
         str: 分析结果文本。
     """
-    # 配置参数
-    api_key = api_key or DEFAULT_API_KEY
-    if not api_key:
-        raise ValueError(
-            "请设置 MODELSCOPE_API_KEY 环境变量或传入 --api-key 参数\n"
-            "获取 API Key: https://modelscope.cn/my/myaccesstoken"
-        )
-
-    if model:
-        model_name = model
-    elif precise:
-        model_name = DEFAULT_MODEL_PRECISE
-    else:
-        model_name = DEFAULT_MODEL
+    config = resolve_api_config(provider, api_key, model, precise)
 
     # 获取图片内容
     image_content = get_image_content(image_path)
@@ -365,14 +393,14 @@ def analyze_image(
 
     # 创建 OpenAI 客户端
     client = OpenAI(
-        api_key=api_key,
-        base_url=API_BASE_URL,
+        api_key=config.api_key,
+        base_url=config.base_url,
     )
 
     # 调用 API
     try:
         response = client.chat.completions.create(
-            model=model_name,
+            model=config.model,
             messages=[
                 {
                     "role": "user",
@@ -445,6 +473,7 @@ def process_video(
                     api_key=args.api_key,
                     model=args.model,
                     precise=args.precise,
+                    provider=args.provider,
                 )
                 if task == "detect":
                     raw_dir = output_dir / "raw"
@@ -497,6 +526,7 @@ def process_image(
             api_key=args.api_key,
             model=args.model,
             precise=args.precise,
+            provider=args.provider,
         )
         if task == "detect":
             raw_dir = output_dir / "raw"
@@ -518,7 +548,7 @@ def process_image(
 
 def main():
     parser = argparse.ArgumentParser(
-        description="MS-Qwen-VL CLI - 使用 OpenAI SDK 调用 ModelScope Qwen-VL 多模态 API",
+        description="MS-Qwen-VL CLI - 调用 ModelScope 或 SiliconFlow Qwen-VL API",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 任务类型:
@@ -596,8 +626,14 @@ def main():
     )
 
     parser.add_argument(
+        "--provider",
+        choices=sorted(PROVIDERS),
+        help="服务商；默认读取 QWEN_VL_PROVIDER，或从唯一已配置的密钥判断",
+    )
+
+    parser.add_argument(
         "--api-key",
-        help="ModelScope API Key（也可通过环境变量 MODELSCOPE_API_KEY 配置）",
+        help="所选服务的 API Key；须同时指定 --provider 或 QWEN_VL_PROVIDER",
     )
 
     parser.add_argument(
@@ -613,11 +649,11 @@ def main():
 
     args = parser.parse_args()
 
-    # 统一环境变量名称（兼容多种命名）
-    global DEFAULT_API_KEY, DEFAULT_MODEL, DEFAULT_MODEL_PRECISE
-    DEFAULT_API_KEY = args.api_key or os.getenv("MODELSCOPE_API_KEY") or DEFAULT_API_KEY
-    DEFAULT_MODEL = args.model or os.getenv("MODELSCOPE_MODEL") or DEFAULT_MODEL
-    DEFAULT_MODEL_PRECISE = os.getenv("MODELSCOPE_MODEL_PRECISE") or DEFAULT_MODEL_PRECISE
+    try:
+        config = resolve_api_config(args.provider, args.api_key, args.model, args.precise)
+    except ValueError as exc:
+        parser.error(str(exc))
+    args.provider = config.provider
 
     input_path = args.input_path
     output_dir = args.output_dir

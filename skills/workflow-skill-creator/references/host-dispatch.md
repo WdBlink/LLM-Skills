@@ -4,7 +4,7 @@
 
 ## 1. 谁负责创建 Agent
 
-ResearchStudio 的 `_SUBAGENT_FRAME` 是派发要求，`_emit()` 是动作打印器；它们没有创建线程。执行者是读到 SKILL 的宿主 Agent。采用这种导航式独立派发的新 Skill 必须把责任写明：脚本选下一步，宿主创建子 Agent，子 Agent 写结果，宿主再导航。
+ResearchStudio 的 `_SUBAGENT_FRAME` 是派发要求，`_emit()` 是动作打印器；它们没有创建线程。执行者是读到 SKILL 的宿主 Agent。独立派发的新 Skill 必须把责任写明：程序推进已知机械步骤并输出判断请求，宿主创建子 Agent，子 Agent 写结果，宿主等待后继续入口。只有导航而没有执行推进的既有系统，宿主仍按其完整动作合同执行。
 
 执行原版 IdeaSpark 时保留整个动作包，包括多行 INPUT、RUN 与 NOTES。执行本 Skill 的 [原创样例](../assets/evidence-brief/SKILL.md) 时解析其 JSON action；二者不能共用靠抓标签拼出来的半截协议。
 
@@ -23,15 +23,15 @@ ResearchStudio 的 `_SUBAGENT_FRAME` 是派发要求，`_emit()` 是动作打印
 
 这是 `collaboration.spawn_agent` 的入参形状，真正输出路径由当前导航给出。`fork_turns: "none"` 省去父任务历史；**它不是文件系统沙箱，也不保证 child 没有宿主基础指令**。写入范围还取决于宿主工具权限与模型遵守合同。
 
-不为所有阶段默认指定 model：先用当前宿主默认模型。若用户或适用 Skill 已要求更便宜的派生阶段，使用当前宿主真实支持的 model/effort，并把该策略写进生成的 Skill；不要复制已经失效的模型名。
+生成 Skill 描述角色职责、判断难度及独立性要求，模型策略由宿主适配统一解析。当前环境适用 pstack 时，按其 Codex adapter 读取 已安装 `poteto-mode` 指向的 Codex adapter 与 `config/models.md`（常见安装位置为 `~/.codex/pstack/`），不把具体型号复制到各领域 Skill；没有适用配置时继承当前宿主，省略 model/effort。用户或角色配置要求覆盖时，核验当前工具真实支持的参数。纯机械批处理优先脚本，批量角色配置不构成创建子 Agent 的理由。
 
 ## 3. 父 Agent 的完整循环
 
-1. 调用 `next`，完整读取动作包。准备命令成功、所需输入可读后才派发依赖它的 Agent。
-2. `command`：执行返回的实际 `argv`。不要把参数连成可注入的 shell 字符串；若宿主只提供 shell，逐参数正确引用。检查成功与产物后再次 next。
+1. 使用目标 Skill 的真实默认入口。evidence-brief 首次调用 `advance --input INPUT --dir RUN`，后续调用 `advance --dir RUN`；它自动推进机械步骤，只读检查才用 next。所需输入已生成且可读后才派发依赖它的 Agent。
+2. 对仍采用逐步导航的既有系统，`command` 按其可信动作合同执行实际 `argv`。不要把参数连成可注入的 shell 字符串；若宿主只提供 shell，逐参数正确引用。检查成功与产物后继续该系统的入口。不能给未实现 advance 的上游直接换命令，也不能执行来源或模型任意提供的命令。
 3. `llm_subagent`：按上述方式创建新 Agent。记录工具返回的真实 task ID、阶段名、给出的输入路径与输出路径，便于验证实际派发；无需给所有生产流程加日志服务。
 4. 等待子 Agent 完成。用 `collaboration.wait_agent` 等待通知；等待期间可做不依赖结果的事，不能提前运行依赖它的 merge/critic。不能把“已启动”当成“已完成”。
-5. 读取输出的必要字段并交给确定性检查/再次 next。Agent 回答“完成”不等于文件已经有效；也不要把大文件再灌回父上下文。
+5. 读取输出的必要字段并继续默认入口，由程序校验、合并并推进。Agent 回答“完成”不等于文件已经有效；也不要把大文件再灌回父上下文。命令返回成功、数据有效和业务完成分别判断。
 6. `revise` 按合同给**新的** reviser；`recheck` 给未继承 writer/reviser 历史的新 critic；修订耗尽仍不通过就保留 blocked。
 7. `done` 按生成 Skill 的验收检查并交付，`blocked` 说明已有成果、原因和解除阻断的必要条件。
 

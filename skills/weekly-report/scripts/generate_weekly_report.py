@@ -9,6 +9,7 @@ import re
 import sys
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit, urlunsplit
 
 
 AI_PHRASES = (
@@ -136,28 +137,54 @@ def get_first_env(names: tuple[str, ...], default: str = "") -> str:
     return default
 
 
+def resolve_llm_config() -> dict[str, Any] | None:
+    defaults = {
+        "WEEKLY_REPORT": ("", ""),
+        "MINIMAX": ("https://api.minimaxi.com/v1", "MiniMax-M2.5"),
+        "OPENAI": ("https://api.openai.com/v1", ""),
+        "SILICONFLOW": ("https://api.siliconflow.cn/v1", ""),
+    }
+    if any(os.getenv(f"WEEKLY_REPORT_{key}") for key in ("BASE_URL", "MODEL")):
+        if not os.getenv("WEEKLY_REPORT_API_KEY", "").strip():
+            raise ValueError("WEEKLY_REPORT_BASE_URL/MODEL require WEEKLY_REPORT_API_KEY")
+    for prefix, (default_url, default_model) in defaults.items():
+        api_key = os.getenv(f"{prefix}_API_KEY", "").strip()
+        if not api_key:
+            continue
+        base_url = os.getenv(f"{prefix}_BASE_URL", default_url).strip()
+        model = os.getenv(f"{prefix}_MODEL", default_model).strip()
+        if not base_url or not model:
+            raise ValueError(f"Set {prefix}_BASE_URL and {prefix}_MODEL for the selected API key")
+        url = urlsplit(base_url)
+        if (url.scheme not in {"http", "https"} or not url.netloc or url.username
+                or url.password or url.query or url.fragment):
+            raise ValueError(f"{prefix}_BASE_URL must be an HTTP(S) URL without credentials, query or fragment")
+        path = url.path.rstrip("/")
+        if not path.endswith("/chat/completions"):
+            path += "/chat/completions"
+        return {
+            "api_key": api_key,
+            "url": urlunsplit((url.scheme, url.netloc, path, "", "")),
+            "model": model,
+            "max_tokens": int(get_first_env(("WEEKLY_REPORT_MAX_TOKENS", f"{prefix}_MAX_TOKENS"), "1200")),
+            "temperature": float(get_first_env(("WEEKLY_REPORT_TEMPERATURE", f"{prefix}_TEMPERATURE"), "0.4")),
+        }
+    return None
+
+
 def call_llm(logs_text: str) -> dict[str, Any] | None:
-    api_key = get_first_env(
-        ("WEEKLY_REPORT_API_KEY", "MINIMAX_API_KEY", "OPENAI_API_KEY", "SILICONFLOW_API_KEY")
-    )
-    if not api_key:
+    try:
+        config = resolve_llm_config()
+    except ValueError as exc:
+        print(f"LLM configuration invalid, using fallback summary: {exc}", file=sys.stderr)
+        return None
+    if config is None:
         return None
 
     try:
         import requests  # type: ignore
     except ImportError:
         return None
-
-    base_url = get_first_env(
-        ("WEEKLY_REPORT_BASE_URL", "MINIMAX_BASE_URL", "OPENAI_BASE_URL", "SILICONFLOW_BASE_URL"),
-        "https://api.minimaxi.com/v1/chat/completions",
-    )
-    model = get_first_env(
-        ("WEEKLY_REPORT_MODEL", "MINIMAX_MODEL", "OPENAI_MODEL", "SILICONFLOW_MODEL"),
-        "MiniMax-M2.5",
-    )
-    max_tokens = int(get_first_env(("WEEKLY_REPORT_MAX_TOKENS", "MINIMAX_MAX_TOKENS"), "1200"))
-    temperature = float(get_first_env(("WEEKLY_REPORT_TEMPERATURE", "MINIMAX_TEMPERATURE"), "0.4"))
 
     prompt = f"""请根据以下最近工作日志生成中文周报内容。
 
@@ -177,20 +204,21 @@ def call_llm(logs_text: str) -> dict[str, Any] | None:
 {logs_text}
 """
     payload = {
-        "model": model,
+        "model": config["model"],
         "messages": [
             {"role": "system", "content": "你是一个克制、准确的中文工作周报助手。"},
             {"role": "user", "content": prompt},
         ],
-        "max_tokens": max_tokens,
-        "temperature": temperature,
+        "max_tokens": config["max_tokens"],
+        "temperature": config["temperature"],
     }
     try:
         response = requests.post(
-            base_url,
+            config["url"],
             json=payload,
-            headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+            headers={"Authorization": f"Bearer {config['api_key']}", "Content-Type": "application/json"},
             timeout=120,
+            allow_redirects=False,
         )
         response.raise_for_status()
         content = response.json()["choices"][0]["message"]["content"].strip()

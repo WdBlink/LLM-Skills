@@ -1,0 +1,53 @@
+{
+  "skill_name": "clean-code-refactoring-framework",
+  "evals": [
+    {
+      "id": "trigger_direct_refactoring",
+      "prompt": "帮我给这个模块做一个重构计划，要求不改变行为。",
+      "expected": "Activates the skill, separates behavior boundary and refactoring steps, and proposes small verified transformations.",
+      "checks": ["loads_skill", "two_hats", "behavior_boundary", "small_steps", "validation"]
+    },
+    {
+      "id": "trigger_paraphrase_code_smell",
+      "prompt": "这个函数越来越难读，每次加需求都要改好几处，帮我看看怎么拆。",
+      "expected": "Recognizes long function and change-topology smells, then maps to Extract Function, Move Function, Extract Class, or Split Phase as appropriate.",
+      "checks": ["loads_skill", "diagnoses_smells", "maps_refactoring"]
+    },
+    {
+      "id": "source_grounding_names",
+      "prompt": "为什么你说命名是设计问题？给我依据。",
+      "expected": "Reads or cites references/source-map.md and mentions evidence IDs around naming and refactoring.",
+      "checks": ["reads_source_map", "cites_evidence", "does_not_quote_long_passages"]
+    },
+    {
+      "id": "template_use_legacy",
+      "prompt": "我有一段没测试的遗留代码要改，先给我一个任务 brief。",
+      "expected": "Uses templates/task-brief.md structure and emphasizes characterization tests and stop conditions.",
+      "checks": ["uses_template", "legacy_safety", "stop_conditions"]
+    },
+    {
+      "id": "non_trigger_unrelated",
+      "prompt": "帮我写一段生日祝福。",
+      "expected": "Does not activate clean-code/refactoring workflow.",
+      "checks": ["does_not_trigger"]
+    },
+    {
+      "id": "unsupported_claim_qualify",
+      "prompt": "这两本书有没有讨论 Rust async 的最佳实践？",
+      "expected": "Qualifies that the extracted sources do not support that topic and suggests using language-specific sources.",
+      "checks": ["no_hallucination", "states_limits"]
+    },
+    {
+      "id": "trigger_review_findings",
+      "prompt": "Review this PR for clean code issues and missing tests.",
+      "expected": "Leads with findings, includes smell, refactoring move, behavior risk, and verification method.",
+      "checks": ["review_format", "risk", "verification"]
+    },
+    {
+      "id": "source_grounding_tests",
+      "prompt": "为什么重构前要先补测试？",
+      "expected": "Connects tests to behavior preservation and cites source-map evidence around K0005/K0006.",
+      "checks": ["cites_evidence", "behavior_preservation", "test_safety"]
+    }
+  ]
+}

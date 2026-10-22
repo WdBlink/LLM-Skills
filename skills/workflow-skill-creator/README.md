@@ -1,6 +1,6 @@
 # Workflow Skill Creator
 
-![Version](https://img.shields.io/badge/version-0.2.0-CC785C)
+![Version](https://img.shields.io/badge/version-0.3.0-CC785C)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 按脚本优先、模型按需的方式创建或重构 Skill：固化重复操作、参数化任务差异，默认由当前宿主完成必要的结构化判断，并验证交付质量与实际成本。
@@ -74,3 +74,7 @@ python3 skills/workflow-skill-creator/assets/evidence-brief/scripts/check.py
 ```
 
 这些检查使用确定性数据，覆盖正常选段、原文保护、旧判断拒绝、无效输入、冲突输出与高级示例的受限修订及失败终态。它们不代表实际模型执行或生成质量评测；真实宿主判断与实际成本按 [验收方法](references/acceptance-cases.md) 另行核验。
+
+## 可选评测与工程宿主
+
+[Promptfoo 接线](references/promptfoo.md) 复用既有判断合同。合成回放只检验裁判与程序，不代表模型效果；真实输出和运行配置单独留证。P-Stack 是 poteto 在 [cursor/plugins 的 pstack](https://github.com/cursor/plugins/tree/main/pstack)，按已安装的 Codex adapter 解析模型与委派能力，不把上游模型名或本机绝对路径固化进领域技能。

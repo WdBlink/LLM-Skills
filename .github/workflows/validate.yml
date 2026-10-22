@@ -18,3 +18,5 @@ jobs:
         run: |
           python3 scripts/render_readme.py
           git diff --exit-code README.md
+      - name: Offline collected-skill regressions
+        run: python3 scripts/check_collected_skills.py

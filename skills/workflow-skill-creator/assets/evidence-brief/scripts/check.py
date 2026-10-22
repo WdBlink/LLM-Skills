@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Executable contract checks. JSON fixtures here are test doubles, never LLM runs."""
 import copy
+import importlib.util
 import json
 from pathlib import Path
 import subprocess
 import sys
 import tempfile
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts/run.py"
@@ -28,7 +30,7 @@ def read(directory, name):
 
 def call(directory, operation="next", *args):
     result = subprocess.run([sys.executable, str(SCRIPT), operation, "--dir", str(directory), *map(str, args)],
-                            capture_output=True, text=True)
+                            capture_output=True, text=True, timeout=20)
     action = json.loads(result.stdout)
     assert result.returncode == (2 if action["kind"] == "blocked" else 0), result
     assert not result.stderr, result.stderr
@@ -72,6 +74,107 @@ def snapshot(directory):
             for path in directory.rglob("*") if path.is_file()}
 
 
+def check_advance(parent, checks):
+    d = parent / "automatic"
+    action = expect(d, "blocked", "advance")
+    assert "--input" in action["notes"] and action["executed"] == []
+    assert not d.exists(), "missing explicit input must not create a run"
+    action = expect(d, "llm_subagent", "advance", "--input", FIXTURE)
+    assert action["step"] == "writer" and action["executed"] == ["prepare"]
+    before = snapshot(d)
+    assert expect(d, "llm_subagent", "advance")["executed"] == []
+    call(d)
+    assert snapshot(d) == before, "waiting and inspection must preserve all artifacts"
+    checks.append("advance requires explicit initial input and stops without simulating a writer")
+
+    put(d, "fill_map.json", FILL)
+    action = expect(d, "llm_subagent", "advance")
+    assert action["step"] == "critic-0" and action["executed"] == ["assemble"]
+    good_review = review(d, "advance")
+    put(d, "critique-0.json", {**good_review, "review_token": "stale"})
+    before = snapshot(d)
+    assert expect(d, "blocked", "advance")["executed"] == []
+    assert snapshot(d) == before and not (d / "brief.md").exists()
+    put(d, "critique-0.json", good_review)
+    prefix = snapshot(d)
+    action = expect(d, "done", "advance")
+    assert action["executed"] == ["render"]
+    assert all(snapshot(d)[name] == value for name, value in prefix.items())
+    done = snapshot(d)
+    assert expect(d, "done", "advance")["executed"] == []
+    assert expect(d, "done", "advance", "--input", FIXTURE)["executed"] == []
+    assert snapshot(d) == done
+    alternate = parent / "new-input.json"
+    alternate.write_text(json.dumps({**read(d, "input.json"), "topic": "另一任务"}), encoding="utf-8")
+    expect(d, "blocked", "advance", "--input", alternate)
+    assert snapshot(d) == done
+    checks.append("advance assembles and renders; stale reviews block; repair resumes without rewriting valid artifacts")
+    checks.append("repeated advance is a no-op; changed input cannot overwrite a completed run")
+
+    d = fresh(parent, "automatic-revision")
+    put(d, "critique-0.json", review(d, "revise"))
+    action = expect(d, "llm_subagent", "advance")
+    assert action["step"] == "reviser" and action["executed"] == []
+    put(d, "patch.json", {"sources": []})
+    expect(d, "blocked", "advance")
+    assert not (d / "revised.json").exists()
+    put(d, "patch.json", {"limits": FILL["limits"] + " 单次事件不能推算长期频率。[E3]"})
+    action = expect(d, "llm_subagent", "advance")
+    assert action["step"] == "critic-1" and action["executed"] == ["merge"]
+    put(d, "critique-1.json", review(d, "revise", 1))
+    expect(d, "blocked", "advance")
+    assert not (d / "brief.md").exists()
+    put(d, "critique-1.json", review(d, "advance", 1))
+    assert expect(d, "done", "advance")["executed"] == ["render"]
+    checks.append("advance enforces patch scope and revision budget before rendering a revised candidate")
+
+    spec = importlib.util.spec_from_file_location("evidence_brief_check_target", SCRIPT)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    d = parent / "interrupted-prepare"
+    original_write = module.atomic_new
+
+    def fail_skeleton(path, text):
+        if path.name == "skeleton.json":
+            raise OSError("injected interruption after input snapshot")
+        original_write(path, text)
+
+    with patch.object(module, "atomic_new", side_effect=fail_skeleton):
+        try:
+            module.advance(d, [], FIXTURE)
+        except OSError as error:
+            assert "injected interruption" in str(error)
+        else:
+            raise AssertionError("interruption was not exercised")
+    before = snapshot(d)
+    assert set(before) == {"input.json"}
+    action = expect(d, "llm_subagent", "advance")
+    assert action["step"] == "writer" and action["executed"] == ["prepare"]
+    assert snapshot(d)["input.json"] == before["input.json"]
+    checks.append("advance resumes interrupted preparation from its validated snapshot")
+
+    for step in ("assemble", "unknown-command"):
+        fixed_action = {"kind": "command", "step": step, "argv": ["must never execute"]}
+        with patch.object(module, "inspect_run", return_value=(fixed_action, None)):
+            if step == "assemble":
+                with patch.object(module, "execute_step") as stalled:
+                    try:
+                        module.advance(d, [])
+                    except ValueError as error:
+                        assert "没有进展" in str(error)
+                    else:
+                        raise AssertionError("no-progress loop was not stopped")
+                    stalled.assert_called_once()
+            else:
+                try:
+                    module.advance(d, [])
+                except ValueError as error:
+                    assert "未知机械步骤" in str(error)
+                else:
+                    raise AssertionError("unknown command was not rejected")
+    checks.append("advance stops unknown actions and no-progress loops; action argv is not executed")
+
+
 def main():
     checks = []
     with tempfile.TemporaryDirectory(prefix="evidence-brief-check-") as temporary:
@@ -89,7 +192,7 @@ def main():
         assert snapshot(d) == done
         expect(d, "blocked", "assemble")
         assert snapshot(d) == done, "out-of-order command must not overwrite"
-        checks.append("advance renders; done validates content; no overwrite")
+        checks.append("passing review permits render; done validates content; no overwrite")
         (d / "brief.md").write_text("", encoding="utf-8")
         expect(d, "blocked")
         checks.append("empty final never counts as done")
@@ -195,7 +298,11 @@ def main():
         (d / "draft.json").unlink()
         put(d, "critique-0.json", {})
         expect(d, "blocked")
+        before = snapshot(d)
+        expect(d, "blocked", "advance", "--input", FIXTURE)
+        assert snapshot(d) == before
         checks.append("orphaned downstream output cannot skip a predecessor")
+        check_advance(parent, checks)
     print(json.dumps({"status": "passed", "checks": checks,
                       "llm_execution": "not tested; these are deterministic test doubles"}, ensure_ascii=False, indent=2))
 

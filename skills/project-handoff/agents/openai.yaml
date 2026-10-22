@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Handoff"
+  short_description: "交叉核对项目资产与历史轨迹，生成可独立上传给另一 AI 的交接文件"
+  default_prompt: "请使用 $project-handoff 为当前工作区生成一份可独立阅读的项目交接文件。"

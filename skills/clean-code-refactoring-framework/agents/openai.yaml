@@ -1,0 +1,7 @@
+interface:
+  display_name: "Clean Code Refactoring"
+  short_description: "Code smell review and safe refactoring workflow"
+  default_prompt: "Use $clean-code-refactoring-framework to review this code for smells and propose a behavior-preserving refactoring plan."
+
+policy:
+  allow_implicit_invocation: true

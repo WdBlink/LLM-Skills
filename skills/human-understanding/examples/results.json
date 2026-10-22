@@ -1,0 +1,17 @@
+{
+  "notice": "全部为虚构测试数据，不是实际研究结果。",
+  "runs": [
+    {
+      "name": "latency_p95",
+      "experiment": "synthetic-run-1",
+      "conditions": "同一硬件，固定并发 1；同一 100 个请求配对比较；仅运行一次，其他负载未测",
+      "baseline_name": "synthetic-baseline",
+      "unit": "ms",
+      "direction": "lower",
+      "value": 90,
+      "baseline": 100,
+      "n": 100,
+      "baseline_n": 100
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Human Understanding"
+  short_description: "用清晰语言、图解和定制交互页面解释复杂概念与结果，保留证据边界"
+  default_prompt: "使用 $human-understanding 找出理解障碍，按具体表达规则解释，复用脚本准备材料和校验证据，由当前宿主按需判断，交付清晰文字、图解或定制 HTML。"

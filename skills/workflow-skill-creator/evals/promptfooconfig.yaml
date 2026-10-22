@@ -1,0 +1,19 @@
+description: Saved paragraph decisions; replay only, not a model capability benchmark
+prompts:
+  - file://adapter.py:create_prompt
+providers:
+  - id: file://adapter.py
+    label: Saved decisions (replay, not inference)
+    config:
+      replayDir: replays/synthetic
+defaultTest:
+  assert:
+    - type: python
+      value: file://adapter.py:get_assert
+tests:
+  - description: Synthetic paragraphs with two explicit scope limitations
+    vars:
+      case_id: scope-limits
+  - description: Synthetic complete evidence with no matching paragraph
+    vars:
+      case_id: no-match

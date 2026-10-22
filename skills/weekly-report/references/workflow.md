@@ -17,15 +17,40 @@ By default, directory mode only includes files containing `#工作日志`. Use
 
 ## LLM Configuration
 
-The script can call any OpenAI-compatible chat-completions endpoint. It checks
-these environment variables in order:
+The script selects one configuration group by the first nonempty API key in
+this order: `WEEKLY_REPORT`, `MINIMAX`, `OPENAI`, `SILICONFLOW`. It reads that
+group's `*_API_KEY`, `*_BASE_URL`, and `*_MODEL` together; it never takes a key
+from one group and an endpoint or model from another.
 
-- API key: `WEEKLY_REPORT_API_KEY`, `MINIMAX_API_KEY`, `OPENAI_API_KEY`,
-  `SILICONFLOW_API_KEY`
-- Base URL: `WEEKLY_REPORT_BASE_URL`, `MINIMAX_BASE_URL`, `OPENAI_BASE_URL`,
-  `SILICONFLOW_BASE_URL`
-- Model: `WEEKLY_REPORT_MODEL`, `MINIMAX_MODEL`, `OPENAI_MODEL`,
-  `SILICONFLOW_MODEL`
+| Prefix | Default API base | Model |
+| --- | --- | --- |
+| `WEEKLY_REPORT` | Required | Required |
+| `MINIMAX` | `https://api.minimaxi.com/v1` | Existing default `MiniMax-M2.5`; override with `MINIMAX_MODEL` |
+| `OPENAI` | `https://api.openai.com/v1` | Set `OPENAI_MODEL` explicitly |
+| `SILICONFLOW` | `https://api.siliconflow.cn/v1` | Set `SILICONFLOW_MODEL` explicitly |
+
+A custom `WEEKLY_REPORT_BASE_URL` or `WEEKLY_REPORT_MODEL` requires its own
+`WEEKLY_REPORT_API_KEY`. Missing selected settings fail locally and use the
+fallback summary; the script does not try a different provider. To change
+providers when several keys are installed, supply a complete `WEEKLY_REPORT`
+group or unset the higher-priority key for that invocation.
+
+`*_BASE_URL` accepts an API base or a full `/chat/completions` URL. The script
+adds `/chat/completions` only when absent, rejects embedded credentials/query
+strings/fragments, and does not follow HTTP redirects. Explicit same-prefix
+endpoint overrides support an authorized compatible gateway or local service.
+
+`WEEKLY_REPORT_MAX_TOKENS` and `WEEKLY_REPORT_TEMPERATURE` override generation
+settings. Otherwise use the selected group's matching settings, then defaults
+of 1200 tokens and 0.4. The script does not borrow these values from another
+provider.
+
+Endpoint references: [OpenAI Chat Completions](https://developers.openai.com/api/reference/resources/chat),
+[SiliconFlow Chat Completions](https://docs.siliconflow.cn/docs/api/chat-completions-post),
+and [MiniMax's OpenAI-compatible API](https://platform.minimax.io/docs/api-reference/text-openai-api).
+The MiniMax default preserves this skill's existing domestic endpoint and
+model; use same-prefix overrides for another region or model. Account/model
+availability must be checked separately before real use.
 
 Use `--no-api` for deterministic fallback generation or smoke tests.
 

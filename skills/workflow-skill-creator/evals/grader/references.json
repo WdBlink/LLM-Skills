@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "data_role": "Public synthetic grader-development fixtures; not a hidden evaluation set",
+  "annotation_origin": "Agent-authored labels checked against the explicit paragraph text; human_review_pending",
+  "cases": {
+    "scope-limits": {
+      "request_id": "sha256:38c88467dc58e1b700685a38e504107bb3fa9b0b71bb840be97d4eb4918069f9",
+      "selected_ids": ["u0002", "u0003"],
+      "rationale": "u0002 explicitly restricts light, camera and distance; u0003 excludes untested conditions. u0001 states a result and u0004 describes file management."
+    },
+    "no-match": {
+      "request_id": "sha256:d8b5ca73b8da13c33757f890f391f23dccfb2a42f60d72f86e0a6ede2a6dce7d",
+      "selected_ids": [],
+      "rationale": "All three paragraphs describe document work; none limits an experimental conclusion or identifies an untested condition."
+    }
+  }
+}

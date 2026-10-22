@@ -8,3 +8,7 @@ __pycache__/
 # Local scratch / pre-reorg copies kept on this machine, not part of the index.
 /air-pptx/
 /test.js
+
+# Machine-local provenance inventories and evaluation outputs.
+/.local-audit/
+/skills/workflow-skill-creator/evals/results/

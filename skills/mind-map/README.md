@@ -1,6 +1,6 @@
 # Mind Map
 
-![Version](https://img.shields.io/badge/version-0.2.12-CC785C)
+![Version](https://img.shields.io/badge/version-0.2.14-CC785C)
 
 Record explicit project thinking into Obsidian-compatible Markdown nodes, layered indexes, an interactive HTML mind map, and an AI context pack. It is for preserving decisions, principles, questions, constraints, and implementation intent before future agents change project code.
 
@@ -13,15 +13,15 @@ mkdir -p ~/.codex/skills/mind-map
 rsync -a skills/mind-map/ ~/.codex/skills/mind-map/
 ```
 
-Requires: Python 3.8+.
+Requires: Python 3.10+.
 
-Optional vault configuration:
+Configure a vault with `--vault`, an environment variable, or the config file:
 
 ```bash
 export MIND_MAP_VAULT=/path/to/obsidian-vault
 ```
 
-If `MIND_MAP_VAULT` is not set, the script reads `~/.agent-mindmap/config.json` field `defaultVaultPath`, then falls back to the default path declared in `SKILL.md`.
+If `MIND_MAP_VAULT` is not set, the script reads `~/.agent-mindmap/config.json` field `defaultVaultPath`, and exits before writing if no vault is configured.
 
 ## Usage
 

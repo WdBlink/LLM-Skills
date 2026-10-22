@@ -1,0 +1,3 @@
+interface:
+  display_name: "摄影师风格拆解"
+  short_description: "从摄影素材提炼风格，交付双模式提示词与参考图，支持 GitHub 私有归档"

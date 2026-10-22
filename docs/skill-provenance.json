@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-23",
+  "baseline_commit": "d7b17e6be73257c6e8ae8cde92ea02b752338012",
+  "limits": "Maintenance provenance is separate from original authorship. Hashes bind SKILL.md only, not package contents or licenses.",
+  "skills": {
+    "good-benchmarks": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "c744ffb87d340aca56686ac50d3a40c865fd538fecb849b0b9fbdd4dcca62b15",
+      "path": "skills/good-benchmarks/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "MIT"
+    },
+    "thinking-in-bets": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "ba056fdc337e3662a7d625ccb479c594489b23f8dfcc7bc36145953f6c897bf8",
+      "path": "skills/thinking-in-bets/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "Proprietary"
+    },
+    "experience-distill": {
+      "classification": "user-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "ae28bcceee45837f793f1767888b79017a375907acee68ced3ba0dbed9981b05",
+      "path": "skills/experience-distill/SKILL.md",
+      "evidence": [
+        "基线main已有；SKILL.md声明独立编写并保留KSI方法参考。"
+      ],
+      "license": "MIT"
+    },
+    "workflow-skill-creator": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "57e1a1e042926cf71b2dcb11d4b6c18a7463f2a5a64f547811761c5428cfc016",
+      "path": "skills/workflow-skill-creator/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "MIT"
+    },
+    "pv-forecast-pptx": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "2ab93296fa50e13750ca8c3aadb13f2d7b4b2f8ee64dd97e3c2713884011118f",
+      "path": "skills/air-pptx/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "Proprietary"
+    },
+    "template-writing": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "92e4dee2b58b73a5e6fcf3227d4e26e2356265d04ee8e95bbfd8e1dabeb87935",
+      "path": "skills/template-writing/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "Proprietary"
+    },
+    "transcript-source-compiler": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "2880ef4fe6aa096973a77eb9d35d841dbe06748955740ad9315a3c22f25aa6ce",
+      "path": "skills/transcript-source-compiler/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "MIT"
+    },
+    "daily-todo-planner": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "1ab200d0e44c067eaa3a99c63370e7306bbd35fce3cec5832d63073f249e3aaf",
+      "path": "skills/daily-todo-planner/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "Proprietary"
+    },
+    "mind-map": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "be0b6d4b65cec4e9c1a7e03a63a1e39755bcf925090a568101998a18cd601caf",
+      "path": "skills/mind-map/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "MIT"
+    },
+    "auto-yolo-dataset": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "9c5f35b86296e2bdd48fcbf6c28edd885a53824043d94114dc8f7a928de204c9",
+      "path": "skills/auto-yolo-dataset/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "Proprietary"
+    },
+    "ms-qwen-vl": {
+      "classification": "user-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "62d393f7edde063cdaa15796fc44e81246bcc86f1c5e1b13d0bbe9e6202ea5ec",
+      "path": "skills/ms-qwen-vl/SKILL.md",
+      "evidence": [
+        "基线main已有；脚本标明代码作者wdblink。"
+      ],
+      "license": "MIT"
+    },
+    "weekly-report": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "6b21d96d4474bd2eb45275006fdfe10bbbf22b0e29027d7f0e2bccc58244e3f4",
+      "path": "skills/weekly-report/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "Proprietary"
+    },
+    "karpathy-autoresearch-adapter": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "ed3206f32a56e42e615c69f0c856daf9dc1346626ef3e001882f5e5bc21310af",
+      "path": "skills/karpathy-autoresearch-adapter/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "MIT"
+    },
+    "social-cover-maker": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "bb5dda1024eb1b9d5dc0df4f223af0f123b4037d73aa7fb6952b481592635f35",
+      "path": "skills/social-cover-maker/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "MIT"
+    },
+    "paper-deconstruction": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "cee58d0010419d2eaae2bd0b406887c081e5341e7fa9c2f270c13a795592683c",
+      "path": "skills/paper-deconstruction/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "MIT"
+    },
+    "glm-ocr-pdf2md": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "bab9babaa946237065922646bdc89d968277c24eaf10565ae51f0d3025a4b958",
+      "path": "skills/glm-ocr-pdf2md/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "MIT"
+    },
+    "academic-writing-storytelling": {
+      "classification": "attribution-unresolved",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "97186263357c017ffd4d272e6e53e08504a3d4ab92f28bf06bb6422a8c68b7f4",
+      "path": "skills/academic-writing-storytelling/SKILL.md",
+      "evidence": [
+        "基线main已有；入口保留女娲/花叔署名与本地书籍提炼记录，不能据此判定下载或原创。"
+      ],
+      "license": "MIT"
+    },
+    "annie-duke-perspective": {
+      "classification": "repository-maintained",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "daf7086d4d5df18985bfe4bc396c38e4c6277d549db74969c38387c7238c773f",
+      "path": "skills/annie-duke-perspective/SKILL.md",
+      "evidence": [
+        "已在基线 WdBlink/LLM-Skills main 中维护；此事实不独立证明从零原创。"
+      ],
+      "license": "MIT"
+    },
+    "human-understanding": {
+      "classification": "local-custom-probable",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "0da24eb2a6be210f1a4c8183f051599de7e83b60bd86d645563d9d50ba96099e",
+      "path": "skills/human-understanding/SKILL.md",
+      "evidence": [
+        "本地安装包与待归档目录一致；具备独立实现、证据合同和46个离线回归。原创身份未由创建记录独立证实。"
+      ],
+      "license": "Proprietary"
+    },
+    "project-handoff": {
+      "classification": "local-custom-probable",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "dc53fe5aea427ad80bfa31b8103b92278962a7c7b74b5fe5d412a67203310fac",
+      "path": "skills/project-handoff/SKILL.md",
+      "evidence": [
+        "本地待归档工作流；来源说明明确区分KSI参考与本地独立角色/受限修订实现。"
+      ],
+      "license": "Proprietary"
+    },
+    "research-context": {
+      "classification": "local-custom-probable",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "ab3c993977a2ee52b80058349feca98a9fdb676007bb9c1854e181477367a8d3",
+      "path": "skills/research-context/SKILL.md",
+      "evidence": [
+        "本地待归档工作流；README声明原创技能与模板MIT，包含冻结来源及修订验证脚本。"
+      ],
+      "license": "MIT"
+    },
+    "resource2skill-distiller": {
+      "classification": "local-custom-probable",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "7a404b1e8dcf9fcb16d8122c1671db22cc2248484018629770fa0d819c5aa854",
+      "path": "skills/resource2skill-distiller/SKILL.md",
+      "evidence": [
+        "本地维护的Resource2Skill方法适配；保留来源、验证和Codex隔离调用实现，不宣称上游方法原创。"
+      ],
+      "license": "MIT"
+    },
+    "photographer-style": {
+      "classification": "local-custom-probable",
+      "authorship": "not_independently_verified",
+      "skill_md_sha256": "f4b66c0cbfb6da7cf1ea69345832273958ba6e064b6f9c4dc1b4256d82aa8310",
+      "path": "skills/photographer-style/SKILL.md",
+      "evidence": [
+        "本地待归档个人工作流；保留女娲方法归因，本轮将个人项目常量和历史授权移出通用入口。"
+      ],
+      "license": "Proprietary"
+    },
+    "clean-code-refactoring-framework": {
+      "classification": "user-generated-derivative",
+      "authorship": "user_confirmed_generation_with_attributed_methods",
+      "skill_md_sha256": "d25f34df3604e8c43e01f4b164427640f278924ea02bacafeed2c8bbd1b88994",
+      "path": "skills/clean-code-refactoring-framework/SKILL.md",
+      "evidence": [
+        "2026-10-23 当前会话确认：部分技能由用户通过女娲等工具生成，旧署名沿用模板；按所提及的本技能作为用户生成的派生包收录，不能外推所有同署名包。",
+        "README与source-map记录两本书的方法提炼；保留书籍作者和生成工具归因，不分发整书。"
+      ],
+      "license": "Proprietary"
+    }
+  }
+}

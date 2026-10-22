@@ -3,7 +3,7 @@ name: mind-map
 description: "Actively record project thinking into Obsidian-compatible Markdown nodes, layered indexes, an interactive HTML mind map, and an AI context pack. Use when the user says mind map, 项目思维导图, 记录项目想法, or asks to preserve a project decision/design direction for later AI implementation."
 metadata:
   version: "0.2.12"
-  default_vault: "/Users/echooo/SynologyDrive/Typora"
+  vault_configuration: "--vault, MIND_MAP_VAULT, or ~/.agent-mindmap/config.json"
   output_root: "AI-Projects/MindMaps"
   default_language: "auto"
 ---
@@ -98,7 +98,7 @@ Default vault resolution:
 
 1. `MIND_MAP_VAULT` environment variable.
 2. `~/.agent-mindmap/config.json` field `defaultVaultPath`.
-3. `/Users/echooo/SynologyDrive/Typora`.
+3. If none is configured, stop before writing and request the target vault path. No author-specific fallback path is used.
 
 Default output layout:
 

@@ -15,7 +15,7 @@ CATEGORY_ZH = {
 
 def render_badge(license_name: str) -> str:
     if license_name.lower() == "proprietary":
-        return "![Private](https://img.shields.io/badge/Private-blueviolet)"
+        return "![Reserved](https://img.shields.io/badge/Rights_reserved-blueviolet)"
     return "![Open](https://img.shields.io/badge/Open-green)"
 
 
@@ -39,7 +39,7 @@ def render() -> str:
         '<h1 align="center">LLM Skills</h1>',
         "",
         '<p align="center">',
-        "  <strong>WdBlink 个人开发的 LLM / Agent Skills 聚合仓库。</strong><br>",
+        "  <strong>WdBlink 个人开发或维护的 LLM / Agent Skills 聚合仓库。</strong><br>",
         "  <sub>面向 Codex、Claude Code、OpenClaw 等本地 Agent 工作流的可安装技能镜像。</sub>",
         "</p>",
         "",
@@ -63,6 +63,8 @@ def render() -> str:
         "- `skills/<name>/README.md`：面向人的技能用法说明，包含 version tag、安装和使用示例。",
         "- `scripts/validate_skills.py`：校验清单、`SKILL.md` 与技能 README 是否一致。",
         "- `scripts/render_readme.py`：从 `skills.yaml` 生成本 README。",
+        "- `scripts/inventory_skills.py`：只读盘点安装来源、符号链接和已审查的入口哈希。",
+        "- [来源与收录说明](docs/skill-collection-2026-10-23.md)：说明本地维护、第三方来源和待核实的区别。",
         "",
         "## 技能列表",
         "",
@@ -136,7 +138,7 @@ def render() -> str:
             "",
             "## 许可证",
             "",
-            "各技能的许可见 `skills.yaml` 和各自目录内的说明。标记为 `Private` / `Proprietary` 的技能仅作为个人工作流镜像管理。",
+            "各技能的许可见 `skills.yaml` 和各自目录内的说明。标记为 `Reserved` / `Proprietary` 的技能保留权利；仓库公开可见不表示授予开源许可。第三方方法与素材的归属见各技能来源说明。",
             "",
         ]
     )

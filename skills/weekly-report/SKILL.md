@@ -85,8 +85,11 @@ filling. The generator uses:
 
 - `python-docx` for DOCX reading/writing.
 - `requests` only when calling an LLM API.
-- `WEEKLY_REPORT_*`, `MINIMAX_*`, `OPENAI_*`, or `SILICONFLOW_*` variables for
-  OpenAI-compatible chat-completions APIs.
+- One complete `WEEKLY_REPORT_*`, `MINIMAX_*`, `OPENAI_*`, or `SILICONFLOW_*`
+  configuration group for OpenAI-compatible chat-completions APIs. The key,
+  endpoint and model must belong to the same group; see the workflow reference
+  for priority and required settings. Missing selected settings use the local
+  fallback and never send credentials to another provider.
 
 Validate changes with a dry-run and a temporary fixture generation. Avoid
 writing into a user's real report directory during smoke tests unless they ask

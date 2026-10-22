@@ -1,17 +1,17 @@
 ---
 name: ms-qwen-vl
-description: "调用魔搭社区（ModelScope）Qwen3-VL 多模态 API 对图片/视频进行视觉解析，支持图片描述、OCR、视觉问答、目标检测、图表解析，并可将检测结果按 YOLO 数据集格式保存。支持本地路径/URL、视频抽帧、文件夹批量处理、指定检测类别。使用 OpenAI SDK 兼容方式调用。用户提到\"硅基流动\"、\"ModelScope\"、\"Qwen-VL\"、\"多模态视觉\"、\"解析图片\"、“解析视频”、“生成yolo数据集”、“目标检测”、“批量处理”等关键词时应触发。"
+description: "通过 ModelScope 或 SiliconFlow 的 Qwen-VL API 解析图片和视频，支持描述、OCR、视觉问答、目标检测、图表解析及 YOLO 数据集导出。用于用户明确要求这些服务或批量视觉解析的任务。"
 ---
 
 # MS-Qwen-VL Skill
 
-基于 ModelScope Qwen3-VL 系列模型的多模态视觉识别技能，使用 OpenAI SDK 兼容方式调用。
+通过明确选择的 ModelScope 或 SiliconFlow 服务调用 Qwen-VL 模型，使用 OpenAI SDK 兼容接口。
 
 ## 功能特点
 
 - **OpenAI SDK 兼容**：使用标准 OpenAI SDK 调用 API
 - **多种任务支持**：图像描述、OCR、视觉问答、目标检测、图表解析
-- **双模型模式**：默认快速模型（30B）+ 精细高精度模型（235B）
+- **可配置模型**：普通与精细模式分别读取所选服务的模型变量；未配置时均使用 `Qwen/Qwen3-VL-235B-A22B-Instruct`
 - **灵活输入**：支持本地图片、URL、视频、文件夹批量
 - **视频抽帧检测**：按时间间隔抽帧并检测
 - **YOLO 数据集输出**：保存 images、labels、images_annotated、raw、classes.txt
@@ -31,10 +31,17 @@ cp .env.example .env
 编辑 `.env` 文件，填入从 https://modelscope.cn/my/myaccesstoken 获取的 API Key：
 
 ```
+QWEN_VL_PROVIDER=modelscope
 MODELSCOPE_API_KEY=your_api_key_here
 ```
 
-## Claude Code 使用方式
+使用 SiliconFlow 时改为 `QWEN_VL_PROVIDER=siliconflow` 并配置 `SILICONFLOW_API_KEY`。ModelScope 固定请求 `https://api-inference.modelscope.cn/v1/`，SiliconFlow 固定请求 `https://api.siliconflow.cn/v1/`；不跨服务借用密钥或模型配置。
+
+`--provider` 优先于 `QWEN_VL_PROVIDER`。两者都未设置时，仅有一套密钥可自动选择服务；同时存在两套密钥会报错。显式传入 `--api-key` 时也必须明确服务。缺少所选服务的密钥时停止调用，不尝试另一个服务。模型可用性以所选服务当前模型列表和账户权限为准，不能保证内置型号始终在线。
+
+以下命令以 skill 目录为工作目录；从其他目录调用时使用脚本的绝对路径。脚本向所选服务发送图片内容；仅在当前任务已授权使用该外部视觉服务时执行。
+
+## Agent 使用方式
 
 ### 重要：处理本地图片
 
@@ -44,7 +51,7 @@ MODELSCOPE_API_KEY=your_api_key_here
 python scripts/ms_qwen_vl.py "<图片路径>" --task <任务类型>
 ```
 
-脚本会自动将本地文件转换为 ModelScope API 需要的 base64 格式，并按长边 1024 进行下采样以保持一致性。
+脚本会自动将本地文件转换为 API 所需的 base64 格式，并按长边 1024 进行下采样以保持一致性。
 
 ### 处理 URL 图片
 
@@ -54,7 +61,7 @@ python scripts/ms_qwen_vl.py "<图片路径>" --task <任务类型>
 python scripts/ms_qwen_vl.py "<URL>" --task <任务类型>
 ```
 
-### Claude Code 对话示例
+### 对话示例
 
 **场景 1：分析桌面截图**
 ```
@@ -114,7 +121,7 @@ python scripts/ms_qwen_vl.py image.jpg --task ocr
 # 视觉问答
 python scripts/ms_qwen_vl.py image.jpg --task ask --question "图片里有什么？"
 
-# 使用精细模式（235B 模型）
+# 使用所选服务配置的精细模式模型
 python scripts/ms_qwen_vl.py image.jpg --task describe --precise
 
 # 目标检测并生成 YOLO 数据集（文件夹批量）
@@ -150,14 +157,18 @@ print(result)
 
 | 变量名 | 说明 |
 |--------|------|
-| `MODELSCOPE_API_KEY` | API 密钥（必需） |
-| `MODELSCOPE_MODEL` | 默认模型（可选） |
-| `MODELSCOPE_MODEL_PRECISE` | 精细模式模型（可选） |
+| `QWEN_VL_PROVIDER` | `modelscope` 或 `siliconflow`；可由 `--provider` 覆盖 |
+| `MODELSCOPE_API_KEY` / `SILICONFLOW_API_KEY` | 所选服务对应的密钥（必需） |
+| `MODELSCOPE_MODEL` / `SILICONFLOW_MODEL` | 所选服务的普通模式模型（可选） |
+| `MODELSCOPE_MODEL_PRECISE` / `SILICONFLOW_MODEL_PRECISE` | 所选服务的精细模式模型（可选） |
 
 ## 主要参数
 
 | 参数 | 说明 |
 |------|------|
+| `--provider` | 明确选择服务；同时配置两套密钥时必需 |
+| `--api-key` | 覆盖所选服务的密钥，须明确服务 |
+| `--model` | 覆盖模型，优先于普通和精细模式环境变量 |
 | `--task` | 任务类型 |
 | `--question` | 视觉问答问题（ask 任务必需） |
 | `--prompt` | 自定义 prompt |
@@ -171,7 +182,8 @@ print(result)
 
 **ms_qwen_vl.py** - 核心解析脚本，提供 `analyze_image()` 统一接口
 
-### references/
+### 验证与来源
 
-**api-guide.md** - OpenAI SDK 兼容调用方式详细说明
-**models.md** - Qwen3-VL 系列模型及推荐使用场景
+`tests/test_provider_routing.py` 在不发送网络请求的条件下验证密钥、地址、模型与 CLI 参数的绑定。从仓库根目录运行 `python3 -B -m unittest discover -s skills/ms-qwen-vl/tests -v`。离线通过不代表服务连通性、模型质量或 YOLO 标注准确率已验证。
+
+服务地址依据 [ModelScope API-Inference 示例](https://www.modelscope.cn/posts/1010?pid=1009) 与 [SiliconFlow 官方快速上手](https://api-docs.siliconflow.cn/docs/userguide/quickstart)。
