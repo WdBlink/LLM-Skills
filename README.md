@@ -40,7 +40,7 @@
 | ![Reserved](https://img.shields.io/badge/Rights_reserved-blueviolet) | [`clean-code-refactoring-framework`](skills/clean-code-refactoring-framework) | [行为保持式代码重构](skills/clean-code-refactoring-framework) | 用书籍提炼的方法诊断坏味道，执行小步重构并验证行为保持。 |
 | ![Reserved](https://img.shields.io/badge/Rights_reserved-blueviolet) | [`daily-todo-planner`](skills/daily-todo-planner) | [每日待办计划器](skills/daily-todo-planner) | 将杂乱每日描述转成可复盘学习、可提前预研的时间块计划。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`experience-distill`](skills/experience-distill) | [任务经验提炼](skills/experience-distill) | 从任务经历提炼有证据、有边界、可供下次任务复用的经验。 |
-| ![Open](https://img.shields.io/badge/Open-green) | [`good-benchmarks`](skills/good-benchmarks) | [Benchmark 设计与审计](skills/good-benchmarks) | 按场景选择 benchmark 形态与成功依据，交付可复用数据和评分器，验证可解性与比较公平性。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`good-benchmarks`](skills/good-benchmarks) | [Benchmark 设计与审计](skills/good-benchmarks) | 先检索复用现有评测，再验收数据、脚本、得分与方法区分度，未达标返回修复。 |
 | ![Reserved](https://img.shields.io/badge/Rights_reserved-blueviolet) | [`human-understanding`](skills/human-understanding) | [结果理解与证据解释](skills/human-understanding) | 以明确主语、固定术语和分步示例解释复杂概念与结果，按需制作图解和交互页面。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`karpathy-autoresearch-adapter`](skills/karpathy-autoresearch-adapter) | [Karpathy 自动研究适配器](skills/karpathy-autoresearch-adapter) | 将现有仓库改造成以真实评价器为核心的自动研究协议项目。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`mind-map`](skills/mind-map) | [项目思维导图](skills/mind-map) | 将项目判断记录为 Obsidian 双链节点、紧凑 schema 索引、图谱中性的时间线/溯源和可交互 HTML 图谱。 |

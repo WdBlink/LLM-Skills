@@ -4,12 +4,12 @@ skills:
     display_name: Good Benchmarks
     name_zh: Benchmark 设计与审计
     category: Knowledge
-    version: 0.2.0
+    version: 0.3.0
     license: MIT
     path: skills/good-benchmarks
-    description: Design and audit benchmarks by selecting task forms and success criteria, binding data and scoring artifacts, and checking solvability, verifier validity and fair comparisons.
-    tagline_en: Choose benchmark forms and success criteria, then deliver reusable data, scoring and validation.
-    tagline_zh: 按场景选择 benchmark 形态与成功依据，交付可复用数据和评分器，验证可解性与比较公平性。
+    description: Search and reuse existing benchmarks, build only the required gaps, and verify evaluation data, executable scoring, reproducible scores and method discrimination before completion.
+    tagline_en: Reuse existing benchmarks, then verify data, runnable scoring, scores and method discrimination.
+    tagline_zh: 先检索复用现有评测，再验收数据、脚本、得分与方法区分度，未达标返回修复。
   - name: thinking-in-bets
     display_name: Thinking in Bets
     name_zh: 对赌决策工作流

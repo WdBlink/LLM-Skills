@@ -7,6 +7,7 @@ import sys
 ROOT = Path(__file__).resolve().parent.parent
 SUITES = [
     ['-m', 'unittest', 'discover', '-s', 'tests', '-v'],
+    ['-m', 'unittest', 'discover', '-s', 'skills/good-benchmarks/scripts', '-p', 'test_*.py', '-v'],
     ['-m', 'unittest', 'discover', '-s', 'skills/ms-qwen-vl/tests', '-v'],
     ['-m', 'unittest', 'discover', '-s', 'skills/weekly-report/tests', '-v'],
     ['-m', 'unittest', 'discover', '-s', 'skills/mind-map/tests', '-v'],
