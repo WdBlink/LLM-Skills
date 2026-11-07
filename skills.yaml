@@ -1,5 +1,15 @@
 version: 1
 skills:
+  - name: nas-web-publish
+    display_name: NAS Web Publish
+    name_zh: 群晖公网发布
+    category: Operations
+    version: 0.1.0
+    license: Proprietary
+    path: skills/nas-web-publish
+    description: Publish an internal web service through Synology DSM reverse proxy with HTTPS, IPv6 DDNS and optional IPv4 forwarding, then verify access from an independent external network.
+    tagline_en: Publish internal web services through Synology DSM and verify external HTTPS access.
+    tagline_zh: 用群晖反代和 IPv6 DDNS 发布内网服务，从真实外网验证 HTTPS 与业务访问。
   - name: good-benchmarks
     display_name: Good Benchmarks
     name_zh: Benchmark 设计与审计

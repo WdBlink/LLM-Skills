@@ -9,6 +9,7 @@ from skill_index import ROOT, load_manifest
 CATEGORY_ZH = {
     "Knowledge": "知识整理",
     "Multimodal": "多模态",
+    "Operations": "部署运维",
     "Presentation": "演示文稿",
 }
 

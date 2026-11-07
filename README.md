@@ -30,7 +30,7 @@
 
 ## 技能列表
 
-> **24 个技能**
+> **25 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
@@ -59,6 +59,8 @@
 | ![Reserved](https://img.shields.io/badge/Rights_reserved-blueviolet) | [`photographer-style`](skills/photographer-style) | [摄影师风格拆解](skills/photographer-style) | 拆解摄影风格，交付介绍、参考图与双模式提示词，并按请求归档到 GitHub 私有仓库。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`resource2skill-distiller`](skills/resource2skill-distiller) | [资源方法技能提炼器](skills/resource2skill-distiller) | 调用本机 Codex 提炼网页、文本与视频证据，交付保留来源和验证记录的候选技能。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`social-cover-maker`](skills/social-cover-maker) | [社交平台封面生成器](skills/social-cover-maker) | 基于 Open Design 风格系统为公众号、小红书、知乎等平台生成可校验的 SVG/PNG 封面。 |
+| **部署运维** | | | |
+| ![Reserved](https://img.shields.io/badge/Rights_reserved-blueviolet) | [`nas-web-publish`](skills/nas-web-publish) | [群晖公网发布](skills/nas-web-publish) | 用群晖反代和 IPv6 DDNS 发布内网服务，从真实外网验证 HTTPS 与业务访问。 |
 | **演示文稿** | | | |
 | ![Reserved](https://img.shields.io/badge/Rights_reserved-blueviolet) | [`pv-forecast-pptx`](skills/air-pptx) | [光伏预测汇报 PPTX](skills/air-pptx) | 基于模板资源生成光伏与能源预测研究汇报 PPTX。 |
 
@@ -87,6 +89,7 @@ LLM-Skills/
     ├── karpathy-autoresearch-adapter/
     ├── mind-map/
     ├── ms-qwen-vl/
+    ├── nas-web-publish/
     ├── paper-deconstruction/
     ├── photographer-style/
     ├── project-handoff/

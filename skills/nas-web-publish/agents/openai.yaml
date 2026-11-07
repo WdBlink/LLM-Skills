@@ -1,0 +1,4 @@
+interface:
+  display_name: "群晖公网发布"
+  short_description: "通过群晖反代与 IPv6 DDNS 发布内网 Web 服务，并验证真实公网访问"
+  default_prompt: "使用 $nas-web-publish，将指定的内网 Web 服务通过群晖反向代理和 IPv6 DDNS 发布为 HTTPS 域名加端口，并完成公网验收。"
