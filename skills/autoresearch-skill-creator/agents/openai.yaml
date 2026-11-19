@@ -1,0 +1,4 @@
+interface:
+  display_name: "AutoResearch Skill 创建器"
+  short_description: "从 AutoResearch 完整源码副本直接改造新的领域技能"
+  default_prompt: "使用 $autoresearch-skill-creator，按 AutoResearch 范式创建适合我业务的新 Skill。"

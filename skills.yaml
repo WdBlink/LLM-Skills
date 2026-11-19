@@ -1,5 +1,15 @@
 version: 1
 skills:
+  - name: autoresearch-skill-creator
+    display_name: AutoResearch Skill Creator
+    name_zh: AutoResearch Skill 创建器
+    category: Knowledge
+    version: 0.1.0
+    license: MIT
+    path: skills/autoresearch-skill-creator
+    description: Create a domain-specific Codex skill by adapting a full AutoResearch clone at a verified upstream commit.
+    tagline_en: Adapt a full AutoResearch clone into a domain-specific Codex skill.
+    tagline_zh: 从 AutoResearch 完整源码副本改造领域技能，保留上游历史并验证交付流程。
   - name: nas-web-publish
     display_name: NAS Web Publish
     name_zh: 群晖公网发布
