@@ -1,5 +1,15 @@
 version: 1
 skills:
+  - name: paperbanana
+    display_name: PaperBanana
+    name_zh: 论文主图绘制
+    category: Multimodal
+    version: 0.1.0
+    license: MIT
+    path: skills/paperbanana
+    description: Create and locally revise publication main figures through reference selection, planning, image tools, pixel critique and verified artifact export without a client UI.
+    tagline_en: Draw and revise paper main figures through agent conversation and headless image tools.
+    tagline_zh: 通过 Agent 对话与无界面图像工具绘制论文主图，保留原图局部修订、审图及版本记录。
   - name: autoresearch-skill-creator
     display_name: AutoResearch Skill Creator
     name_zh: AutoResearch Skill 创建器

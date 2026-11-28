@@ -30,7 +30,7 @@
 
 ## 技能列表
 
-> **26 个技能**
+> **27 个技能**
 
 | | 英文名 | 中文名 | 描述 |
 |---|---|---|---|
@@ -57,6 +57,7 @@
 | ![Reserved](https://img.shields.io/badge/Rights_reserved-blueviolet) | [`auto-yolo-dataset`](skills/auto-yolo-dataset) | [自动 YOLO 数据集](skills/auto-yolo-dataset) | 通过本地或远程检测器生成 YOLO、COCO、VOC 和 Label Studio 数据集资产。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`glm-ocr-pdf2md`](skills/glm-ocr-pdf2md) | [本地GLM-OCR扫描PDF转Markdown](skills/glm-ocr-pdf2md) | 本地ZhipuAI/GLM-OCR将扫描版PDF转为带目录和页码标记的Markdown书籍。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`ms-qwen-vl`](skills/ms-qwen-vl) | [魔搭 Qwen-VL 视觉解析](skills/ms-qwen-vl) | 用 Qwen-VL 解析图片/视频，并可输出 YOLO 数据集。 |
+| ![Open](https://img.shields.io/badge/Open-green) | [`paperbanana`](skills/paperbanana) | [论文主图绘制](skills/paperbanana) | 通过 Agent 对话与无界面图像工具绘制论文主图，保留原图局部修订、审图及版本记录。 |
 | ![Reserved](https://img.shields.io/badge/Rights_reserved-blueviolet) | [`photographer-style`](skills/photographer-style) | [摄影师风格拆解](skills/photographer-style) | 拆解摄影风格，交付介绍、参考图与双模式提示词，并按请求归档到 GitHub 私有仓库。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`resource2skill-distiller`](skills/resource2skill-distiller) | [资源方法技能提炼器](skills/resource2skill-distiller) | 调用本机 Codex 提炼网页、文本与视频证据，交付保留来源和验证记录的候选技能。 |
 | ![Open](https://img.shields.io/badge/Open-green) | [`social-cover-maker`](skills/social-cover-maker) | [社交平台封面生成器](skills/social-cover-maker) | 基于 Open Design 风格系统为公众号、小红书、知乎等平台生成可校验的 SVG/PNG 封面。 |
@@ -93,6 +94,7 @@ LLM-Skills/
     ├── ms-qwen-vl/
     ├── nas-web-publish/
     ├── paper-deconstruction/
+    ├── paperbanana/
     ├── photographer-style/
     ├── project-handoff/
     ├── research-context/
